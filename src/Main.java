@@ -5,7 +5,5 @@ public class Main {
         System.out.println("Hello and welcome!");
         int s = 3;
         System.out.println("Group members:" + s);
-
-
     }
 }
