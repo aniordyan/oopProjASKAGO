@@ -1,9 +1,16 @@
-// Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
-// then press Enter. You can now see whitespace characters in your code.
+import People.Admin;
+import People.User;
+
+import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello and welcome!");
-        int s = 3;
-        System.out.println("Group members:" + s);
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter your role(customer/admin): ");
+        String person = sc.next();
+        if(person.equals("customer")) {
+            User customer = new User();
+        } else{
+            Admin admin = new Admin();
+        }
     }
 }
