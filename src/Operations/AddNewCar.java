@@ -3,7 +3,7 @@ package Operations;
 import java.util.Scanner;
 
 public class AddNewCar {
-    public static void main(String[] args) {
+    public void add() {
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter brand: ");
         String brand = sc.next();
