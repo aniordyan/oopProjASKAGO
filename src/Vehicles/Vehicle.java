@@ -8,6 +8,18 @@ public abstract class Vehicle {
     private int ratePerDay;
 
 
+    public Vehicle(int id,
+                   String brand,
+                   String model,
+                   int yearOfProduction,
+                   int ratePerDay){
+        this.id = id;
+        this.brand = brand;
+        this.model = model;
+        this.yearOfProduction = yearOfProduction;
+        this.ratePerDay = ratePerDay;
+    }
+
     public int getId(){
         return this.id;
     }
