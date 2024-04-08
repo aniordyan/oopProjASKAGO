@@ -7,6 +7,8 @@ public abstract class Vehicle {
     private int yearOfProduction;
     private int ratePerDay;
 
+    public Vehicle(){}
+
 
     public Vehicle(int id,
                    String brand,

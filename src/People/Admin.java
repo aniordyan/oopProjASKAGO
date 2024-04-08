@@ -1,13 +1,14 @@
 package People;
 
+import Operations.AddNewCar;
+
 import java.util.Scanner;
 
 public class Admin {
-    public static void EntryPoint() {
+    public void EntryPoint() {// should it be static or not
         while (true) {
-            //Options for the user
             System.out.println();
-            System.out.println("===== Welcome to Askago Vehicle Rental System Admin Portal=====");
+            System.out.println("===== Welcome to ASKAGO Vehicle Rental System Admin Portal=====");
             System.out.println("1. View Cars");
             System.out.println("1. View Motobikes");
             System.out.println("3. Add Vehicle");
@@ -21,7 +22,9 @@ public class Admin {
             sc.nextLine();
 
             switch (choice) {
-
+                case 3:
+                    AddNewCar addNewCar = new AddNewCar();
+                    addNewCar.add();
             }
         }
     }

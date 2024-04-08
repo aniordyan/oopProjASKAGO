@@ -1,5 +1,7 @@
+import Operations.AddNewCar;
 import People.Admin;
 import People.User;
+import Vehicles.Car;
 
 import java.util.Scanner;
 public class Main {
@@ -11,6 +13,10 @@ public class Main {
             User customer = new User();
         } else{
             Admin admin = new Admin();
+            admin.EntryPoint();
         }
+
+
+
     }
 }

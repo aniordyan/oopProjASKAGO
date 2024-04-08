@@ -8,6 +8,7 @@ public class Car extends Vehicle implements Rentable {
         SEDAN, SUV, CROSSOVER, MICRO
     }
 
+    private boolean available = true;
     private CarBody style;
 
     public Car(int id,
@@ -20,14 +21,22 @@ public class Car extends Vehicle implements Rentable {
         this.style = style;
     }
 
+    public CarBody getStyle(){
+        return this.style;
+    }
+
+    public void setStyle(CarBody style){
+        this.style = style;
+    }
+
     @Override
-    public void displayInfo() {
+    public void displayInfo() { //probably remove and add to operations
         super.displayInfo();
         System.out.println("Car body: " + style);
     }
 
     @Override
     public boolean isAvailable() {
-        return available;
+        return available;//add logic
     }
 }
