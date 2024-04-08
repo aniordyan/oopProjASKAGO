@@ -27,6 +27,6 @@ public class Motorbike extends Vehicle implements Rentable {
 
     @Override
     public boolean isAvailable() {
-        return available;
+        return available; //no logic
     }
 }
