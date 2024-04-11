@@ -1,16 +1,20 @@
 public class Podcast extends AudioFile{
+    public enum Genre1{COMEDY, CONVERSATIONAL, MUSIC, DRAMA, UNKNOWN};
+
     private String[] partisipants;
     private int date;
-    private int[] episods;
+    private int[] episodes;
     private String describtion;
+    private Podcast.Genre1 genre;
 
     public Podcast(int id,String name, String creator, int duration, String filePath, String[] partisipants,
-                   int date, int[]episods, String describtion){
+                   int date, int[]episodes, String describtion, Genre1 genre){
         super(id,name,creator,duration,filePath);
         this.partisipants = partisipants;
         this.date = date;
-        this.episods = episods;
+        this.episodes = episodes;
         this.describtion = describtion;
+        this.genre = genre;
     }
     public String[] getPartisipants(){
         return this.partisipants;
@@ -24,11 +28,11 @@ public class Podcast extends AudioFile{
     public void setDate(int date){
         this.date = date;
     }
-    public int[] getEpisods(){
-        return this.episods;
+    public int[] getEpisodes(){
+        return this.episodes;
     }
-    public void setEpisods(int[] episods){
-        this.episods = episods;
+    public void setEpisodes(int[] episods){
+        this.episodes = episods;
     }
     public String getDescribtion(){
         return this.describtion;
@@ -36,4 +40,12 @@ public class Podcast extends AudioFile{
     public void setDescribtion(String describtion){
         this.describtion = describtion;
     }
+    public Genre1 getGenre() {
+        return this.genre;
+    }
+    public void setGenre(Genre1 genre) {
+        this.genre = genre;
+    }
+
+
 }
