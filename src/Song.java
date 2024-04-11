@@ -5,7 +5,7 @@ public class Song extends AudioFile{
 
     public Song(int id,String name, String creator, int duration, String filePath){
         super(id,name,creator,duration,filePath);
-       // this.genre = genre;
+        this.genre = genre;
     }
 
     public Genre getGenre() {
