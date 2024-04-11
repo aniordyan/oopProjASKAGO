@@ -1,5 +1,5 @@
 public class Podcast extends AudioFile{
-    public enum Genre1{COMEDY, CONVERSATIONAL, MUSIC, BUSINESS, UNKNOWN};
+    public enum Genre1{COMEDY, CONVERSATIONAL, MUSIC, DRAMA, UNKNOWN};
 
     private String[] partisipants;
     private int date;
