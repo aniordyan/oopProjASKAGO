@@ -50,13 +50,23 @@ public abstract class People {
                             songPlayer.deleteSong(selectedId);
 
                             break;
+
                     }
                 break;
 
+                case 3:
+                    songPlayer.createPlaylistByGenre();
+                    System.out.println("Choose playlist to play: ");
+                    String respone = sc.next();
+
+                    break;
+
                 case 4:
                     c.createNewPlaylist();
+                    break;
                 case 5:
                     c.addNewSong();
+                    break;
             }
         }
     }

@@ -121,10 +121,26 @@ public class Operations {
             }
         }
 
-        public void createPlaylist(){
-            for(Song.Genre g : Song.Genre.values()){
-
+        public void createPlaylistByGenre() {
+            for (Song.Genre genre : Song.Genre.values()) {
+                String genreFileName = genre.toString() + ".txt";
+                try (PrintWriter writer = new PrintWriter(new FileWriter(genreFileName))) {
+                    for (Song song : songs) {
+                        if (song.getGenre() == genre) {
+                            writer.println(song.getId() + "," + song.getName() + "," + song.getCreator() + "," +
+                                    song.getDuration() + "," + song.getGenre() + "," + song.getFilePath());
+                        }
+                    }
+                    System.out.println(genre.toString());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
+
+        }
+
+        public void loopPlaylist(String response) throws SongNotFoundException{
+
         }
 
 

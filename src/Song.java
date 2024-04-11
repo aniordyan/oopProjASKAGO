@@ -1,5 +1,5 @@
 public class Song extends AudioFile{
-    public enum Genre{CLASSICAL, POP, ROCK, JAZZ, UNKNOWN};
+    public enum Genre{CLASSICAL, POP, ROCK, JAZZ};
 
     private Genre genre;
 
