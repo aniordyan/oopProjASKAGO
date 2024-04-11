@@ -18,9 +18,9 @@ public class Operations {
 
         private List<Song> loadSongsFromDatabase() {
             List<Song> songs = new ArrayList<>();
-            try (BufferedReader reader = new BufferedReader(new FileReader("database.txt"))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
+            try (Scanner scanner = new Scanner(new File("database.txt"))) {
+                while (scanner.hasNextLine()) {
+                    String line = scanner.nextLine();
                     String[] parts = line.split(",");
                     int id = Integer.parseInt(parts[0]);
                     String name = parts[1];
@@ -29,7 +29,7 @@ public class Operations {
                     String filePath = parts[4];
                     songs.add(new Song(id, name, creator, duration, filePath));
                 }
-            } catch (IOException e) {
+            } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
             return songs;
@@ -37,9 +37,11 @@ public class Operations {
 
         public void listSongs() {
             System.out.println("Available songs:");
+            System.out.println("=====================");
             for (Song song : songs) {
-                System.out.println(song.getId() + ": " + song.getName() + " by " + song.getCreator());
+                System.out.println(song);
             }
+            System.out.println("=====================");
         }
 
         public void playSong(int id) throws SongNotFoundException {
@@ -51,17 +53,25 @@ public class Operations {
                     Clip clip = AudioSystem.getClip();
                     clip.open(audioInputStream);
 
+                    long duration = clip.getMicrosecondLength() / 1_000_000;
+                    long seconds = duration % 60;
+                    long minutes = (duration / 60) % 60;
+                    long hours = duration / 3600;
+
                     Scanner sc = new Scanner(System.in);
                     String response = "";
 
 
                     while(!response.equals("Q")){
                         System.out.println("P = play, S = stop, R = reset, Q = quit");
+                        System.out.println("Duration: " + hours + " : " + minutes + " : " + seconds);
                         System.out.println("Enter your choice: ");
                         response = sc.next().toUpperCase();
 
                         switch(response){
-                            case("P"): clip.start(); break;
+                            case("P"):
+                                clip.start();
+                                break;
                             case("S"): clip.stop(); break;
                             case("R"): clip.setMicrosecondPosition(0); break;
                             case("Q"): clip.close(); break;

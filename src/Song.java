@@ -17,10 +17,8 @@ public class Song extends AudioFile{
     }
 
     public String toString() {
-        return "Song{" +
+        return
                 "title='" + this.getName() + '\'' +
-                ", artist='" + this.getCreator() + '\'' +
-                ", durationInSeconds=" + this.getDuration() +
-                '}';
+                ", artist='" + this.getCreator() + '\'';
     }
 }

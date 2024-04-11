@@ -4,7 +4,9 @@ import java.util.Scanner;
 
 public abstract class People {
 
-    String folderPath = "src/songs"; // Replace with the actual folder path
+    String folderPath = "src/songs";
+    private Creator c;
+    private
 
     Operations.SongPlayer songPlayer = new Operations.SongPlayer(folderPath);
 
@@ -30,16 +32,15 @@ public abstract class People {
                     // List all songs
                     songPlayer.listSongs();
                     System.out.println("Select operation");
-                    System.out.println("1. Play song");
-                    System.out.println("2. Delete song");
+                    System.out.println("1. Play song ==== 2. Delete song");
 
                     int operation = sc.nextInt();
                     sc.nextLine();
                     switch(operation) {
                         case 1:
-                            // Play a selected song by ID
                             System.out.print("Enter the ID of the song to play: ");
                             int selectedId = sc.nextInt();
+
                             songPlayer.playSong(selectedId);
 
                             break;
@@ -50,7 +51,12 @@ public abstract class People {
 
                             break;
                     }
-                    break;
+                break;
+
+                case 4:
+                    c.createNewPlaylist();
+                case 5:
+                    c.addNewSong();
             }
         }
     }
