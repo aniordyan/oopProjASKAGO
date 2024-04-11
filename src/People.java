@@ -15,8 +15,10 @@ public abstract class People {
             // Options for the user
             System.out.println();
             System.out.println("1. Display Songs");
-            System.out.println("2. Display existing playlists");
+            System.out.println("2. Display Podcasts");
+            System.out.println("3. Display existing playlists");
             System.out.println("4. Create new playlist");
+            System.out.println("5. Add new song");
             System.out.println();
             System.out.print("Enter your choice: ");
 
@@ -30,7 +32,6 @@ public abstract class People {
                     System.out.println("Select operation");
                     System.out.println("1. Play song");
                     System.out.println("2. Delete song");
-                    System.out.println("3. Add new song");
 
                     int operation = sc.nextInt();
                     sc.nextLine();
