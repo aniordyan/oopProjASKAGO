@@ -32,7 +32,7 @@ public abstract class People {
                     // List all songs
                     songPlayer.listSongs();
                     System.out.println("Select operation");
-                    System.out.println("1. Play song ==== 2. Delete song");
+                    System.out.println("1. Play song | 2. Delete song");
 
                     int operation = sc.nextInt();
                     sc.nextLine();

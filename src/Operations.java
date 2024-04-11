@@ -11,12 +11,15 @@ public class Operations {
         private String folderPath;
         private List<Song> songs;
 
+
         public SongPlayer(String folderPath) {
             this.folderPath = folderPath;
             this.songs = loadSongsFromDatabase();
         }
 
-        private List<Song> loadSongsFromDatabase() {
+
+
+        public List<Song> loadSongsFromDatabase() {
             List<Song> songs = new ArrayList<>();
             try (Scanner scanner = new Scanner(new File("database.txt"))) {
                 while (scanner.hasNextLine()) {
@@ -26,8 +29,9 @@ public class Operations {
                     String name = parts[1];
                     String creator = parts[2];
                     int duration = Integer.parseInt(parts[3]);
-                    String filePath = parts[4];
-                    songs.add(new Song(id, name, creator, duration, filePath));
+                    Song.Genre genre = Song.Genre.valueOf(parts[4]);
+                    String filePath = parts[5];
+                    songs.add(new Song(id, name, creator, duration, genre, filePath));
                 }
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -58,20 +62,18 @@ public class Operations {
                     long minutes = (duration / 60) % 60;
                     long hours = duration / 3600;
 
+                    System.out.println(hours + " : " + minutes + " : " + seconds);
                     Scanner sc = new Scanner(System.in);
                     String response = "";
 
 
                     while(!response.equals("Q")){
                         System.out.println("P = play, S = stop, R = reset, Q = quit");
-                        System.out.println("Duration: " + hours + " : " + minutes + " : " + seconds);
                         System.out.println("Enter your choice: ");
                         response = sc.next().toUpperCase();
 
                         switch(response){
-                            case("P"):
-                                clip.start();
-                                break;
+                            case("P"): clip.start();break;
                             case("S"): clip.stop(); break;
                             case("R"): clip.setMicrosecondPosition(0); break;
                             case("Q"): clip.close(); break;
@@ -112,10 +114,16 @@ public class Operations {
             try (PrintWriter writer = new PrintWriter(new FileWriter("database.txt"))) {
                 for (Song song : songs) {
                     writer.println(song.getId() + "," + song.getName() + "," + song.getCreator() + "," +
-                            song.getDuration() + "," + song.getFilePath());
+                            song.getDuration() + ","  + song.getGenre() + "," + song.getFilePath());
                 }
             } catch (IOException e) {
                 e.printStackTrace();
+            }
+        }
+
+        public void createPlaylist(){
+            for(Song.Genre g : Song.Genre.values()){
+
             }
         }
 

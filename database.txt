@@ -1,3 +1,4 @@
-1,Song1,Artist1,200,sample-12s.wav
-2,GruppaKrovi,Tsoi,200,gruppa_krovi.wav
-3,Song3,Artist3,200,sample-15s.wav
+1,Gruppa Krovi,Victor Tsoi,3,ROCK,gruppa_krovi.wav
+2,Chop Sue,System of a Down,3,ROCK,System-of-A-Down-Chop-Suey_.wav
+3,Zvezda po imeni solnce,Victor Tsoi,3,ROCK,Виктор-Цой-Звезда-по-имени-Солнце.wav
+4,La Boheme,Charles Aznavour,3,POP,Charles-Aznavour-La-Boheme.wav

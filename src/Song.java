@@ -3,7 +3,7 @@ public class Song extends AudioFile{
 
     private Genre genre;
 
-    public Song(int id,String name, String creator, int duration, String filePath){
+    public Song(int id,String name, String creator, int duration, Genre genre, String filePath){
         super(id,name,creator,duration,filePath);
         this.genre = genre;
     }
@@ -18,7 +18,9 @@ public class Song extends AudioFile{
 
     public String toString() {
         return
-                "title='" + this.getName() + '\'' +
-                ", artist='" + this.getCreator() + '\'';
+                "title: " + this.getName()  +
+                ", artist: " + this.getCreator() +
+                ", genre: " + this.getGenre() +
+                ", duration: " + this.getDuration();
     }
 }
