@@ -1,6 +1,7 @@
 package am.aua.cli;
 
-import am.aua.core.Core;
+
+import am.aua.core.SongCore;
 import am.aua.exceptions.InvalidGenreException;
 import am.aua.exceptions.SongNotFoundException;
 
@@ -14,7 +15,7 @@ public class User {
     String folderPath = "src/am/aua/songs";
     String defaultDatabase = "database.txt";
 
-    Core.SongPlayer songPlayer = new Core.SongPlayer(folderPath);
+    SongCore songPlayer = new SongCore(folderPath);
 
     public void EntryPoint() throws SongNotFoundException, UnsupportedAudioFileException, LineUnavailableException, IOException, InvalidGenreException {
         Scanner sc = new Scanner(System.in);
@@ -34,7 +35,7 @@ public class User {
 
             switch (choice) {
                 case 1:
-                    songPlayer.listSongs(defaultDatabase);
+                    songPlayer.listFiles(defaultDatabase);
                     System.out.println("Select operation");
                     System.out.println("1. Play song | 2. Delete song | 3. Exit");
 
@@ -44,7 +45,7 @@ public class User {
                         case 1:
                             System.out.print("Enter the ID of the song to play: ");
                             int selectedId = sc.nextInt();
-                            songPlayer.playSong(selectedId);
+                            songPlayer.playFiles(selectedId);
 
                             break;
                         case 2:
@@ -77,7 +78,7 @@ public class User {
                     break;
 
                 case 5:
-                    songPlayer.addSong();
+                    songPlayer.addFile();
             }
         }
     }
