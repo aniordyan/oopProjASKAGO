@@ -10,7 +10,7 @@ import java.nio.file.Paths;
 import java.util.*;
 
 
-public class Operations { //change name to smth better?
+public class Core {
     private static final String databasePath = "database.txt";
 
   /*  public class Duration{
@@ -222,9 +222,11 @@ public class Operations { //change name to smth better?
 
         }
 
-        public void playlistToPlay(String respone) throws UnsupportedAudioFileException, LineUnavailableException, IOException, SongNotFoundException {
+        public void playlistToPlay(String respone, boolean shuffle) throws UnsupportedAudioFileException, LineUnavailableException, IOException, SongNotFoundException {
             listSongs(respone + ".txt");
             List<Song> playlistSongs = loadSongsFromDatabase(respone + ".txt");
+
+            if (shuffle) Collections.shuffle(playlistSongs);
 
             for (Song songs : playlistSongs) {
                 File songFile;
@@ -246,20 +248,12 @@ public class Operations { //change name to smth better?
 
                         }
 
-
-
                     } catch (UnsupportedAudioFileException | LineUnavailableException | IOException e) {
                         e.printStackTrace();
                     }
                 }
 
             }
-
-            // boolean flag for shuffle, repeat
-
-       /* public void playingPlaylist(String response) throws SongNotFoundException{
-
-        }*/
 
 
         }

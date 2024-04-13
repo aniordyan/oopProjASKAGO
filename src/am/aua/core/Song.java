@@ -35,25 +35,16 @@ public class Song extends AudioFile{
         //this.duration = d.getDuration(this);
     }
 
- /*   public String toString() {
-            return
-                    "title: " + this.getName()  +
-                    ", artist: " + this.getCreator() +
-                    ", genre: " + this.getGenre();
-    }
-
-  */
 
     public String toString() {
-        final int COLUMN_WIDTH = 40; // Define a width for each column
+        final int COLUMN_WIDTH = 40;
 
-        // Format the title, artist, and genre values with padding
+        String formattedId = String.format("%-" + 10 + "s", "ID: " + this.getId());
         String formattedTitle = String.format("%-" + COLUMN_WIDTH + "s", "Title: " + this.getName());
         String formattedArtist = String.format("%-" + COLUMN_WIDTH + "s", "Artist: " + this.getCreator());
         String formattedGenre = String.format("%-" + COLUMN_WIDTH + "s", "Genre: " + this.getGenre());
 
-        // Concatenate the formatted values and return
-        return formattedTitle + formattedArtist + formattedGenre;
+        return formattedId + formattedTitle + formattedArtist + formattedGenre;
     }
 
 }

@@ -1,6 +1,6 @@
 package am.aua.cli;
 
-import am.aua.core.Operations;
+import am.aua.core.Core;
 import am.aua.exceptions.InvalidGenreException;
 import am.aua.exceptions.SongNotFoundException;
 
@@ -14,7 +14,7 @@ public class User {
     String folderPath = "src/am/aua/songs";
     String defaultDatabase = "database.txt";
 
-    Operations.SongPlayer songPlayer = new Operations.SongPlayer(folderPath);
+    Core.SongPlayer songPlayer = new Core.SongPlayer(folderPath);
 
     public void EntryPoint() throws SongNotFoundException, UnsupportedAudioFileException, LineUnavailableException, IOException, InvalidGenreException {
         Scanner sc = new Scanner(System.in);
@@ -48,10 +48,9 @@ public class User {
 
                             break;
                         case 2:
-                            System.out.print("Enter the ID of the song to play: ");
-                             selectedId = sc.nextInt();
+                            System.out.print("Enter the ID of the song to delete: ");
+                            selectedId = sc.nextInt();
                             songPlayer.deleteSong(selectedId);
-
                             break;
                         case 3:
                             break;
@@ -62,7 +61,18 @@ public class User {
                     songPlayer.createPlaylistByGenre();
                     System.out.println("Choose playlist to play: ");
                     String respone = sc.next().toUpperCase();
-                    songPlayer.playlistToPlay(respone);
+                    boolean shuffle;
+                    boolean repeat = true;
+                    while(repeat){
+                        System.out.println("Do you want to enable shuffling?(y/n)");
+                        if(sc.next().equalsIgnoreCase("y")) shuffle = true;
+                        else shuffle = false;
+                        songPlayer.playlistToPlay(respone, shuffle);
+                        System.out.println("Do you want to repeat with playlist?(y/n)");
+                        if(sc.next().equalsIgnoreCase("y")) repeat = true;
+                        else repeat = false;
+
+                    }
 
                     break;
 
