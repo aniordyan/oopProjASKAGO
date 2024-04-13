@@ -161,9 +161,9 @@ public class Operations { //change name to smth better?
             if (songToDelete != null) {
                 songs.remove(songToDelete);
                 updateDatabase();
-                System.out.println("am.aua.core.Song with ID " + id + " has been deleted.");
+                System.out.println("Song with ID " + id + " has been deleted.");
             } else {
-                throw new SongNotFoundException("am.aua.core.Song with ID " + id + " not found.");
+                throw new SongNotFoundException("Song with ID " + id + " not found.");
             }
         }
 
