@@ -38,25 +38,16 @@ public class Operations { //change name to smth better?
    */
 
 
-
-
-
-
-
-
     public static class SongPlayer {
         private String folderPath;
         private List<Song> songs;
         private static int highestId = 0;
 
 
-
-
         public SongPlayer(String folderPath) {
             this.folderPath = folderPath;
             this.songs = loadSongsFromDatabase(databasePath);
         }
-
 
 
         public List<Song> loadSongsFromDatabase(String path) {
@@ -66,10 +57,10 @@ public class Operations { //change name to smth better?
                     String line = scanner.nextLine();
                     String[] parts = line.split(",");
                     int id = Integer.parseInt(parts[0]);
-                    if(id > highestId) highestId = id; // for adding song id
+                    if (id > highestId) highestId = id; // for adding song id
                     String name = parts[1];
                     String creator = parts[2];
-                  //  int duration = Integer.parseInt(parts[3]);
+                    //  int duration = Integer.parseInt(parts[3]);
                     Song.Genre genre = Song.Genre.valueOf(parts[3]);
                     String filePath = parts[4];
                     songs.add(new Song(id, name, creator, genre, filePath));
@@ -106,7 +97,6 @@ public class Operations { //change name to smth better?
                 }
 
 
-
                 try {
                     AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(songFile);
                     Clip clip = AudioSystem.getClip();
@@ -124,16 +114,24 @@ public class Operations { //change name to smth better?
                     String response = "";
 
 
-                    while(!response.equals("Q")){
+                    while (!response.equals("Q")) {
                         System.out.println("P = play, S = stop, R = reset, Q = quit");
                         System.out.println("Enter your choice: ");
                         response = sc.next().toUpperCase();
 
-                        switch(response){
-                            case("P"): clip.start();break;
-                            case("S"): clip.stop(); break;
-                            case("R"): clip.setMicrosecondPosition(0); break;
-                            case("Q"): clip.close(); break;
+                        switch (response) {
+                            case ("P"):
+                                clip.start();
+                                break;
+                            case ("S"):
+                                clip.stop();
+                                break;
+                            case ("R"):
+                                clip.setMicrosecondPosition(0);
+                                break;
+                            case ("Q"):
+                                clip.close();
+                                break;
 
                         }
                     }
@@ -171,14 +169,14 @@ public class Operations { //change name to smth better?
             try (PrintWriter writer = new PrintWriter(new FileWriter(databasePath))) {
                 for (Song song : songs) {
                     writer.println(song.getId() + "," + song.getName() + "," + song.getCreator() +
-                            ","  + song.getGenre() + "," + song.getFilePath());
+                            "," + song.getGenre() + "," + song.getFilePath());
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
 
-        public void addSong() throws InvalidGenreException{
+        public void addSong() throws InvalidGenreException {
             Song.Genre genre = null;
             Scanner scanner = new Scanner(System.in);
 
@@ -228,15 +226,43 @@ public class Operations { //change name to smth better?
             listSongs(respone + ".txt");
             List<Song> playlistSongs = loadSongsFromDatabase(respone + ".txt");
 
+            for (Song songs : playlistSongs) {
+                File songFile;
+                if (songs != null) {
+                    Path path = Paths.get(songs.getFilePath());
+                    if (path.isAbsolute()) {
+                        songFile = new File(songs.getFilePath());
+                    } else {
+                        songFile = new File(folderPath + File.separator + songs.getFilePath());
+                    }
 
-        }
+                    try {
+                        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(songFile);
+                        Clip clip = AudioSystem.getClip();
 
-        // boolean flag for shuffle, repeat
+                        clip.open(audioInputStream);
+                        clip.start();
+                        while(clip.getMicrosecondLength() != clip.getMicrosecondPosition()){
+
+                        }
+
+
+
+                    } catch (UnsupportedAudioFileException | LineUnavailableException | IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+
+            // boolean flag for shuffle, repeat
 
        /* public void playingPlaylist(String response) throws SongNotFoundException{
 
         }*/
 
+
+        }
 
 
     }
