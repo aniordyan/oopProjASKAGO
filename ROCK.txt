@@ -1,3 +1,4 @@
-1,Gruppa Krovi,Victor Tsoi,3,ROCK,gruppa_krovi.wav
-2,Chop Sue,System of a Down,3,ROCK,System-of-A-Down-Chop-Suey_.wav
-3,Zvezda po imeni solnce,Victor Tsoi,3,ROCK,Виктор-Цой-Звезда-по-имени-Солнце.wav
+1,Gruppa Krovi,Victor Tsoi,ROCK,gruppa_krovi.wav
+2,Chop Sue,System of a Down,ROCK,System-of-A-Down-Chop-Suey_.wav
+3,Zvezda po imeni solnce,Victor Tsoi,ROCK,Виктор-Цой-Звезда-по-имени-Солнце.wav
+6,Bohemian Rhapsody,Queen,ROCK,Queen-Bohemian-Rhapsody.wav

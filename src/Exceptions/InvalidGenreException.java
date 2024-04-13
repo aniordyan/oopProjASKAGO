@@ -2,7 +2,7 @@ package Exceptions;
 
 public class InvalidGenreException extends Exception{
     public InvalidGenreException(){
-        super();
+        super("The provided genre is invalid");
     }
 
     public InvalidGenreException(String message){

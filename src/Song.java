@@ -30,7 +30,7 @@ public class Song extends AudioFile{
 
     public void setDuration(String duration) throws UnsupportedAudioFileException, LineUnavailableException, IOException {
         d = new Duration();
-        this.duration = d.getDuration(this);
+        //this.duration = d.getDuration(this);
     }
 
     public String toString() {

@@ -1,3 +1,4 @@
+import Exceptions.InvalidGenreException;
 import Exceptions.SongNotFoundException;
 
 import javax.sound.sampled.LineUnavailableException;
@@ -11,15 +12,15 @@ public class User {
 
     Operations.SongPlayer songPlayer = new Operations.SongPlayer(folderPath);
 
-    public void EntryPoint() throws SongNotFoundException, UnsupportedAudioFileException, LineUnavailableException, IOException {
+    public void EntryPoint() throws SongNotFoundException, UnsupportedAudioFileException, LineUnavailableException, IOException, InvalidGenreException {
         Scanner sc = new Scanner(System.in);
 
         while (true) {
             System.out.println();
             System.out.println("1. Display Songs");
-            System.out.println("2. Display Podcasts");
+            System.out.println("2. Display Podcasts"); //currently doesnt work
             System.out.println("3. Display existing playlists");
-            System.out.println("4. Create new playlist");
+            System.out.println("4. Create new playlist"); // currently doesnt work
             System.out.println("5. Add new song");
             System.out.println();
             System.out.print("Enter your choice: ");
@@ -29,7 +30,6 @@ public class User {
 
             switch (choice) {
                 case 1:
-                    // List all songs
                     songPlayer.listSongs();
                     System.out.println("Select operation");
                     System.out.println("1. Play song | 2. Delete song");
@@ -40,7 +40,6 @@ public class User {
                         case 1:
                             System.out.print("Enter the ID of the song to play: ");
                             int selectedId = sc.nextInt();
-
                             songPlayer.playSong(selectedId);
 
                             break;
@@ -61,7 +60,8 @@ public class User {
 
                     break;
 
-
+                case 5:
+                    songPlayer.addSong();
             }
         }
     }

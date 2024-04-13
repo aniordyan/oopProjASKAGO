@@ -1,7 +1,10 @@
+import Exceptions.InvalidGenreException;
 import Exceptions.SongNotFoundException;
 
 import javax.sound.sampled.*;
 import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 
@@ -40,24 +43,26 @@ public class Operations { //change name to smth better?
     public static class SongPlayer {
         private String folderPath;
         private List<Song> songs;
+        private static int highestId = 0;
+        private static final String dataBasePath = "database.txt";
 
 
 
         public SongPlayer(String folderPath) {
             this.folderPath = folderPath;
             this.songs = loadSongsFromDatabase();
-
         }
 
 
 
         public List<Song> loadSongsFromDatabase() {
             List<Song> songs = new ArrayList<>();
-            try (Scanner scanner = new Scanner(new File("database.txt"))) {
+            try (Scanner scanner = new Scanner(new File(dataBasePath))) {
                 while (scanner.hasNextLine()) {
                     String line = scanner.nextLine();
                     String[] parts = line.split(",");
                     int id = Integer.parseInt(parts[0]);
+                    if(id > highestId) highestId = id; // for adding song id
                     String name = parts[1];
                     String creator = parts[2];
                   //  int duration = Integer.parseInt(parts[3]);
@@ -84,9 +89,18 @@ public class Operations { //change name to smth better?
         }
 
         public void playSong(int id) throws SongNotFoundException {
+            File songFile;
             Song selectedSong = findSongById(id);
             if (selectedSong != null) {
-                File songFile = new File(folderPath + File.separator + selectedSong.getFilePath());
+                Path path = Paths.get(selectedSong.getFilePath());
+                if (path.isAbsolute()) {
+                    songFile = new File(selectedSong.getFilePath());
+                } else {
+                    songFile = new File(folderPath + File.separator + selectedSong.getFilePath());
+                }
+
+
+
                 try {
                     AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(songFile);
                     Clip clip = AudioSystem.getClip();
@@ -148,7 +162,7 @@ public class Operations { //change name to smth better?
         }
 
         public void updateDatabase() {
-            try (PrintWriter writer = new PrintWriter(new FileWriter("database.txt"))) {
+            try (PrintWriter writer = new PrintWriter(new FileWriter(dataBasePath))) {
                 for (Song song : songs) {
                     writer.println(song.getId() + "," + song.getName() + "," + song.getCreator() +
                             ","  + song.getGenre() + "," + song.getFilePath());
@@ -156,6 +170,33 @@ public class Operations { //change name to smth better?
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+
+        public void addSong() throws InvalidGenreException{
+            Song.Genre genre = null;
+            Scanner scanner = new Scanner(System.in);
+
+            System.out.println("Enter the name of the song:");
+            String name = scanner.nextLine();
+            System.out.println("Enter the artist of the song:");
+            String artist = scanner.nextLine();
+            System.out.println("Enter the genre of the song:");
+            String genreInput = scanner.nextLine();
+            try {
+                genre = Song.Genre.valueOf(genreInput.toUpperCase());
+            } catch (IllegalArgumentException e) {
+                throw new InvalidGenreException("Invalid genre.");
+            }
+
+            System.out.println("Enter the path to the audio file:");
+            String filePath = scanner.nextLine();
+
+            int id = highestId + 1;
+
+            Song newSong = new Song(id, name, artist, genre, filePath);
+            songs.add(newSong);
+            updateDatabase();
+            System.out.println("Song added successfully!");
         }
 
         public void createPlaylistByGenre() {
