@@ -1,4 +1,4 @@
-package Exceptions;
+package am.aua.exceptions;
 
 public class ParamNotFoundException extends Exception {
 

@@ -1,3 +1,5 @@
+package am.aua.core;
+
 public class Podcast extends AudioFile{
     public enum Genre1{COMEDY, CONVERSATIONAL, MUSIC, DRAMA, UNKNOWN};
 

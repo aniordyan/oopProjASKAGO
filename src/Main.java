@@ -1,5 +1,6 @@
-import Exceptions.InvalidGenreException;
-import Exceptions.SongNotFoundException;
+import am.aua.cli.User;
+import am.aua.exceptions.InvalidGenreException;
+import am.aua.exceptions.SongNotFoundException;
 
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;

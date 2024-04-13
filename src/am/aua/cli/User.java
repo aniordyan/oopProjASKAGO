@@ -1,5 +1,8 @@
-import Exceptions.InvalidGenreException;
-import Exceptions.SongNotFoundException;
+package am.aua.cli;
+
+import am.aua.core.Operations;
+import am.aua.exceptions.InvalidGenreException;
+import am.aua.exceptions.SongNotFoundException;
 
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -8,7 +11,8 @@ import java.util.Scanner;
 
 public class User {
 
-    String folderPath = "src/songs";
+    String folderPath = "src/am.aua.songs";
+    String defaultDatabase = "database.txt";
 
     Operations.SongPlayer songPlayer = new Operations.SongPlayer(folderPath);
 
@@ -30,9 +34,9 @@ public class User {
 
             switch (choice) {
                 case 1:
-                    songPlayer.listSongs();
+                    songPlayer.listSongs(defaultDatabase);
                     System.out.println("Select operation");
-                    System.out.println("1. Play song | 2. Delete song");
+                    System.out.println("1. Play song | 2. Delete song | 3. Exit");
 
                     int operation = sc.nextInt();
                     sc.nextLine();
@@ -49,14 +53,16 @@ public class User {
                             songPlayer.deleteSong(selectedId);
 
                             break;
-
+                        case 3:
+                            break;
                     }
                 break;
 
                 case 3:
                     songPlayer.createPlaylistByGenre();
                     System.out.println("Choose playlist to play: ");
-                    String respone = sc.next();
+                    String respone = sc.next().toUpperCase();
+                    songPlayer.playlistToPlay(respone);
 
                     break;
 

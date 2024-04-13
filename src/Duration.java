@@ -1,8 +1,9 @@
+import am.aua.core.Song;
+
 import javax.sound.sampled.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Scanner;
 
 public class Duration {
     private long hours;
@@ -13,7 +14,7 @@ public class Duration {
 
 
     public void getDuration(Song s) throws LineUnavailableException, IOException, UnsupportedAudioFileException {
-        File audioFile = new File("src/songs" + File.separator + s.getFilePath());
+        File audioFile = new File("src/am.aua.songs" + File.separator + s.getFilePath());
 
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
             Clip clip = AudioSystem.getClip();

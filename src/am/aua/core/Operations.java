@@ -1,5 +1,7 @@
-import Exceptions.InvalidGenreException;
-import Exceptions.SongNotFoundException;
+package am.aua.core;
+
+import am.aua.exceptions.InvalidGenreException;
+import am.aua.exceptions.SongNotFoundException;
 
 import javax.sound.sampled.*;
 import java.io.*;
@@ -9,14 +11,14 @@ import java.util.*;
 
 
 public class Operations { //change name to smth better?
+    private static final String databasePath = "database.txt";
 
-
-    public class Duration{
+  /*  public class Duration{
         private long hours, minutes, seconds;
 
 
-        public String getDuration(AudioFile s) throws LineUnavailableException, IOException, UnsupportedAudioFileException {
-            File audioFile = new File("src/songs" + File.separator + s.getFilePath());
+        public String getDuration(am.aua.core.AudioFile s) throws LineUnavailableException, IOException, UnsupportedAudioFileException {
+            File audioFile = new File("src/am.aua.songs" + File.separator + s.getFilePath());
 
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
             Clip clip = AudioSystem.getClip();
@@ -33,6 +35,8 @@ public class Operations { //change name to smth better?
     }
 
 
+   */
+
 
 
 
@@ -44,20 +48,20 @@ public class Operations { //change name to smth better?
         private String folderPath;
         private List<Song> songs;
         private static int highestId = 0;
-        private static final String dataBasePath = "database.txt";
+
 
 
 
         public SongPlayer(String folderPath) {
             this.folderPath = folderPath;
-            this.songs = loadSongsFromDatabase();
+            this.songs = loadSongsFromDatabase(databasePath);
         }
 
 
 
-        public List<Song> loadSongsFromDatabase() {
+        public List<Song> loadSongsFromDatabase(String path) {
             List<Song> songs = new ArrayList<>();
-            try (Scanner scanner = new Scanner(new File(dataBasePath))) {
+            try (Scanner scanner = new Scanner(new File(path))) {
                 while (scanner.hasNextLine()) {
                     String line = scanner.nextLine();
                     String[] parts = line.split(",");
@@ -70,6 +74,7 @@ public class Operations { //change name to smth better?
                     String filePath = parts[4];
                     songs.add(new Song(id, name, creator, genre, filePath));
                 }
+                return songs;
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
@@ -78,8 +83,9 @@ public class Operations { //change name to smth better?
 
         }
 
-        public void listSongs() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
-            System.out.println("Available songs:");
+        public void listSongs(String path) throws UnsupportedAudioFileException, LineUnavailableException, IOException {
+            List<Song> songs = loadSongsFromDatabase(path);
+            System.out.println("Songs:");
             System.out.println("=====================");
             for (Song song : songs) {
                 System.out.println(song);
@@ -137,7 +143,7 @@ public class Operations { //change name to smth better?
                     e.printStackTrace();
                 }
             } else {
-                System.out.println("Song with ID " + id + " not found.");
+                System.out.println("am.aua.core.Song with ID " + id + " not found.");
             }
         }
 
@@ -155,14 +161,14 @@ public class Operations { //change name to smth better?
             if (songToDelete != null) {
                 songs.remove(songToDelete);
                 updateDatabase();
-                System.out.println("Song with ID " + id + " has been deleted.");
+                System.out.println("am.aua.core.Song with ID " + id + " has been deleted.");
             } else {
-                throw new SongNotFoundException("Song with ID " + id + " not found.");
+                throw new SongNotFoundException("am.aua.core.Song with ID " + id + " not found.");
             }
         }
 
         public void updateDatabase() {
-            try (PrintWriter writer = new PrintWriter(new FileWriter(dataBasePath))) {
+            try (PrintWriter writer = new PrintWriter(new FileWriter(databasePath))) {
                 for (Song song : songs) {
                     writer.println(song.getId() + "," + song.getName() + "," + song.getCreator() +
                             ","  + song.getGenre() + "," + song.getFilePath());
@@ -196,12 +202,13 @@ public class Operations { //change name to smth better?
             Song newSong = new Song(id, name, artist, genre, filePath);
             songs.add(newSong);
             updateDatabase();
-            System.out.println("Song added successfully!");
+            System.out.println("am.aua.core.Song added successfully!");
         }
 
-        public void createPlaylistByGenre() {
+        public void createPlaylistByGenre() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
+
             for (Song.Genre genre : Song.Genre.values()) {
-                String genreFileName = genre.toString() + ".txt";
+                String genreFileName = genreFileName = genre.toString() + ".txt";
                 try (PrintWriter writer = new PrintWriter(new FileWriter(genreFileName))) {
                     for (Song song : songs) {
                         if (song.getGenre() == genre) {
@@ -217,11 +224,18 @@ public class Operations { //change name to smth better?
 
         }
 
-        // boolean flag for shuffle, repeat
+        public void playlistToPlay(String respone) throws UnsupportedAudioFileException, LineUnavailableException, IOException, SongNotFoundException {
+            listSongs(respone + ".txt");
+            List<Song> playlistSongs = loadSongsFromDatabase(respone + ".txt");
 
-        public void loopPlaylist(String response) throws SongNotFoundException{
 
         }
+
+        // boolean flag for shuffle, repeat
+
+       /* public void playingPlaylist(String response) throws SongNotFoundException{
+
+        }*/
 
 
 
