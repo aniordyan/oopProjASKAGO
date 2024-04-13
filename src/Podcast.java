@@ -7,9 +7,9 @@ public class Podcast extends AudioFile{
     private String describtion;
     private Podcast.Genre1 genre;
 
-    public Podcast(int id,String name, String creator, int duration, String filePath, String[] partisipants,
+    public Podcast(int id,String name, String creator, String filePath, String[] partisipants,
                    int date, int[]episodes, String describtion, Genre1 genre){
-        super(id,name,creator,duration,filePath);
+        super(id,name,creator,filePath);
         this.partisipants = partisipants;
         this.date = date;
         this.episodes = episodes;

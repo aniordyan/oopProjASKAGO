@@ -5,16 +5,48 @@ import java.io.*;
 import java.util.*;
 
 
-public class Operations {
+public class Operations { //change name to smth better?
+
+
+    public class Duration{
+        private long hours, minutes, seconds;
+
+
+        public String getDuration(AudioFile s) throws LineUnavailableException, IOException, UnsupportedAudioFileException {
+            File audioFile = new File("src/songs" + File.separator + s.getFilePath());
+
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+
+            long duration = clip.getMicrosecondLength() / 1_000_000;
+            seconds = duration % 60;
+            minutes = (duration / 60) % 60;
+            hours = duration / 3600;
+
+            return hours + ":" + minutes + ":" + seconds;
+
+        }
+    }
+
+
+
+
+
+
+
+
 
     public static class SongPlayer {
         private String folderPath;
         private List<Song> songs;
 
 
+
         public SongPlayer(String folderPath) {
             this.folderPath = folderPath;
             this.songs = loadSongsFromDatabase();
+
         }
 
 
@@ -28,23 +60,26 @@ public class Operations {
                     int id = Integer.parseInt(parts[0]);
                     String name = parts[1];
                     String creator = parts[2];
-                    int duration = Integer.parseInt(parts[3]);
-                    Song.Genre genre = Song.Genre.valueOf(parts[4]);
-                    String filePath = parts[5];
-                    songs.add(new Song(id, name, creator, duration, genre, filePath));
+                  //  int duration = Integer.parseInt(parts[3]);
+                    Song.Genre genre = Song.Genre.valueOf(parts[3]);
+                    String filePath = parts[4];
+                    songs.add(new Song(id, name, creator, genre, filePath));
                 }
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
+
             return songs;
+
         }
 
-        public void listSongs() {
+        public void listSongs() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
             System.out.println("Available songs:");
             System.out.println("=====================");
             for (Song song : songs) {
                 System.out.println(song);
             }
+
             System.out.println("=====================");
         }
 
@@ -57,12 +92,14 @@ public class Operations {
                     Clip clip = AudioSystem.getClip();
                     clip.open(audioInputStream);
 
-                    long duration = clip.getMicrosecondLength() / 1_000_000;
+             /*       long duration = clip.getMicrosecondLength() / 1_000_000;
                     long seconds = duration % 60;
                     long minutes = (duration / 60) % 60;
                     long hours = duration / 3600;
 
                     System.out.println(hours + " : " + minutes + " : " + seconds);
+
+              */
                     Scanner sc = new Scanner(System.in);
                     String response = "";
 
@@ -90,7 +127,7 @@ public class Operations {
             }
         }
 
-        private Song findSongById(int id) {
+        public Song findSongById(int id) {
             for (Song song : songs) {
                 if (song.getId() == id) {
                     return song;
@@ -110,11 +147,11 @@ public class Operations {
             }
         }
 
-        private void updateDatabase() {
+        public void updateDatabase() {
             try (PrintWriter writer = new PrintWriter(new FileWriter("database.txt"))) {
                 for (Song song : songs) {
-                    writer.println(song.getId() + "," + song.getName() + "," + song.getCreator() + "," +
-                            song.getDuration() + ","  + song.getGenre() + "," + song.getFilePath());
+                    writer.println(song.getId() + "," + song.getName() + "," + song.getCreator() +
+                            ","  + song.getGenre() + "," + song.getFilePath());
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -127,8 +164,8 @@ public class Operations {
                 try (PrintWriter writer = new PrintWriter(new FileWriter(genreFileName))) {
                     for (Song song : songs) {
                         if (song.getGenre() == genre) {
-                            writer.println(song.getId() + "," + song.getName() + "," + song.getCreator() + "," +
-                                    song.getDuration() + "," + song.getGenre() + "," + song.getFilePath());
+                            writer.println(song.getId() + "," + song.getName() + "," + song.getCreator() +
+                                    "," + song.getGenre() + "," + song.getFilePath());
                         }
                     }
                     System.out.println(genre.toString());
@@ -138,6 +175,8 @@ public class Operations {
             }
 
         }
+
+        // boolean flag for shuffle, repeat
 
         public void loopPlaylist(String response) throws SongNotFoundException{
 
