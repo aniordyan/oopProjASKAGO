@@ -6,11 +6,9 @@ import java.io.IOException;
 
 public class Song extends AudioFile{
     public enum Genre{CLASSICAL, POP, ROCK, JAZZ};
-
-
     private Genre genre;
     private String duration;
-    //private Duration d;
+
 
     public Song(int id,String name, String creator, Genre genre, String filePath){
         super(id,name,creator,filePath);
@@ -19,11 +17,6 @@ public class Song extends AudioFile{
 
     public Genre getGenre() {
         return this.genre;
-    }
-
-
-    public void setGenre(Genre genre) { // consider erasing
-        this.genre = genre;
     }
 
     public String getDuration() {

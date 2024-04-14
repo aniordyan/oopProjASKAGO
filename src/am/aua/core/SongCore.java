@@ -65,7 +65,7 @@ public class SongCore implements Playable {
     public void playFiles(int id) throws SongNotFoundException {
 
         Song selectedSong = findSongById(id);
-        File songFile = getSongFileById(selectedSong);
+        File songFile = getSongLocation(selectedSong);
 
 
             try {
@@ -194,11 +194,10 @@ public class SongCore implements Playable {
     public void playlistToPlay(String respone, boolean shuffle) throws UnsupportedAudioFileException, LineUnavailableException, IOException, SongNotFoundException {
         listFiles(respone + ".txt");
         List<Song> playlistSongs = loadSongsFromDatabase(respone + ".txt");
-
         if (shuffle) Collections.shuffle(playlistSongs);
 
         for (Song songs : playlistSongs) {
-            File songFile = getSongFileById(songs);
+            File songFile = getSongLocation(songs);
 
             try {
                 AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(songFile);
@@ -206,9 +205,7 @@ public class SongCore implements Playable {
 
                 clip.open(audioInputStream);
                 clip.start();
-                while (clip.getMicrosecondLength() != clip.getMicrosecondPosition()) {
-
-                }
+                while (clip.getMicrosecondLength() != clip.getMicrosecondPosition()) {}
 
             } catch (UnsupportedAudioFileException | LineUnavailableException | IOException e) {
                 e.printStackTrace();
@@ -218,7 +215,7 @@ public class SongCore implements Playable {
     }
 
 
-    public File getSongFileById(Song s) throws SongNotFoundException {
+    public File getSongLocation(Song s) throws SongNotFoundException {
 
         if (s != null) {
             Path path = Paths.get(s.getFilePath());
@@ -235,21 +232,6 @@ public class SongCore implements Playable {
 }
 
 
- /*   public File getLocation(Song s) {
-        File songFile = null;
-        if (s != null) {
-            Path path = Paths.get(s.getFilePath());
-            if (path.isAbsolute()) {
-                songFile = new File(s.getFilePath());
-            } else {
-                songFile = new File(folderPath + File.separator + s.getFilePath());
-            }
-        }
-
-        return songFile;
-    }
-
-  */
 
 
 

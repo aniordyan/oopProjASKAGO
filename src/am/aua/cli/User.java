@@ -23,9 +23,9 @@ public class User {
         while (true) {
             System.out.println();
             System.out.println("1. Display Songs");
-            System.out.println("2. Display Podcasts"); //currently doesnt work
+            System.out.println("2. Display Podcasts"); //in progress
             System.out.println("3. Display existing playlists");
-            System.out.println("4. Create new playlist"); // currently doesnt work
+            System.out.println("4. Create new playlist"); //is progress
             System.out.println("5. Add new song");
             System.out.println();
             System.out.print("Enter your choice: ");
@@ -65,7 +65,7 @@ public class User {
                     boolean shuffle;
                     boolean repeat = true;
                     while(repeat){
-                        System.out.println("Do you want to enable shuffling?(y/n)");
+                        System.out.println("Do you want to enable shuffle play?(y/n)");
                         if(sc.next().equalsIgnoreCase("y")) shuffle = true;
                         else shuffle = false;
                         songPlayer.playlistToPlay(respone, shuffle);
