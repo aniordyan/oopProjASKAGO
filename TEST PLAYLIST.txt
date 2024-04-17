@@ -1,0 +1,2 @@
+1,Blood Type,Viktor Tsoi,ROCK,gruppa_krovi.wav
+2,Chop Sue,System of a Down,ROCK,System-of-A-Down-Chop-Suey_.wav

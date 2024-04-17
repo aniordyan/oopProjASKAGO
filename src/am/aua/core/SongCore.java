@@ -19,10 +19,26 @@ public class SongCore implements Playable {
     private static int highestId = 0;
     private static final String databasePath = "database.txt";
 
+    public SongCore(){}
+
 
     public SongCore(String folderPath) {
         this.folderPath = folderPath;
         this.songs = loadSongsFromDatabase(databasePath);
+    }
+
+    public File getSongLocation(Song s) throws SongNotFoundException {
+
+        if (s != null) {
+            Path path = Paths.get(s.getFilePath());
+            if (path.isAbsolute()) {
+                return new File(s.getFilePath());
+            } else {
+                return new File(folderPath + File.separator + s.getFilePath());
+            }
+        } else {
+            throw new SongNotFoundException("Song not found.");
+        }
     }
 
 
@@ -215,19 +231,10 @@ public class SongCore implements Playable {
     }
 
 
-    public File getSongLocation(Song s) throws SongNotFoundException {
 
-        if (s != null) {
-            Path path = Paths.get(s.getFilePath());
-            if (path.isAbsolute()) {
-                return new File(s.getFilePath());
-            } else {
-                return new File(folderPath + File.separator + s.getFilePath());
-            }
-        } else {
-            throw new SongNotFoundException("Song not found.");
-        }
-    }
+
+
+
 
 }
 

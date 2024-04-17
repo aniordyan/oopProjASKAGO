@@ -1,6 +1,7 @@
 package am.aua.cli;
 
 
+import am.aua.core.CustomPlaylist;
 import am.aua.core.SongCore;
 import am.aua.exceptions.InvalidGenreException;
 import am.aua.exceptions.SongNotFoundException;
@@ -8,6 +9,7 @@ import am.aua.exceptions.SongNotFoundException;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
+import java.sql.SQLOutput;
 import java.util.Scanner;
 
 public class User {
@@ -16,6 +18,7 @@ public class User {
     String defaultDatabase = "database.txt";
 
     SongCore songPlayer = new SongCore(folderPath);
+    CustomPlaylist customPlaylist = new CustomPlaylist(folderPath);
 
     public void EntryPoint() throws SongNotFoundException, UnsupportedAudioFileException, LineUnavailableException, IOException, InvalidGenreException {
         Scanner sc = new Scanner(System.in);
@@ -59,7 +62,16 @@ public class User {
                 break;
 
                 case 3:
+                    System.out.println("Local library: ");
                     songPlayer.createPlaylistByGenre();
+
+                    if (CustomPlaylist.names.isEmpty()) { // If no playlist was created
+                        System.out.println("No custom playlists.");
+                    } else {
+                        System.out.println("Custom playlists: ");
+                        customPlaylist.listPlaylists();
+                    }
+
                     System.out.println("Choose playlist to play: ");
                     String respone = sc.next().toUpperCase();
                     boolean shuffle;
@@ -77,8 +89,15 @@ public class User {
 
                     break;
 
+                case 4:
+                    customPlaylist.createCustomPlaylist();
+
+                    break;
+
+
                 case 5:
                     songPlayer.addFile();
+                break;
             }
         }
     }
