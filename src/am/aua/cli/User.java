@@ -69,6 +69,7 @@ public class User {
                     System.out.println("Custom playlists:");
                     for (Playlist playlist : playlistManager.getAllPlaylists()) {
                         System.out.println(playlist.getName());
+                        //songPlayer.playlistToPlayTest(playlist.getSongIds(), false);
                     }
                     System.out.println();
                     System.out.println("Choose playlist to play: ");
@@ -79,7 +80,9 @@ public class User {
                         System.out.println("Do you want to enable shuffle play?(y/n)");
                         if(sc.next().equalsIgnoreCase("y")) shuffle = true;
                         else shuffle = false;
-                        songPlayer.playlistToPlay(respone, shuffle);
+                        //songPlayer.playlistToPlay(respone, shuffle);
+                        songPlayer.playlistToPlayTest(songPlayer.getSongIdsFromGenreDatabase(respone), shuffle);
+
                         System.out.println("Do you want to repeat with playlist?(y/n)");
                         if(sc.next().equalsIgnoreCase("y")) repeat = true;
                         else repeat = false;

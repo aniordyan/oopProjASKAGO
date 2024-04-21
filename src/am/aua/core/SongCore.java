@@ -42,8 +42,8 @@ public class SongCore implements Playable {
     }
 
 
-    public List<Song> loadSongsFromDatabase(String path) {
-        List<Song> songs = new ArrayList<>();
+    public ArrayList<Song> loadSongsFromDatabase(String path) {
+        ArrayList<Song> songs = new ArrayList<>();
         try (Scanner scanner = new Scanner(new File(path))) {
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
@@ -185,7 +185,7 @@ public class SongCore implements Playable {
         Song newSong = new Song(id, name, artist, genre, filePath);
         songs.add(newSong);
         updateDatabase();
-        System.out.println("am.aua.core.Song added successfully!");
+        System.out.println("Song added successfully!");
     }
 
     public void createPlaylistByGenre() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
@@ -207,9 +207,58 @@ public class SongCore implements Playable {
 
     }
 
+    public ArrayList<Integer> getSongIdsFromGenreDatabase(String genreName) {
+        String genreDatabasePath = genreName + ".txt";
+        ArrayList<Integer> songIds = new ArrayList<>();
+        try (Scanner scanner = new Scanner(new File(genreDatabasePath))) {
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                String[] parts = line.split(",");
+                int id = Integer.parseInt(parts[0]);
+                songIds.add(id);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return songIds;
+    }
+
+    public void playlistToPlayTest(ArrayList<Integer> songIds, boolean shuffle) throws UnsupportedAudioFileException, LineUnavailableException, IOException, SongNotFoundException {
+        if (songIds.isEmpty()) {
+            System.out.println("Playlist is empty.");
+            return;
+        }
+
+        if (shuffle) {
+            Collections.shuffle(songIds);
+        }
+
+        for (int songId : songIds) {
+            Song song = findSongById(songId);
+            if (song != null) {
+                File songFile = getSongLocation(song);
+                try {
+                    AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(songFile);
+                    Clip clip = AudioSystem.getClip();
+
+                    clip.open(audioInputStream);
+                    clip.start();
+                    while (clip.getMicrosecondLength() != clip.getMicrosecondPosition()) {
+                    }
+
+                } catch (UnsupportedAudioFileException | LineUnavailableException | IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                System.out.println("Song with ID " + songId + " not found.");
+            }
+        }
+    }
+
+
     public void playlistToPlay(String respone, boolean shuffle) throws UnsupportedAudioFileException, LineUnavailableException, IOException, SongNotFoundException {
         listFiles(respone + ".txt");
-        List<Song> playlistSongs = loadSongsFromDatabase(respone + ".txt");
+        ArrayList<Song> playlistSongs = loadSongsFromDatabase(respone + ".txt");
         if (shuffle) Collections.shuffle(playlistSongs);
 
         for (Song songs : playlistSongs) {
@@ -229,6 +278,46 @@ public class SongCore implements Playable {
         }
 
     }
+
+
+    public void setSongDuration(Song song) throws SongNotFoundException {
+        File songFile = getSongLocation(song);
+        Duration duration = new Duration(songFile);
+        song.setDuration(duration.getSeconds());
+    }
+
+    private class Duration {
+        private long seconds;
+
+
+        public Duration(File audioFile) {
+            try {
+                AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
+                Clip clip = AudioSystem.getClip();
+                clip.open(audioInputStream);
+
+                    long duration = clip.getMicrosecondLength() / 1_000_000;
+                    /*long seconds = duration % 60;
+                    long minutes = (duration / 60) % 60;
+                    long hours = duration / 3600;
+
+                     */
+
+                    this.seconds = duration;
+
+
+            } catch (UnsupportedAudioFileException | IOException e) {
+                e.printStackTrace();
+            } catch (LineUnavailableException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        public long getSeconds() {
+            return seconds;
+        }
+    }
+
 
 
 

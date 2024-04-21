@@ -21,6 +21,15 @@ public class Playlist {
     }
 
 
+    public ArrayList<Integer> getSongIds() {
+        ArrayList<Integer> songIds = new ArrayList<>();
+        for (Song song : songs) {
+            songIds.add(song.getId());
+        }
+        return songIds;
+    }
+
+
     public void addSong(int songId) throws SongNotFoundException {
         Song songToAdd = songCore.findSongById(songId);
         if (songToAdd != null) {
