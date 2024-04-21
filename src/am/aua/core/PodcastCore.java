@@ -19,7 +19,7 @@ public class PodcastCore implements Playable{
     private List<String> episodes;
    // private List<Episodes> episodes;
     private static int highestId = 0;
-    private static final String databasePath = "database.txt";
+    private static final String databasePath = "podcastDatabase.txt";
 
         public File getPodcastLocation(Podcast podcast) throws SongNotFoundException{
         if (podcast != null) {
