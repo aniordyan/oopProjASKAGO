@@ -1,16 +1,17 @@
 package am.aua.core;
 
 public class Podcast extends AudioFile{
-    public enum PodGenre{COMEDY, CONVERSATIONAL, MUSIC, DRAMA, UNKNOWN};
+    public enum Genre{COMEDY, EDUCATION, SOPRT, UNKNOWN};
 
     private String[] partisipants;
     private int date;
-    private int[] episodes;
+    private String episodes;
     private String describtion;
-    private Podcast.PodGenre genre;
+    private Podcast.Genre genre;
 
-    public Podcast(int id,String name, String creator, String filePath, String[] partisipants,
-                   int date, int[]episodes, String describtion, PodGenre genre){
+
+    public Podcast(int id,String name, String creator, String[] partisipants, Genre genre,
+                    String episodes, int date, String describtion, String filePath){
         super(id,name,creator,filePath);
         this.partisipants = partisipants;
         this.date = date;
@@ -21,19 +22,33 @@ public class Podcast extends AudioFile{
     public String[] getPartisipants(){
         return this.partisipants;
     }
+    public void setPartisipants(String[] partisipants){
+        this.partisipants = partisipants;
+    }
     public int getDate(){
         return this.date;
     }
-    public int[] getEpisodes(){
+    public void setDate(int date){
+        this.date = date;
+    }
+    public String getEpisodes(){
         return this.episodes;
+    }
+    public void setEpisodes(String episods){
+        this.episodes = episods;
     }
     public String getDescribtion(){
         return this.describtion;
     }
-    public PodGenre getGenre() {
+    public void setDescribtion(String describtion){
+        this.describtion = describtion;
+    }
+    public Genre getGenre() {
         return this.genre;
     }
-
+    public void setGenre(Genre genre) {
+        this.genre = genre;
+    }
 
 
 }
