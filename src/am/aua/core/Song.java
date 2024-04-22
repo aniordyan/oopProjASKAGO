@@ -5,7 +5,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
 
 public class Song extends AudioFile{
-    public enum Genre{CLASSICAL, POP, ROCK, JAZZ};
+    public enum Genre{CLASSICAL, POP, ROCK, JAZZ, FUNK, RNB};
     private Genre genre;
     private String duration;
 
