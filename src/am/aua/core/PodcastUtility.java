@@ -1,7 +1,6 @@
 package am.aua.core;
 
 import am.aua.exceptions.InvalidGenreException;
-import am.aua.exceptions.ParamNotFoundException;
 import am.aua.exceptions.PodcastNotFoundExcaption;
 import am.aua.exceptions.SongNotFoundException;
 
@@ -13,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class PodcastCore implements Playable{
+public class PodcastUtility implements Playable{
     private String folderPath;
     private List<Podcast> podcasts;
     private List<String> episodes;

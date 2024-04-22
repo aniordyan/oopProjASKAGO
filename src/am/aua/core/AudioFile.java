@@ -9,7 +9,7 @@ public abstract class AudioFile {
     private String name;
     private String creator;
     private String filePath;
-
+    private String duration;
 
     public AudioFile(int id,String name, String creator, String filePath){
         this.id = id;
@@ -22,24 +22,12 @@ public abstract class AudioFile {
         return this.id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public String getName() {
         return this.name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getCreator() {
         return this.creator;
-    }
-
-    public void setCreator(String creator) {
-        this.creator = creator;
     }
 
 
@@ -47,8 +35,13 @@ public abstract class AudioFile {
         return this.filePath;
     }
 
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
+
+    public String getDuration() {
+        return duration;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
     }
 
 
