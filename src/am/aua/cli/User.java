@@ -2,7 +2,7 @@ package am.aua.cli;
 
 
 
-import am.aua.core.SongCore;
+import am.aua.core.SongUtility;
 import am.aua.core.Playlist;
 import am.aua.exceptions.InvalidGenreException;
 import am.aua.exceptions.SongNotFoundException;
@@ -15,9 +15,9 @@ import java.util.Scanner;
 public class User {
 
     String folderPath = "src/am/aua/songs";
-    String defaultDatabase = "database.txt";
+    String defaultDatabase = "songDatabase.txt";
 
-    SongCore songPlayer = new SongCore(folderPath);
+    SongUtility songPlayer = new SongUtility(folderPath);
     private Playlist.PlaylistManager playlistManager = new Playlist.PlaylistManager();
 
 

@@ -9,22 +9,22 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.Scanner;
 
-public class SongCore implements Playable {
+public class SongUtility implements Playable {
 
     private String folderPath;
-    private List<Song> songs;
+    private ArrayList<Song> songs;
     private static int highestId = 0;
-    private static final String databasePath = "database.txt";
+    private static final String databasePath = "songDatabase.txt";
 
-    public SongCore(){}
+    public SongUtility(){}
 
 
-    public SongCore(String folderPath) {
+    public SongUtility(String folderPath) {
         this.folderPath = folderPath;
         this.songs = loadSongsFromDatabase(databasePath);
+
     }
 
     public File getSongLocation(Song s) throws SongNotFoundException {
@@ -67,7 +67,7 @@ public class SongCore implements Playable {
     }
 
     public void listFiles(String path) throws UnsupportedAudioFileException, LineUnavailableException, IOException {
-        List<Song> songs = loadSongsFromDatabase(path);
+        ArrayList<Song> songs = loadSongsFromDatabase(path);
         System.out.println("Songs:");
         System.out.println("=====================");
         for (Song song : songs) {
@@ -280,43 +280,39 @@ public class SongCore implements Playable {
     }
 
 
-    public void setSongDuration(Song song) throws SongNotFoundException {
+ /*   public void setSongDuration(Song song) throws SongNotFoundException {
         File songFile = getSongLocation(song);
         Duration duration = new Duration(songFile);
-        song.setDuration(duration.getSeconds());
+        song.setDuration(duration.getFormattedDuration());
     }
 
-    private class Duration {
-        private long seconds;
 
+    private class Duration {
+        private String formattedDuration;
 
         public Duration(File audioFile) {
             try {
                 AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
-                Clip clip = AudioSystem.getClip();
-                clip.open(audioInputStream);
+                AudioFormat format = audioInputStream.getFormat();
+                long frames = audioInputStream.getFrameLength();
+                double durationInSeconds = (frames + 0.0) / format.getFrameRate();
 
-                    long duration = clip.getMicrosecondLength() / 1_000_000;
-                    /*long seconds = duration % 60;
-                    long minutes = (duration / 60) % 60;
-                    long hours = duration / 3600;
+                long hours = (long) (durationInSeconds / 3600);
+                long minutes = (long) ((durationInSeconds % 3600) / 60);
+                long seconds = (long) (durationInSeconds % 60);
 
-                     */
-
-                    this.seconds = duration;
-
-
+                this.formattedDuration = String.format("%02d:%02d:%02d", hours, minutes, seconds);
             } catch (UnsupportedAudioFileException | IOException e) {
                 e.printStackTrace();
-            } catch (LineUnavailableException e) {
-                throw new RuntimeException(e);
             }
         }
 
-        public long getSeconds() {
-            return seconds;
+        public String getFormattedDuration() {
+            return formattedDuration;
         }
     }
+    */
+
 
 
 
