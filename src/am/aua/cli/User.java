@@ -15,7 +15,7 @@ import java.util.Scanner;
 public class User {
 
     String folderPath = "src/am/aua/songs";
-    String defaultDatabase = "database.txt";
+    String defaultDatabase = "songDatabase.txt";
 
     SongUtility songPlayer = new SongUtility(folderPath);
     private Playlist.PlaylistManager playlistManager = new Playlist.PlaylistManager();

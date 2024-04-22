@@ -14,10 +14,8 @@ import java.util.Scanner;
 
 public class PodcastUtility implements Playable{
     private String folderPath;
-    private List<Podcast> podcasts;
-    private List<String> episodes;
-   // private List<Episodes> episodes;
-    private static int highestId = 0;
+    private ArrayList<Podcast> podcasts;
+
     private static final String databasePath = "podcastDatabase.txt";
 
         public File getPodcastLocation(Podcast podcast) throws SongNotFoundException{
@@ -33,7 +31,7 @@ public class PodcastUtility implements Playable{
         }
     }
 
-    public List<Podcast> loadPodcastsFromDatabase(String path){
+  /*  public List<Podcast> loadPodcastsFromDatabase(String path){
         List<Podcast> podcasts = new ArrayList<>();
         try (Scanner scanner = new Scanner(new File(path))) {
             while (scanner.hasNextLine()) {
@@ -58,6 +56,8 @@ public class PodcastUtility implements Playable{
         return podcasts;
     }
 
+
+
     @Override
     public void listFiles(String path) throws UnsupportedAudioFileException, LineUnavailableException, IOException {
         List<Podcast> podcasts = loadPodcastsFromDatabase(path);
@@ -76,52 +76,11 @@ public class PodcastUtility implements Playable{
         }
         return null;
     }
-//    public Podcast findPodcastByEpisodId(int episodId){
-//        for (Episodes episodes : episodes){
-//            if (episodes.getId() == episodId){
-//                return episodes;
-//            }
-//        }
-//        return null;
-//    }
+
 
     @Override
     public void playFiles(int id) throws SongNotFoundException {
-        Podcast selectedPodcast = findPodcastById(id);
-        File podcastFile = getPodcastLocation(selectedPodcast);
-        try{
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(podcastFile);
-            Clip clip = AudioSystem.getClip();
-            clip.open(audioInputStream);
 
-            Scanner scanner = new Scanner(System.in);
-            String response = "";
-            while(!response.equals("Q")){
-                System.out.println("P = play, S = stop, R = reset, Q = quit");
-                System.out.println("Enter your choice: ");
-                response = scanner.next().toUpperCase();
-
-                switch (response) {
-                    case ("P"):
-                        clip.start();
-                        break;
-                    case ("S"):
-                        clip.stop();
-                        break;
-                    case ("R"):
-                        clip.setMicrosecondPosition(0);
-                        break;
-                    case ("Q"):
-                        clip.close();
-                        break;
-
-                }
-            }
-            audioInputStream.close();
-        }
-        catch(UnsupportedAudioFileException| LineUnavailableException | IOException e){
-            e.printStackTrace();
-        }
     }
     public void deletePodcast(int id) throws PodcastNotFoundExcaption{
         Podcast deletePodcast = findPodcastById(id);
@@ -137,55 +96,31 @@ public class PodcastUtility implements Playable{
 
     @Override
     public void updateDatabase() {
-        try(PrintWriter printWriter = new PrintWriter(new FileWriter(databasePath))){
-            for (Podcast podcast : podcasts){
-                printWriter.println(podcast.getId() + ", " + podcast.getName() + ", " + podcast.getCreator() + ", "
-                        + podcast.getPartisipants() + ", " + podcast.getGenre() + ", " + podcast.getEpisodes()
-                        + ", " + podcast.getDate() + ", " + podcast.getDescribtion() + ", " + podcast.getFilePath());
-            }
-        }
-        catch(IOException e){
-            e.printStackTrace();
-        }
+
+    }
+
+   */
+
+    @Override
+    public void listFiles(String path) throws UnsupportedAudioFileException, LineUnavailableException, IOException {
+
+    }
+
+    @Override
+    public void playFiles(int id) throws SongNotFoundException {
+
+    }
+
+    @Override
+    public void updateDatabase() {
+
     }
 
     @Override
     public void addFile() throws InvalidGenreException {
-        Podcast.Genre genre = null;
-        Scanner scanner = new Scanner(System.in);
-        
-        System.out.println("Enter the name of the podcast: ");
-        String name = scanner.nextLine();
-        System.out.println("Enter the name of the podcast host: ");
-        String creator = scanner.nextLine();
-        System.out.println("How many partisipants does the podcast have?");
-        int number = scanner.nextInt();
-        String[] partisipants = new String[0];
-        for (int i = 0; i < number; i++) {
-            System.out.println("Enter the names of the partisipants: ");
-            partisipants[i] = scanner.nextLine();
-        }
-        System.out.println("Enter the genre of the podcast: ");
-        String genreInput = scanner.nextLine();
-        System.out.println("Enter the number of episodes: ");
-        String episodes = scanner.nextLine();
-        System.out.println("Enter the date of the podcast: ");
-        int date = scanner.nextInt();
-        System.out.println("Add describtion to podcast: ");
-        String describtion = scanner.nextLine();
-        try{
-            genre = Podcast.Genre.valueOf(genreInput.toUpperCase());
-        }
-        catch(IllegalArgumentException e){
-            throw new InvalidGenreException("Invalid genre.");
-        }
-        System.out.println("Enter the path to the file: ");
-        String filePath = scanner.nextLine();
-        int id = highestId + 1;
-        
-        Podcast newPodcast = new Podcast(id, name, creator, partisipants, genre, episodes, date, describtion, filePath);
-        podcasts.add(newPodcast);
-        updateDatabase();
-        System.out.println("Podcast has been added successfully.");
+/*
+here addFile should mean that the user input the name of a podcast and an absolute path to it
+and there would be a database with name... and path to the folder
+ */
     }
 }

@@ -9,15 +9,14 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.Scanner;
 
 public class SongUtility implements Playable {
 
     private String folderPath;
-    private List<Song> songs;
+    private ArrayList<Song> songs;
     private static int highestId = 0;
-    private static final String databasePath = "database.txt";
+    private static final String databasePath = "songDatabase.txt";
 
     public SongUtility(){}
 
@@ -68,7 +67,7 @@ public class SongUtility implements Playable {
     }
 
     public void listFiles(String path) throws UnsupportedAudioFileException, LineUnavailableException, IOException {
-        List<Song> songs = loadSongsFromDatabase(path);
+        ArrayList<Song> songs = loadSongsFromDatabase(path);
         System.out.println("Songs:");
         System.out.println("=====================");
         for (Song song : songs) {
