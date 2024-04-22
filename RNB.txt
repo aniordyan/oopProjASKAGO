@@ -1,2 +1,2 @@
-8,Kiss Me,DPR LIVE,RNB,
-9,Ballroom Extravaganza,DPR IAN,RNB,
+8,Kiss Me,DPR LIVE,RNB
+9,Ballroom Extravaganza,DPR IAN,RNB

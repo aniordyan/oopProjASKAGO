@@ -1,3 +1,3 @@
 4,La Boheme,Charles Aznavour,POP,Charles-Aznavour-La-Boheme.wav
-10,Off My Face,Justin Bieber,POP,
-11,Blueberry Eyes,Max feat Suga of BTS,POP,
+10,Off My Face,Justin Bieber,POP
+11,Blueberry Eyes,Max feat Suga of BTS,POP
