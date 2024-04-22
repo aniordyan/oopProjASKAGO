@@ -1,15 +1,15 @@
 package am.aua.cli;
 
 
-import am.aua.core.CustomPlaylist;
+
 import am.aua.core.SongCore;
+import am.aua.core.Playlist;
 import am.aua.exceptions.InvalidGenreException;
 import am.aua.exceptions.SongNotFoundException;
 
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
-import java.sql.SQLOutput;
 import java.util.Scanner;
 
 public class User {
@@ -18,7 +18,8 @@ public class User {
     String defaultDatabase = "database.txt";
 
     SongCore songPlayer = new SongCore(folderPath);
-    CustomPlaylist customPlaylist = new CustomPlaylist(folderPath);
+    private Playlist.PlaylistManager playlistManager = new Playlist.PlaylistManager();
+
 
     public void EntryPoint() throws SongNotFoundException, UnsupportedAudioFileException, LineUnavailableException, IOException, InvalidGenreException {
         Scanner sc = new Scanner(System.in);
@@ -26,9 +27,9 @@ public class User {
         while (true) {
             System.out.println();
             System.out.println("1. Display Songs");
-            System.out.println("2. Display Podcasts"); //in progress
+            System.out.println("2. Display Podcasts");
             System.out.println("3. Display existing playlists");
-            System.out.println("4. Create new playlist"); //is progress
+            System.out.println("4. Create new playlist");
             System.out.println("5. Add new song");
             System.out.println();
             System.out.print("Enter your choice: ");
@@ -65,13 +66,12 @@ public class User {
                     System.out.println("Local library: ");
                     songPlayer.createPlaylistByGenre();
 
-                    if (CustomPlaylist.names.isEmpty()) { // If no playlist was created
-                        System.out.println("No custom playlists.");
-                    } else {
-                        System.out.println("Custom playlists: ");
-                        customPlaylist.listPlaylists();
+                    System.out.println("Custom playlists:");
+                    for (Playlist playlist : playlistManager.getAllPlaylists()) {
+                        System.out.println(playlist.getName());
+                        //songPlayer.playlistToPlayTest(playlist.getSongIds(), false);
                     }
-
+                    System.out.println();
                     System.out.println("Choose playlist to play: ");
                     String respone = sc.next().toUpperCase();
                     boolean shuffle;
@@ -80,7 +80,9 @@ public class User {
                         System.out.println("Do you want to enable shuffle play?(y/n)");
                         if(sc.next().equalsIgnoreCase("y")) shuffle = true;
                         else shuffle = false;
-                        songPlayer.playlistToPlay(respone, shuffle);
+                        //songPlayer.playlistToPlay(respone, shuffle);
+                        songPlayer.playlistToPlayTest(songPlayer.getSongIdsFromGenreDatabase(respone), shuffle);
+
                         System.out.println("Do you want to repeat with playlist?(y/n)");
                         if(sc.next().equalsIgnoreCase("y")) repeat = true;
                         else repeat = false;
@@ -90,9 +92,26 @@ public class User {
                     break;
 
                 case 4:
-                    customPlaylist.createCustomPlaylist();
+                    System.out.println("Enter the name of the new playlist:");
+                    String playlistName = sc.nextLine();
+                    Playlist newPlaylist = new Playlist(playlistName, songPlayer);
+                    playlistManager.addPlaylist(newPlaylist);
+                    System.out.println("Playlist created successfully!");
 
+                    System.out.println("Add songs to the playlist:");
+                    System.out.println("Enter the IDs of the songs to add (separated by spaces):");
+                    String input = sc.nextLine();
+                    String[] songIds = input.split("\\s+");
+                    for (String idStr : songIds) {
+                        try {
+                            int songId = Integer.parseInt(idStr);
+                            newPlaylist.addSong(songId);
+                        } catch (NumberFormatException e) {
+                            System.out.println("Invalid input: " + idStr + ". Please enter valid song IDs.");
+                        }
+                    }
                     break;
+
 
 
                 case 5:
