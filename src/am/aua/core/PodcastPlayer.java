@@ -1,7 +1,6 @@
 package am.aua.core;
 
 import am.aua.exceptions.InvalidGenreException;
-import am.aua.exceptions.PodcastNotFoundExcaption;
 import am.aua.exceptions.SongNotFoundException;
 
 import javax.sound.sampled.*;
@@ -9,10 +8,8 @@ import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
 
-public class PodcastUtility implements Playable{
+public class PodcastPlayer implements Playable{
     private String folderPath;
     private ArrayList<Podcast> podcasts;
 

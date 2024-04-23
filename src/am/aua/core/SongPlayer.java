@@ -11,17 +11,19 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
 
-public class SongUtility implements Playable {
+public class SongPlayer implements Playable {
 
     private String folderPath;
     private ArrayList<Song> songs;
     private static int highestId = 0;
     private static final String databasePath = "songDatabase.txt";
 
-    public SongUtility(){}
+
+    public SongPlayer() {
+    }
 
 
-    public SongUtility(String folderPath) {
+    public SongPlayer(String folderPath) {
         this.folderPath = folderPath;
         this.songs = loadSongsFromDatabase(databasePath);
 
@@ -75,6 +77,39 @@ public class SongUtility implements Playable {
         }
 
         System.out.println("=====================");
+    }
+
+    public void playSong(Song s) throws SongNotFoundException, UnsupportedAudioFileException, IOException {
+        File songFile = new File(folderPath + File.separator + s.getFilePath());
+        try {
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(songFile);
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            clip.start();
+            audioInputStream.close();
+
+        } catch (LineUnavailableException ex) {
+            throw new RuntimeException(ex);
+        }
+
+
+    }
+
+
+
+    public void pauseSong(Song s) throws SongNotFoundException, UnsupportedAudioFileException, IOException {
+        File songFile = new File(folderPath + File.separator + s.getFilePath());
+        try {
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(songFile);
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            if (clip.isRunning()) {
+                clip.stop(); // Stop playback
+            }
+            audioInputStream.close();
+        } catch (LineUnavailableException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
 
@@ -280,38 +315,27 @@ public class SongUtility implements Playable {
     }
 
 
- /*   public void setSongDuration(Song song) throws SongNotFoundException {
-        File songFile = getSongLocation(song);
-        Duration duration = new Duration(songFile);
-        song.setDuration(duration.getFormattedDuration());
-    }
+ /*   public String calculateDuration(Song s) {
+        try {
+            File songFile = new File(s.getFilePath());
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(songFile);
+            AudioFormat format = audioInputStream.getFormat();
+            long frames = audioInputStream.getFrameLength();
+            double durationInSeconds = (frames + 0.0) / format.getFrameRate();
 
+            long hours = (long) (durationInSeconds / 3600);
+            long minutes = (long) ((durationInSeconds % 3600) / 60);
+            long seconds = (long) (durationInSeconds % 60);
 
-    private class Duration {
-        private String formattedDuration;
-
-        public Duration(File audioFile) {
-            try {
-                AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
-                AudioFormat format = audioInputStream.getFormat();
-                long frames = audioInputStream.getFrameLength();
-                double durationInSeconds = (frames + 0.0) / format.getFrameRate();
-
-                long hours = (long) (durationInSeconds / 3600);
-                long minutes = (long) ((durationInSeconds % 3600) / 60);
-                long seconds = (long) (durationInSeconds % 60);
-
-                this.formattedDuration = String.format("%02d:%02d:%02d", hours, minutes, seconds);
-            } catch (UnsupportedAudioFileException | IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        public String getFormattedDuration() {
-            return formattedDuration;
+            return String.format("%02d:%02d:%02d", hours, minutes, seconds);
+        } catch (UnsupportedAudioFileException | IOException e) {
+            e.printStackTrace();
+            return "Unknown"; // Handle error condition gracefully
         }
     }
-    */
+
+  */
+
 
 
 

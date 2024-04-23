@@ -2,7 +2,7 @@ package am.aua.cli;
 
 
 
-import am.aua.core.SongUtility;
+import am.aua.core.SongPlayer;
 import am.aua.core.Playlist;
 import am.aua.exceptions.InvalidGenreException;
 import am.aua.exceptions.SongNotFoundException;
@@ -17,10 +17,10 @@ public class User {
     String folderPath = "src/am/aua/songs";
     String defaultDatabase = "songDatabase.txt";
 
-    SongUtility songPlayer = new SongUtility(folderPath);
+    SongPlayer songPlayer = new SongPlayer(folderPath);
     private Playlist.PlaylistManager playlistManager = new Playlist.PlaylistManager();
 
-
+//need to be changed for ui right?
     public void EntryPoint() throws SongNotFoundException, UnsupportedAudioFileException, LineUnavailableException, IOException, InvalidGenreException {
         Scanner sc = new Scanner(System.in);
 

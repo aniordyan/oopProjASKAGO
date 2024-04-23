@@ -9,7 +9,7 @@ public abstract class AudioFile {
     private String name;
     private String creator;
     private String filePath;
-    private String duration;
+    //private String duration;
 
     public AudioFile(int id,String name, String creator, String filePath){
         this.id = id;
@@ -36,7 +36,7 @@ public abstract class AudioFile {
     }
 
 
-    public String getDuration() {
+ /*   public String getDuration() {
         return duration;
     }
 
@@ -45,5 +45,7 @@ public abstract class AudioFile {
     }
 
 
+
+  */
 
 }

@@ -4,8 +4,8 @@
 4,La Boheme,Charles Aznavour,POP,Charles-Aznavour-La-Boheme.wav
 5,Maskarad,Aram Khachaturian,CLASSICAL,aram_ilich_hachaturjan_-_waltz_maskarad_109__z3.fm_.wav
 6,Bohemian Rhapsody,Queen,ROCK,Queen-Bohemian-Rhapsody.wav
-7,Calm Down,Anderson Paak,FUNK
-8,Kiss Me,DPR LIVE,RNB
-9,Ballroom Extravaganza,DPR IAN,RNB
-10,Off My Face,Justin Bieber,POP
-11,Blueberry Eyes,Max feat Suga of BTS,POP
+7,Calm Down,Anderson Paak,FUNK,Queen-Bohemian-Rhapsody.wav
+8,Kiss Me,DPR LIVE,RNB,Queen-Bohemian-Rhapsody.wav
+9,Ballroom Extravaganza,DPR IAN,RNB,Queen-Bohemian-Rhapsody.wav
+10,Off My Face,Justin Bieber,POP,Queen-Bohemian-Rhapsody.wav
+11,Blueberry Eyes,Max feat Suga of BTS,POP,Queen-Bohemian-Rhapsody.wav

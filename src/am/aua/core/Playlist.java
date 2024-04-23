@@ -8,9 +8,9 @@ import java.util.List;
 public class Playlist {
     private String name;
     private ArrayList<Song> songs;
-    private SongUtility songCore;
+    private SongPlayer songCore;
 
-    public Playlist(String name, SongUtility songCore) {
+    public Playlist(String name, SongPlayer songCore) {
         this.name = name;
         this.songs = new ArrayList<>();
         this.songCore = songCore;
