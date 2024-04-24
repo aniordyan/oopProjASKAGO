@@ -26,6 +26,7 @@ public class AudioPlayerUi extends JFrame {
     private JButton stopButton;
     private JPanel audiofileListPanel;
     private Song selectedSong;
+    private boolean isPaused;
 
     SongPlayer songPlayer = new SongPlayer("src/am/aua/songs");
 
@@ -33,6 +34,7 @@ public class AudioPlayerUi extends JFrame {
         setTitle("Audio Player");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(WIDTH, HEIGHT);
+        setResizable(false);
 
         JPanel mainPanel = new JPanel(new BorderLayout());
 
@@ -109,17 +111,27 @@ public class AudioPlayerUi extends JFrame {
         pauseButton = new JButton("Pause");
         stopButton = new JButton("Stop");
 
+        controlBarPanel.add(playButton);
+        controlBarPanel.add(pauseButton);
+        controlBarPanel.add(stopButton);
+
+
         playButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                    songPlayer.playSong(selectedSong);
-                } catch (SongNotFoundException ex) {
-                    throw new RuntimeException(ex);
-                } catch (UnsupportedAudioFileException ex) {
-                    throw new RuntimeException(ex);
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
+                if (isPaused) {
+                    songPlayer.resumeSong();
+                    isPaused = false;
+                } else {
+                    try {
+                        songPlayer.playSong(selectedSong);
+                    } catch (SongNotFoundException ex) {
+                        throw new RuntimeException(ex);
+                    } catch (UnsupportedAudioFileException ex) {
+                        throw new RuntimeException(ex);
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
                 }
             }
         });
@@ -127,14 +139,9 @@ public class AudioPlayerUi extends JFrame {
         pauseButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                    songPlayer.pauseSong(selectedSong);
-                } catch (UnsupportedAudioFileException ex) {
-                    throw new RuntimeException(ex);
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                } catch (SongNotFoundException ex) {
-                    throw new RuntimeException(ex);
+                if (!isPaused) {
+                    songPlayer.pauseSong();
+                    isPaused = true;
                 }
             }
         });
@@ -142,13 +149,11 @@ public class AudioPlayerUi extends JFrame {
         stopButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                songPlayer.stopSong();
             }
         });
 
-        controlBarPanel.add(playButton);
-        controlBarPanel.add(pauseButton);
-        controlBarPanel.add(stopButton);
+
 
         playerPanel.add(controlBarPanel, BorderLayout.SOUTH);
 
@@ -168,7 +173,7 @@ public class AudioPlayerUi extends JFrame {
                     songPlayer.playSong(song);
                     selectedSong = song;
 
-                    label.setBackground(Color.YELLOW); // Change the background color to yellow
+                    label.setBackground(Color.YELLOW);
                     label.setOpaque(true);
                 } catch (SongNotFoundException ex) {
                     throw new RuntimeException(ex);

@@ -14,6 +14,8 @@ import java.util.Scanner;
 public class SongPlayer implements Playable {
 
     private String folderPath;
+    private long clipPosition;
+    private Clip clip;
     private ArrayList<Song> songs;
     private static int highestId = 0;
     private static final String databasePath = "songDatabase.txt";
@@ -72,32 +74,33 @@ public class SongPlayer implements Playable {
         File songFile = new File(folderPath + File.separator + s.getFilePath());
         try {
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(songFile);
-            Clip clip = AudioSystem.getClip();
+            clip = AudioSystem.getClip(); // Initialize the Clip instance
             clip.open(audioInputStream);
             clip.start();
             audioInputStream.close();
-
         } catch (LineUnavailableException ex) {
             throw new RuntimeException(ex);
         }
-
-
     }
 
+    public void pauseSong() {
+        if (clip != null && clip.isRunning()) { // Check if a song is currently playing
+            clipPosition = clip.getMicrosecondPosition(); // Store the current position
+            clip.stop(); // Pause the playback
+        }
+    }
 
+    public void resumeSong() {
+        if (clip != null) { // Check if a song is loaded
+            clip.setMicrosecondPosition(clipPosition); // Set the position to where it was paused
+            clip.start(); // Resume playback
+        }
+    }
 
-    public void pauseSong(Song s) throws SongNotFoundException, UnsupportedAudioFileException, IOException {
-        File songFile = new File(folderPath + File.separator + s.getFilePath());
-        try {
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(songFile);
-            Clip clip = AudioSystem.getClip();
-            clip.open(audioInputStream);
-            if (clip.isRunning()) {
-                clip.stop(); // Stop playback
-            }
-            audioInputStream.close();
-        } catch (LineUnavailableException ex) {
-            throw new RuntimeException(ex);
+    public void stopSong() {
+        if (clip != null && clip.isRunning()) { // Check if a song is currently playing
+            clip.stop(); // Stop the playback
+            clipPosition = 0; // Reset the position
         }
     }
 
