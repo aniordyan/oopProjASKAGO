@@ -3,32 +3,27 @@ package am.aua.core;
 import java.util.ArrayList;
 
 public class Episode extends AudioFile{
-    private ArrayList<String>  partisipants;
-    private String publishedDate;
-    private String description;
+    public enum GenrePodcast{COMEDY, EDUCATION, SPORT, NEWS};
 
+
+    private String publishedDate;
+    private GenrePodcast genre;
 
     public Episode(int id,
                    String name,
                    String creator,
+                   GenrePodcast genre,
                    String filePath,
-                   String publishedDate,
-                   String description) {
+                   String publishedDate
+                   ) {
         super(id, name, creator, filePath);
-        this.partisipants = new ArrayList<>();
         this.publishedDate = publishedDate;
-        this.description = description;
-    }
+        this.genre = genre;
 
-    public ArrayList<String> getPartisipants() {
-        return partisipants;
     }
 
     public String getPublishedDate() {
         return publishedDate;
     }
 
-    public String getDescription() {
-        return description;
-    }
 }

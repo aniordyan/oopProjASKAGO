@@ -6,6 +6,7 @@ import am.aua.exceptions.SongNotFoundException;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public interface Playable { //maybe its a bad idea, maybe it should be just abstract class, maybe we will have other interfaces too
@@ -14,7 +15,9 @@ public interface Playable { //maybe its a bad idea, maybe it should be just abst
 
      }
 
-     public void listFiles(String path) throws UnsupportedAudioFileException, LineUnavailableException, IOException;
+
+
+
 
      public void playFiles(int id) throws SongNotFoundException;
 

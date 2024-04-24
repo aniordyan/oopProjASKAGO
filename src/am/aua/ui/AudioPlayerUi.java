@@ -1,9 +1,7 @@
 package am.aua.ui;
 
-import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,9 +10,7 @@ import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import am.aua.cli.User;
 import am.aua.core.*;
-import am.aua.exceptions.InvalidGenreException;
 import am.aua.exceptions.SongNotFoundException;
 
 public class AudioPlayerUi extends JFrame {
@@ -28,7 +24,7 @@ public class AudioPlayerUi extends JFrame {
     private JButton playButton;
     private JButton pauseButton;
     private JButton stopButton;
-    private JPanel songListPanel;
+    private JPanel audiofileListPanel;
     private Song selectedSong;
 
     SongPlayer songPlayer = new SongPlayer("src/am/aua/songs");
@@ -55,9 +51,9 @@ public class AudioPlayerUi extends JFrame {
         mainPanel.add(controlPanel, BorderLayout.WEST);
 
         // Song list panel
-        songListPanel = new JPanel();
-        songListPanel.setLayout(new BoxLayout(songListPanel, BoxLayout.Y_AXIS));
-        songListPanel.setVisible(true); // Initially invisible
+        audiofileListPanel = new JPanel();
+        audiofileListPanel.setLayout(new BoxLayout(audiofileListPanel, BoxLayout.Y_AXIS));
+        audiofileListPanel.setVisible(true);
 
 
 
@@ -78,22 +74,25 @@ public class AudioPlayerUi extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 welcomePanel.setVisible(false);
+                audiofileListPanel.removeAll();
 
                 ArrayList<Song> songs = songPlayer.loadSongsFromDatabase("songDatabase.txt");
 
                 for (Song song : songs) {
                     JLabel songLabel = createClickableLabel(song);
-                    songListPanel.add(songLabel);
+                    audiofileListPanel.add(songLabel);
                 }
 
-                mainPanel.add(songListPanel, BorderLayout.CENTER);
-                mainPanel.revalidate(); // Revalidate the main panel to reflect changes
+                mainPanel.add(audiofileListPanel, BorderLayout.CENTER);
+                mainPanel.revalidate();
                 mainPanel.repaint();
-                songListPanel.setVisible(true);
+                audiofileListPanel.setVisible(true);
 
 
             }
         });
+
+
 
         // Player panel with control bar
         JPanel playerPanel = new JPanel(new BorderLayout());
@@ -168,6 +167,9 @@ public class AudioPlayerUi extends JFrame {
                 try {
                     songPlayer.playSong(song);
                     selectedSong = song;
+
+                    label.setBackground(Color.YELLOW); // Change the background color to yellow
+                    label.setOpaque(true);
                 } catch (SongNotFoundException ex) {
                     throw new RuntimeException(ex);
                 } catch (UnsupportedAudioFileException ex) {

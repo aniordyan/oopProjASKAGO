@@ -39,7 +39,7 @@ public class User {
 
             switch (choice) {
                 case 1:
-                    songPlayer.listFiles(defaultDatabase);
+                 //   songPlayer.listFiles(defaultDatabase);
                     System.out.println("Select operation");
                     System.out.println("1. Play song | 2. Delete song | 3. Exit");
 

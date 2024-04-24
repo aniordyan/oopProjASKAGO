@@ -68,17 +68,6 @@ public class SongPlayer implements Playable {
 
     }
 
-    public void listFiles(String path) throws UnsupportedAudioFileException, LineUnavailableException, IOException {
-        ArrayList<Song> songs = loadSongsFromDatabase(path);
-        System.out.println("Songs:");
-        System.out.println("=====================");
-        for (Song song : songs) {
-            System.out.println(song);
-        }
-
-        System.out.println("=====================");
-    }
-
     public void playSong(Song s) throws SongNotFoundException, UnsupportedAudioFileException, IOException {
         File songFile = new File(folderPath + File.separator + s.getFilePath());
         try {
@@ -291,7 +280,7 @@ public class SongPlayer implements Playable {
     }
 
 
-    public void playlistToPlay(String respone, boolean shuffle) throws UnsupportedAudioFileException, LineUnavailableException, IOException, SongNotFoundException {
+ /*   public void playlistToPlay(String respone, boolean shuffle) throws UnsupportedAudioFileException, LineUnavailableException, IOException, SongNotFoundException {
         listFiles(respone + ".txt");
         ArrayList<Song> playlistSongs = loadSongsFromDatabase(respone + ".txt");
         if (shuffle) Collections.shuffle(playlistSongs);
@@ -313,6 +302,8 @@ public class SongPlayer implements Playable {
         }
 
     }
+
+  */
 
 
  /*   public String calculateDuration(Song s) {

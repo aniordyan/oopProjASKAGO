@@ -40,13 +40,12 @@ public class Song extends AudioFile{
     public String toString() {
         final int COLUMN_WIDTH = 40;
 
-        String Id = String.format("%-" + 10 + "s", "ID: " + this.getId());
         String Title = String.format("%-" + COLUMN_WIDTH + "s", "Title: " + this.getName());
         String Artist = String.format("%-" + COLUMN_WIDTH + "s", "Artist: " + this.getCreator());
         String Genre = String.format("%-" + COLUMN_WIDTH + "s", "Genre: " + this.getGenre());
 
 
-        return Id + Title + Artist + Genre;
+        return Title + Artist + Genre;
     }
 
 }
