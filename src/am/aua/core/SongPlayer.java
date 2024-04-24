@@ -45,6 +45,20 @@ public class SongPlayer implements Playable {
         }
     }
 
+    public File getSongLocation(String filepath) throws SongNotFoundException {
+
+        if (filepath != null) {
+            Path path = Paths.get(filepath);
+            if (path.isAbsolute()) {
+                return new File(filepath);
+            } else {
+                return new File(folderPath + File.separator + filepath);
+            }
+        } else {
+            throw new SongNotFoundException("Song not found.");
+        }
+    }
+
 
     public ArrayList<Song> loadSongsFromDatabase(String path) {
         ArrayList<Song> songs = new ArrayList<>();

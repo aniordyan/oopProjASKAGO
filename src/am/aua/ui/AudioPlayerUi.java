@@ -17,7 +17,7 @@ public class AudioPlayerUi extends JFrame {
 
     public static final int WIDTH = 800;
     public static final int HEIGHT = 500;
-    public static final int SIDE_WIDTH = 200;
+    public static final int SIDE_WIDTH = 100;
 
     private JScrollPane scrollPane;
     private JSlider progressSlider;
