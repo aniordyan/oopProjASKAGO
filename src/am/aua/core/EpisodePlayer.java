@@ -17,6 +17,13 @@ public class EpisodePlayer {
 
     private static final String databasePath = "podcastDatabase.txt";
 
+
+    public EpisodePlayer(String folderPath) {
+        this.folderPath = folderPath;
+        this.episodes = loadPodcastsFromDatabase(databasePath);
+
+    }
+
         public File getEpisodeLocation(Episode episode) throws SongNotFoundException{
         if (episode != null) {
             Path path = Paths.get(episode.getFilePath());

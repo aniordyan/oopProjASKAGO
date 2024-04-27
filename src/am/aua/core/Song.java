@@ -29,35 +29,6 @@ public class Song extends AudioFile implements Playable{
         this.duration = duration;
     }
 
-
-/*    private String calculateDuration(String filePath) {
-        try {
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("src/am/aua/songs" + File.separator + filePath));
-            Clip clip = AudioSystem.getClip();
-            clip.open(audioInputStream);
-            long frameLength = clip.getFrameLength();
-            float frameRate = clip.getFormat().getFrameRate();
-            clip.close();
-            audioInputStream.close();
-
-
-            long milliseconds = (long) (1000 * frameLength / frameRate);
-
-
-            long seconds = milliseconds / 1000;
-            long hours = seconds / 3600;
-            seconds %= 3600;
-            long minutes = seconds / 60;
-            seconds %= 60;
-
-
-            return String.format("%02d:%02d:%02d", hours, minutes, seconds);
-        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
-            e.printStackTrace();
-            return "00:00:00";
-        }
-    }
-*/
     @Override
     public String toString() {
         final int COLUMN_WIDTH = 40;

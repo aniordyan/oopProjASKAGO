@@ -22,8 +22,31 @@ public class Episode extends AudioFile{
 
     }
 
+    public void setPublishedDate(String publishedDate) {
+        this.publishedDate = publishedDate;
+    }
+
+    public GenrePodcast getGenre() {
+        return genre;
+    }
+
+    public void setGenre(GenrePodcast genre) {
+        this.genre = genre;
+    }
+
     public String getPublishedDate() {
         return publishedDate;
+    }
+
+    public String toString(){
+        final int COLUMN_WIDTH = 40;
+
+        String Title = String.format("%-" + COLUMN_WIDTH + "s",  getName());
+        String Artist = String.format("%-" + COLUMN_WIDTH + "s",  getCreator());
+        String Genre = String.format("%-" + COLUMN_WIDTH + "s",  getGenre());
+        String Date = String.format("%-" + COLUMN_WIDTH + "s",  getPublishedDate());
+
+        return Title + Artist + Genre + Date;
     }
 
 }

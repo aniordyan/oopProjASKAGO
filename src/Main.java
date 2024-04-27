@@ -12,15 +12,5 @@ public class Main {
 
         AudioPlayerUi audioPlayerUI = new AudioPlayerUi();
 
-
-        User user = new User();
-        System.out.printf("------------------------------------------%n");
-        System.out.printf("      Welcome to ASKAGO Music Player      %n");
-        System.out.printf("------------------------------------------%n");
-        //user.EntryPoint();
-
-
-
-
     }
 }

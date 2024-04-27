@@ -1,5 +1,6 @@
 package am.aua.ui;
 
+import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import java.awt.*;
@@ -24,12 +25,15 @@ public class AudioPlayerUi extends JFrame {
     private JButton playButton;
     private JButton pauseButton;
     private JButton stopButton;
+    private JButton shuffleButton;
     private JPanel audiofileListPanel;
+    private AudioFile selectedAudio;
     private Song selectedSong;
-    private Timer timer;
     private boolean isPaused;
 
     SongPlayer songPlayer = new SongPlayer("src/am/aua/songs");
+    AudioFilePlayer audioPlayer = new AudioFilePlayer("src/am/aua/songs");
+    EpisodePlayer episodePlayer = new EpisodePlayer("src/am/aua");
 
     public AudioPlayerUi() {
         setTitle("Audio Player");
@@ -38,6 +42,20 @@ public class AudioPlayerUi extends JFrame {
         setResizable(false);
 
         JPanel mainPanel = new JPanel(new BorderLayout());
+
+        // Menu bar
+        JMenuBar menuBar = new JMenuBar();
+        JMenu addMenu = new JMenu("Add");
+        JMenu deleteMenu = new JMenu("Delete");
+        JMenu createPlylistMenu = new JMenu("Create new playlist");
+
+        menuBar.add(addMenu);
+        menuBar.add(deleteMenu);
+        menuBar.add(createPlylistMenu);
+        setJMenuBar(menuBar);
+
+
+
 
         // Control panel with buttons
         JPanel controlPanel = new JPanel();
@@ -95,6 +113,31 @@ public class AudioPlayerUi extends JFrame {
             }
         });
 
+
+        podcastsLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                welcomePanel.setVisible(false);
+                audiofileListPanel.removeAll();
+
+                ArrayList<Episode> episodes = episodePlayer.loadPodcastsFromDatabase("podcastDatabase.txt");
+
+                for (Episode episode : episodes) {
+                    JLabel episodeLabel = createClickableLabel(episode);
+                    audiofileListPanel.add(episodeLabel);
+                }
+
+                mainPanel.add(audiofileListPanel, BorderLayout.CENTER);
+                mainPanel.revalidate();
+                mainPanel.repaint();
+                audiofileListPanel.setVisible(true);
+            }
+        });
+
+
+
+
+
         classicalPlylistLabel.addMouseListener(new MouseAdapter() {
                     @Override
             public void mouseClicked(MouseEvent e) {
@@ -135,10 +178,12 @@ public class AudioPlayerUi extends JFrame {
         playButton = new JButton("Play");
         pauseButton = new JButton("Pause");
         stopButton = new JButton("Stop");
+        shuffleButton = new JButton("Shuffle");
 
         controlBarPanel.add(playButton);
         controlBarPanel.add(pauseButton);
         controlBarPanel.add(stopButton);
+        controlBarPanel.add(shuffleButton);
 
 
         playButton.addActionListener(new ActionListener() {
@@ -178,6 +223,13 @@ public class AudioPlayerUi extends JFrame {
             }
         });
 
+        shuffleButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
 
 
         playerPanel.add(controlBarPanel, BorderLayout.SOUTH);
@@ -196,23 +248,23 @@ public class AudioPlayerUi extends JFrame {
     }
 
 
-        private JLabel createClickableLabel(Song song) {
-        JLabel label = new JLabel(song.toString());
+        private JLabel createClickableLabel(AudioFile audioFile) {
+        JLabel label = new JLabel(audioFile.toString());
         label.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         label.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 try {
-                    songPlayer.playSong(song);
-                    selectedSong = song;
+                    audioPlayer.playAudioFile(audioFile);
+                    selectedAudio = audioFile;
 
                     label.setBackground(Color.YELLOW);
                     label.setOpaque(true);
-                } catch (SongNotFoundException ex) {
-                    throw new RuntimeException(ex);
                 } catch (UnsupportedAudioFileException ex) {
                     throw new RuntimeException(ex);
                 } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                } catch (LineUnavailableException ex) {
                     throw new RuntimeException(ex);
                 }
             }

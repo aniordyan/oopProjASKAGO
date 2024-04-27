@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
 
-public class SongPlayer  {
+public class SongPlayer{
 
     private String folderPath;
     private long clipPosition;
@@ -269,34 +269,6 @@ public class SongPlayer  {
     }
 
   */
-
-
- /*   public String calculateDuration(Song s) {
-        try {
-            File songFile = new File(s.getFilePath());
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(songFile);
-            AudioFormat format = audioInputStream.getFormat();
-            long frames = audioInputStream.getFrameLength();
-            double durationInSeconds = (frames + 0.0) / format.getFrameRate();
-
-            long hours = (long) (durationInSeconds / 3600);
-            long minutes = (long) ((durationInSeconds % 3600) / 60);
-            long seconds = (long) (durationInSeconds % 60);
-
-            return String.format("%02d:%02d:%02d", hours, minutes, seconds);
-        } catch (UnsupportedAudioFileException | IOException e) {
-            e.printStackTrace();
-            return "Unknown"; // Handle error condition gracefully
-        }
-    }
-
-  */
-
-
-
-
-
-
 
 }
 
