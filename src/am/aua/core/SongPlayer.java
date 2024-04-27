@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
 
-public class SongPlayer implements Playable {
+public class SongPlayer  {
 
     private String folderPath;
     private long clipPosition;
@@ -119,57 +119,6 @@ public class SongPlayer implements Playable {
     }
 
 
-    public void playFiles(int id) throws SongNotFoundException {
-
-        Song selectedSong = findSongById(id);
-        File songFile = getSongLocation(selectedSong);
-
-
-            try {
-                AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(songFile);
-                Clip clip = AudioSystem.getClip();
-                clip.open(audioInputStream);
-
-             /*       long duration = clip.getMicrosecondLength() / 1_000_000;
-                    long seconds = duration % 60;
-                    long minutes = (duration / 60) % 60;
-                    long hours = duration / 3600;
-
-                    System.out.println(hours + " : " + minutes + " : " + seconds);
-
-              */
-                Scanner sc = new Scanner(System.in);
-                String response = "";
-
-
-                while (!response.equals("Q")) {
-                    System.out.println("P = play, S = stop, R = reset, Q = quit");
-                    System.out.println("Enter your choice: ");
-                    response = sc.next().toUpperCase();
-
-                    switch (response) {
-                        case ("P"):
-                            clip.start();
-                            break;
-                        case ("S"):
-                            clip.stop();
-                            break;
-                        case ("R"):
-                            clip.setMicrosecondPosition(0);
-                            break;
-                        case ("Q"):
-                            clip.close();
-                            break;
-
-                    }
-                }
-
-                audioInputStream.close();
-            } catch (UnsupportedAudioFileException | LineUnavailableException | IOException e) {
-                e.printStackTrace();
-            }
-    }
-
 
     public Song findSongById(int id) {
         for (Song song : songs) {
@@ -185,7 +134,6 @@ public class SongPlayer implements Playable {
         if (songToDelete != null) {
             songs.remove(songToDelete);
             updateDatabase();
-            System.out.println("Song with ID " + id + " has been deleted.");
         } else {
             throw new SongNotFoundException("Song with ID " + id + " not found.");
         }

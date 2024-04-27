@@ -10,7 +10,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class EpisodePlayer implements Playable{
+public class EpisodePlayer {
     private String folderPath;
     private static int highestId = 0;
     private ArrayList<Episode> episodes;
@@ -55,17 +55,17 @@ public class EpisodePlayer implements Playable{
     }
 
 
-    @Override
+
     public void playFiles(int id) throws SongNotFoundException {
 
     }
 
-    @Override
+
     public void updateDatabase() {
 
     }
 
-    @Override
+
     public void addFile() throws InvalidGenreException {
 /*
 here addFile should mean that the user input the name of a podcast and an absolute path to it

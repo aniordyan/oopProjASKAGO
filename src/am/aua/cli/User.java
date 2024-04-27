@@ -21,7 +21,7 @@ public class User {
     private Playlist.PlaylistManager playlistManager = new Playlist.PlaylistManager();
 
 //need to be changed for ui right?
-    public void EntryPoint() throws SongNotFoundException, UnsupportedAudioFileException, LineUnavailableException, IOException, InvalidGenreException {
+  /*  public void EntryPoint() throws SongNotFoundException, UnsupportedAudioFileException, LineUnavailableException, IOException, InvalidGenreException {
         Scanner sc = new Scanner(System.in);
 
         while (true) {
@@ -120,4 +120,6 @@ public class User {
             }
         }
     }
+
+   */
 }

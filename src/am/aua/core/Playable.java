@@ -1,53 +1,42 @@
 package am.aua.core;
 
-import am.aua.exceptions.InvalidGenreException;
-import am.aua.exceptions.SongNotFoundException;
-
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.sound.sampled.*;
+import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
-public interface Playable { //maybe its a bad idea, maybe it should be just abstract class, maybe we will have other interfaces too
+public interface Playable {
 
-     public class Duration {
+    void setDuration(Duration duration);
 
-     }
+    class Duration {
+        private String duration;
 
+        public Duration(String filePath) {
+            try {
+                AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("src/am/aua/songs" + File.separator + filePath));
+                Clip clip = AudioSystem.getClip();
+                clip.open(audioInputStream);
+                long frameLength = clip.getFrameLength();
+                float frameRate = clip.getFormat().getFrameRate();
+                clip.close();
+                audioInputStream.close();
 
+                long milliseconds = (long) (1000 * frameLength / frameRate);
+                long seconds = milliseconds / 1000;
+                long hours = seconds / 3600;
+                seconds %= 3600;
+                long minutes = seconds / 60;
+                seconds %= 60;
 
+                this.duration = String.format("%02d:%02d:%02d", hours, minutes, seconds);
+            } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+                e.printStackTrace();
+                this.duration = "00:00:00";
+            }
+        }
 
-
-     public void playFiles(int id) throws SongNotFoundException;
-
-     public void updateDatabase();
-
-     public void addFile() throws InvalidGenreException;
-
-}
-
-
- /*  public class Duration{
-        private long hours, minutes, seconds;
-
-
-        public String getDuration(am.aua.core.AudioFile s) throws LineUnavailableException, IOException, UnsupportedAudioFileException {
-            File audioFile = new File("src/am.aua.songs" + File.separator + s.getFilePath());
-
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
-            Clip clip = AudioSystem.getClip();
-            clip.open(audioInputStream);
-
-            long duration = clip.getMicrosecondLength() / 1_000_000;
-            seconds = duration % 60;
-            minutes = (duration / 60) % 60;
-            hours = duration / 3600;
-
-            return hours + ":" + minutes + ":" + seconds;
-
+        public String getDuration() {
+            return duration;
         }
     }
-
-
-   */
+}

@@ -7,33 +7,30 @@ import am.aua.core.SongPlayer;
 import am.aua.exceptions.SongNotFoundException;
 
 
-public class Song extends AudioFile{
-    public enum Genre { CLASSICAL, POP, ROCK, JAZZ, FUNK, RNB }
+public class Song extends AudioFile implements Playable{
+    public enum Genre {CLASSICAL, POP, ROCK, FUNK, RNB }
+    private Playable.Duration duration;
 
     private Genre genre;
-    private String duration;
+
 
 
     public Song(int id, String name, String creator, Genre genre, String filePath) {
         super(id, name, creator, filePath);
         this.genre = genre;
-        this.duration = calculateDuration(filePath);
+        this.duration = new Playable.Duration(filePath);
     }
 
     public Genre getGenre() {
         return genre;
     }
 
-    public String getDuration() {
-        return duration;
-    }
-
-    public void setDuration(String duartion){
-        this.duration = duartion;
+    public void setDuration(Playable.Duration duration) {
+        this.duration = duration;
     }
 
 
-    private String calculateDuration(String filePath) {
+/*    private String calculateDuration(String filePath) {
         try {
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("src/am/aua/songs" + File.separator + filePath));
             Clip clip = AudioSystem.getClip();
@@ -60,7 +57,7 @@ public class Song extends AudioFile{
             return "00:00:00";
         }
     }
-
+*/
     @Override
     public String toString() {
         final int COLUMN_WIDTH = 40;
@@ -68,7 +65,7 @@ public class Song extends AudioFile{
         String Title = String.format("%-" + COLUMN_WIDTH + "s",  getName());
         String Artist = String.format("%-" + COLUMN_WIDTH + "s",  getCreator());
         String Genre = String.format("%-" + COLUMN_WIDTH + "s",  getGenre());
-        String Duration = String.format("%-" + COLUMN_WIDTH + "s", duration);
+        String Duration = String.format("%-" + COLUMN_WIDTH + "s", duration.getDuration());
 
         return Title + Artist + Genre + Duration;
     }

@@ -26,6 +26,7 @@ public class AudioPlayerUi extends JFrame {
     private JButton stopButton;
     private JPanel audiofileListPanel;
     private Song selectedSong;
+    private Timer timer;
     private boolean isPaused;
 
     SongPlayer songPlayer = new SongPlayer("src/am/aua/songs");
@@ -44,12 +45,16 @@ public class AudioPlayerUi extends JFrame {
         controlPanel.setBackground(Color.LIGHT_GRAY);
         controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.Y_AXIS));
 
-        JButton songsButton = new JButton("Songs");
-        JButton podcastsButton = new JButton("Podcasts");
-        JButton playlistsButton = new JButton("Playlists");
-        controlPanel.add(songsButton);
-        controlPanel.add(podcastsButton);
-        controlPanel.add(playlistsButton);
+        JLabel songsLabel = createClickableLabel("Songs");
+        JLabel podcastsLabel = createClickableLabel("Podcasts");
+        JLabel classicalPlylistLabel = createClickableLabel("Classical");
+        JLabel rockPlylistLabel = createClickableLabel("Rock");
+
+        controlPanel.add(songsLabel);
+        controlPanel.add(podcastsLabel);
+        controlPanel.add(classicalPlylistLabel);
+        controlPanel.add(rockPlylistLabel);
+
         mainPanel.add(controlPanel, BorderLayout.WEST);
 
         // Song list panel
@@ -70,11 +75,9 @@ public class AudioPlayerUi extends JFrame {
         mainPanel.add(welcomePanel, BorderLayout.CENTER);
 
 
-
-
-        songsButton.addActionListener(new ActionListener() {
+        songsLabel.addMouseListener(new MouseAdapter() {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void mouseClicked(MouseEvent e) {
                 welcomePanel.setVisible(false);
                 audiofileListPanel.removeAll();
 
@@ -89,8 +92,26 @@ public class AudioPlayerUi extends JFrame {
                 mainPanel.revalidate();
                 mainPanel.repaint();
                 audiofileListPanel.setVisible(true);
+            }
+        });
 
+        classicalPlylistLabel.addMouseListener(new MouseAdapter() {
+                    @Override
+            public void mouseClicked(MouseEvent e) {
+                welcomePanel.setVisible(false);
+                audiofileListPanel.removeAll();
 
+                ArrayList<Song> songs = songPlayer.loadSongsFromDatabase("CLASSICAL.txt");
+
+                for (Song song : songs) {
+                    JLabel songLabel = createClickableLabel(song);
+                    audiofileListPanel.add(songLabel);
+                }
+
+                mainPanel.add(audiofileListPanel, BorderLayout.CENTER);
+                mainPanel.revalidate();
+                mainPanel.repaint();
+                audiofileListPanel.setVisible(true);
             }
         });
 
@@ -105,6 +126,10 @@ public class AudioPlayerUi extends JFrame {
         progressSlider.setMaximum(100);
         progressSlider.setValue(0);
         playerPanel.add(progressSlider, BorderLayout.CENTER);
+
+       //slider
+
+
 
         JPanel controlBarPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         playButton = new JButton("Play");
@@ -162,6 +187,14 @@ public class AudioPlayerUi extends JFrame {
         add(mainPanel);
         setVisible(true);
     }
+
+
+    private JLabel createClickableLabel(String labelText) {
+        JLabel label = new JLabel(labelText);
+        label.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        return label;
+    }
+
 
         private JLabel createClickableLabel(Song song) {
         JLabel label = new JLabel(song.toString());
