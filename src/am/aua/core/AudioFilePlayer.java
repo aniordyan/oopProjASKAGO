@@ -41,4 +41,32 @@ public class AudioFilePlayer {
             clip.close();
         }
     }
+
+
+
+   /*STUFF FOR SLIDER THAT DIDNT WORK YET
+    public int getCurrentPosition(AudioFile audioFile) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+        if (clip != null && clip.isOpen()) {
+            return (int) clip.getMicrosecondPosition() / 1000;
+        }
+        return 0;
+    }
+
+    public Clip getClip(AudioFile audioFile) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+        File file = new File(folderPath + File.separator + audioFile.getFilePath());
+        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file);
+
+        if (clip != null) {
+            clip.close();
+        }
+
+        clip = AudioSystem.getClip();
+        clip.open(audioInputStream);
+        audioInputStream.close();
+
+        return clip;
+    }
+
+    */
+
 }

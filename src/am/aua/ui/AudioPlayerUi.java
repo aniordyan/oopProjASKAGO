@@ -1,8 +1,13 @@
 package am.aua.ui;
 
+import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,22 +32,26 @@ public class AudioPlayerUi extends JFrame {
     private JButton stopButton;
     private JButton shuffleButton;
     private JPanel audiofileListPanel;
+    private JPanel mainPanel;
+    private JPanel welcomePanel;
     private AudioFile selectedAudio;
     private Song selectedSong;
     private boolean isPaused;
+    private Timer timer;
 
     SongPlayer songPlayer = new SongPlayer("src/am/aua/songs");
     AudioFilePlayer audioPlayer = new AudioFilePlayer("src/am/aua/audioFiles");
     //AudioFilePlayer audioPlayer = new AudioFilePlayer("src/am/aua/songs");
     EpisodePlayer episodePlayer = new EpisodePlayer("src/am/aua");
 
-    public AudioPlayerUi() {
+
+    public AudioPlayerUi() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
         setTitle("Audio Player");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(WIDTH, HEIGHT);
         setResizable(false);
 
-        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel = new JPanel(new BorderLayout());
 
         // Menu bar
         JMenuBar menuBar = new JMenuBar();
@@ -54,6 +63,18 @@ public class AudioPlayerUi extends JFrame {
         menuBar.add(deleteMenu);
         menuBar.add(createPlylistMenu);
         setJMenuBar(menuBar);
+
+
+
+
+
+
+
+
+
+
+
+        /////
 
 
 
@@ -76,16 +97,42 @@ public class AudioPlayerUi extends JFrame {
 
         mainPanel.add(controlPanel, BorderLayout.WEST);
 
-        // Song list panel
+        // Audifile list panel
         audiofileListPanel = new JPanel();
         audiofileListPanel.setLayout(new BoxLayout(audiofileListPanel, BoxLayout.Y_AXIS));
         audiofileListPanel.setVisible(true);
 
+        deleteMenu.addMenuListener(new MenuListener() {
+            @Override
+            public void menuSelected(MenuEvent e) {
+                audioPlayer.stopAudioFile();
+                if (selectedAudio != null) {
+                    try {
+                        if (selectedAudio instanceof Song) {
+                            songPlayer.deleteSong(selectedAudio.getId());
+                            loadSongs();
+
+                        }
+                        selectedAudio = null;
+                    } catch (SongNotFoundException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+            }
+
+            @Override
+            public void menuDeselected(MenuEvent e) {
+            }
+
+            @Override
+            public void menuCanceled(MenuEvent e) {
+            }
+        });
 
 
 
         //welcome message
-        JPanel welcomePanel = new JPanel();
+        welcomePanel = new JPanel();
         welcomePanel.setBackground(Color.WHITE);
         JLabel welcomeLabel = new JLabel("Welcome to Askago audio player");
         welcomeLabel.setFont(new Font("Arial", Font.BOLD, 20));
@@ -97,20 +144,7 @@ public class AudioPlayerUi extends JFrame {
         songsLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                welcomePanel.setVisible(false);
-                audiofileListPanel.removeAll();
-
-                ArrayList<Song> songs = songPlayer.loadSongsFromDatabase("songDatabase.txt");
-
-                for (Song song : songs) {
-                    JLabel songLabel = createClickableLabel(song);
-                    audiofileListPanel.add(songLabel);
-                }
-
-                mainPanel.add(audiofileListPanel, BorderLayout.CENTER);
-                mainPanel.revalidate();
-                mainPanel.repaint();
-                audiofileListPanel.setVisible(true);
+                loadSongs();
             }
         });
 
@@ -170,6 +204,8 @@ public class AudioPlayerUi extends JFrame {
         progressSlider.setMaximum(100);
         progressSlider.setValue(0);
         playerPanel.add(progressSlider, BorderLayout.CENTER);
+
+
 
        //slider
 
@@ -282,6 +318,46 @@ public class AudioPlayerUi extends JFrame {
         });
         return label;
     }
+
+    private void loadSongs() {
+        welcomePanel.setVisible(false);
+        audiofileListPanel.removeAll();
+
+        ArrayList<Song> songs = songPlayer.loadSongsFromDatabase("songDatabase.txt");
+
+        for (Song song : songs) {
+            JLabel songLabel = createClickableLabel(song);
+            audiofileListPanel.add(songLabel);
+        }
+
+        mainPanel.add(audiofileListPanel, BorderLayout.CENTER);
+        mainPanel.revalidate();
+        mainPanel.repaint();
+        audiofileListPanel.setVisible(true);
+    }
+
+   /* private void startSliderUpdateTimer() {
+         timer = new Timer(100, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int currentPosition = 0;
+                try {
+                    currentPosition = audioPlayer.getCurrentPosition(selectedAudio);
+                } catch (UnsupportedAudioFileException ex) {
+                    throw new RuntimeException(ex);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                } catch (LineUnavailableException ex) {
+                    throw new RuntimeException(ex);
+                }
+                progressSlider.setValue(currentPosition);
+            }
+        });
+        timer.start();
+    }
+
+    */
+
 
 
 

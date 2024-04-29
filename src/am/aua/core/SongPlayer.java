@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
 
-public class SongPlayer{
+public class SongPlayer extends AudioFilePlayer{
 
     private String folderPath;
     private long clipPosition;
@@ -84,39 +84,6 @@ public class SongPlayer{
 
     }
 
-    public void playSong(Song s) throws SongNotFoundException, UnsupportedAudioFileException, IOException {
-        File songFile = new File(folderPath + File.separator + s.getFilePath());
-        try {
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(songFile);
-            clip = AudioSystem.getClip(); // Initialize the Clip instance
-            clip.open(audioInputStream);
-            clip.start();
-            audioInputStream.close();
-        } catch (LineUnavailableException ex) {
-            throw new RuntimeException(ex);
-        }
-    }
-
-    public void pauseSong() {
-        if (clip != null && clip.isRunning()) { // Check if a song is currently playing
-            clipPosition = clip.getMicrosecondPosition(); // Store the current position
-            clip.stop(); // Pause the playback
-        }
-    }
-
-    public void resumeSong() {
-        if (clip != null) { // Check if a song is loaded
-            clip.setMicrosecondPosition(clipPosition); // Set the position to where it was paused
-            clip.start(); // Resume playback
-        }
-    }
-
-    public void stopSong() {
-        if (clip != null && clip.isRunning()) { // Check if a song is currently playing
-            clip.stop(); // Stop the playback
-            clipPosition = 0; // Reset the position
-        }
-    }
 
 
 
@@ -129,7 +96,7 @@ public class SongPlayer{
         return null;
     }
 
-    public void deleteSong(int id) throws SongNotFoundException {
+    public void deleteSong(int id ) throws SongNotFoundException {
         Song songToDelete = findSongById(id);
         if (songToDelete != null) {
             songs.remove(songToDelete);
