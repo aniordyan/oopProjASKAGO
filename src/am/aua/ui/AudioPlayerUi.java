@@ -32,7 +32,8 @@ public class AudioPlayerUi extends JFrame {
     private boolean isPaused;
 
     SongPlayer songPlayer = new SongPlayer("src/am/aua/songs");
-    AudioFilePlayer audioPlayer = new AudioFilePlayer("src/am/aua/songs");
+    AudioFilePlayer audioPlayer = new AudioFilePlayer("src/am/aua/audioFiles");
+    //AudioFilePlayer audioPlayer = new AudioFilePlayer("src/am/aua/songs");
     EpisodePlayer episodePlayer = new EpisodePlayer("src/am/aua");
 
     public AudioPlayerUi() {
@@ -190,16 +191,14 @@ public class AudioPlayerUi extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (isPaused) {
-                    songPlayer.resumeSong();
+                    audioPlayer.resumeAudioFile();
                     isPaused = false;
                 } else {
                     try {
-                        songPlayer.playSong(selectedSong);
-                    } catch (SongNotFoundException ex) {
-                        throw new RuntimeException(ex);
+                        audioPlayer.playAudioFile(selectedAudio);
                     } catch (UnsupportedAudioFileException ex) {
                         throw new RuntimeException(ex);
-                    } catch (IOException ex) {
+                    } catch (IOException | LineUnavailableException ex) {
                         throw new RuntimeException(ex);
                     }
                 }
@@ -210,7 +209,7 @@ public class AudioPlayerUi extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (!isPaused) {
-                    songPlayer.pauseSong();
+                    audioPlayer.pauseAudioFile();
                     isPaused = true;
                 }
             }
@@ -219,7 +218,9 @@ public class AudioPlayerUi extends JFrame {
         stopButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                songPlayer.stopSong();
+
+                audioPlayer.stopAudioFile();
+
             }
         });
 
@@ -260,6 +261,16 @@ public class AudioPlayerUi extends JFrame {
 
                     label.setBackground(Color.YELLOW);
                     label.setOpaque(true);
+
+                    Timer timer = new Timer(3000, new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            label.setBackground(null);
+                            label.setOpaque(false);
+                        }
+                    });
+
+
                 } catch (UnsupportedAudioFileException ex) {
                     throw new RuntimeException(ex);
                 } catch (IOException ex) {

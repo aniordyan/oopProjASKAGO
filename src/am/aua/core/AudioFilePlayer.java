@@ -12,6 +12,8 @@ public class AudioFilePlayer {
         this.folderPath = folderPath;
     }
 
+    public AudioFilePlayer(){}
+
     public void playAudioFile(AudioFile audioFile) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
         File file = new File(folderPath + File.separator + audioFile.getFilePath());
         AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file);

@@ -2,12 +2,13 @@ package am.aua.core;
 
 import java.util.ArrayList;
 
-public class Episode extends AudioFile{
+public class Episode extends AudioFile implements Playable{
     public enum GenrePodcast{COMEDY, EDUCATION, SPORT, NEWS};
 
 
     private String publishedDate;
     private GenrePodcast genre;
+    private Playable.Duration duration;
 
     public Episode(int id,
                    String name,
@@ -19,6 +20,7 @@ public class Episode extends AudioFile{
         super(id, name, creator, filePath);
         this.publishedDate = publishedDate;
         this.genre = genre;
+        this.duration = new Playable.Duration(filePath);
 
     }
 
@@ -38,6 +40,11 @@ public class Episode extends AudioFile{
         return publishedDate;
     }
 
+    public void setDuration(Playable.Duration duration) {
+        this.duration = duration;
+    }
+
+
     public String toString(){
         final int COLUMN_WIDTH = 40;
 
@@ -45,8 +52,9 @@ public class Episode extends AudioFile{
         String Artist = String.format("%-" + COLUMN_WIDTH + "s",  getCreator());
         String Genre = String.format("%-" + COLUMN_WIDTH + "s",  getGenre());
         String Date = String.format("%-" + COLUMN_WIDTH + "s",  getPublishedDate());
+        String Duration = String.format("%-" + COLUMN_WIDTH + "s", duration.getDuration());
 
-        return Title + Artist + Genre + Date;
+        return Title + Artist + Genre + Date + Duration;
     }
 
 }

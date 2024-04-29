@@ -13,7 +13,7 @@ public interface Playable {
 
         public Duration(String filePath) {
             try {
-                AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("src/am/aua/songs" + File.separator + filePath));
+                AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("src/am/aua/audioFiles" + File.separator + filePath));
                 Clip clip = AudioSystem.getClip();
                 clip.open(audioInputStream);
                 long frameLength = clip.getFrameLength();
