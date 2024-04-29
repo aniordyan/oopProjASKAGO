@@ -1,4 +1,3 @@
-1,Blood Type,Viktor Tsoi,ROCK,gruppa_krovi.wav
 3,A Star Named Sun,Viktor Tsoi,ROCK,Виктор-Цой-Звезда-по-имени-Солнце.wav
 4,La Boheme,Charles Aznavour,POP,Charles-Aznavour-La-Boheme.wav
 5,Maskarad,Aram Khachaturian,CLASSICAL,aram_ilich_hachaturjan_-_waltz_maskarad_109__z3.fm_.wav

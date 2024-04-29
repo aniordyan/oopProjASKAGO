@@ -110,7 +110,7 @@ public class AudioPlayerUi extends JFrame {
                     try {
                         if (selectedAudio instanceof Song) {
                             songPlayer.deleteSong(selectedAudio.getId());
-                            loadSongs();
+                            loadSongs("songDatabase.txt");
 
                         }
                         selectedAudio = null;
@@ -144,7 +144,7 @@ public class AudioPlayerUi extends JFrame {
         songsLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                loadSongs();
+                loadSongs("songDatabase.txt");
             }
         });
 
@@ -176,20 +176,7 @@ public class AudioPlayerUi extends JFrame {
         classicalPlylistLabel.addMouseListener(new MouseAdapter() {
                     @Override
             public void mouseClicked(MouseEvent e) {
-                welcomePanel.setVisible(false);
-                audiofileListPanel.removeAll();
-
-                ArrayList<Song> songs = songPlayer.loadSongsFromDatabase("CLASSICAL.txt");
-
-                for (Song song : songs) {
-                    JLabel songLabel = createClickableLabel(song);
-                    audiofileListPanel.add(songLabel);
-                }
-
-                mainPanel.add(audiofileListPanel, BorderLayout.CENTER);
-                mainPanel.revalidate();
-                mainPanel.repaint();
-                audiofileListPanel.setVisible(true);
+                loadSongs("CLASSICAL.txt");
             }
         });
 
@@ -319,11 +306,11 @@ public class AudioPlayerUi extends JFrame {
         return label;
     }
 
-    private void loadSongs() {
+    private void loadSongs(String path) {
         welcomePanel.setVisible(false);
         audiofileListPanel.removeAll();
 
-        ArrayList<Song> songs = songPlayer.loadSongsFromDatabase("songDatabase.txt");
+        ArrayList<Song> songs = songPlayer.loadSongsFromDatabase(path);
 
         for (Song song : songs) {
             JLabel songLabel = createClickableLabel(song);
