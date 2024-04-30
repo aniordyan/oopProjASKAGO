@@ -70,7 +70,6 @@ public class SongPlayer extends AudioFilePlayer{
                 if (id > highestId) highestId = id; // for adding song id
                 String name = parts[1];
                 String creator = parts[2];
-                //  int duration = Integer.parseInt(parts[3]);
                 Song.Genre genre = Song.Genre.valueOf(parts[3]);
                 String filePath = parts[4];
                 songs.add(new Song(id, name, creator, genre, filePath));

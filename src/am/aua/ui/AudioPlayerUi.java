@@ -8,6 +8,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -31,17 +32,16 @@ public class AudioPlayerUi extends JFrame {
     private JButton pauseButton;
     private JButton stopButton;
     private JButton shuffleButton;
-    private JPanel audiofileListPanel;
-    private JPanel mainPanel;
-    private JPanel welcomePanel;
-    private AudioFile selectedAudio;
-    private Song selectedSong;
+    private static JPanel audiofileListPanel;
+    private static JPanel mainPanel;
+    private static JPanel welcomePanel;
+    static AudioFile selectedAudio;
+    Song selectedSong;
     private boolean isPaused;
     private Timer timer;
 
-    SongPlayer songPlayer = new SongPlayer("src/am/aua/songs");
-    AudioFilePlayer audioPlayer = new AudioFilePlayer("src/am/aua/audioFiles");
-    //AudioFilePlayer audioPlayer = new AudioFilePlayer("src/am/aua/songs");
+    static SongPlayer songPlayer = new SongPlayer("src/am/aua/songs");
+    static AudioFilePlayer audioPlayer = new AudioFilePlayer("src/am/aua/audioFiles");
     EpisodePlayer episodePlayer = new EpisodePlayer("src/am/aua");
 
 
@@ -54,29 +54,8 @@ public class AudioPlayerUi extends JFrame {
         mainPanel = new JPanel(new BorderLayout());
 
         // Menu bar
-        JMenuBar menuBar = new JMenuBar();
-        JMenu addMenu = new JMenu("Add");
-        JMenu deleteMenu = new JMenu("Delete");
-        JMenu createPlylistMenu = new JMenu("Create new playlist");
-
-        menuBar.add(addMenu);
-        menuBar.add(deleteMenu);
-        menuBar.add(createPlylistMenu);
+        JMenuBar menuBar = MenuBarManager.createMenuBar(this);
         setJMenuBar(menuBar);
-
-
-
-
-
-
-
-
-
-
-
-        /////
-
-
 
 
         // Control panel with buttons
@@ -102,32 +81,6 @@ public class AudioPlayerUi extends JFrame {
         audiofileListPanel.setLayout(new BoxLayout(audiofileListPanel, BoxLayout.Y_AXIS));
         audiofileListPanel.setVisible(true);
 
-        deleteMenu.addMenuListener(new MenuListener() {
-            @Override
-            public void menuSelected(MenuEvent e) {
-                audioPlayer.stopAudioFile();
-                if (selectedAudio != null) {
-                    try {
-                        if (selectedAudio instanceof Song) {
-                            songPlayer.deleteSong(selectedAudio.getId());
-                            loadSongs("songDatabase.txt");
-
-                        }
-                        selectedAudio = null;
-                    } catch (SongNotFoundException ex) {
-                        throw new RuntimeException(ex);
-                    }
-                }
-            }
-
-            @Override
-            public void menuDeselected(MenuEvent e) {
-            }
-
-            @Override
-            public void menuCanceled(MenuEvent e) {
-            }
-        });
 
 
 
@@ -272,7 +225,7 @@ public class AudioPlayerUi extends JFrame {
     }
 
 
-        private JLabel createClickableLabel(AudioFile audioFile) {
+        private static JLabel createClickableLabel(AudioFile audioFile) {
         JLabel label = new JLabel(audioFile.toString());
         label.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         label.addMouseListener(new MouseAdapter() {
@@ -306,7 +259,7 @@ public class AudioPlayerUi extends JFrame {
         return label;
     }
 
-    private void loadSongs(String path) {
+     static void loadSongs(String path) {
         welcomePanel.setVisible(false);
         audiofileListPanel.removeAll();
 
@@ -322,29 +275,6 @@ public class AudioPlayerUi extends JFrame {
         mainPanel.repaint();
         audiofileListPanel.setVisible(true);
     }
-
-   /* private void startSliderUpdateTimer() {
-         timer = new Timer(100, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int currentPosition = 0;
-                try {
-                    currentPosition = audioPlayer.getCurrentPosition(selectedAudio);
-                } catch (UnsupportedAudioFileException ex) {
-                    throw new RuntimeException(ex);
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                } catch (LineUnavailableException ex) {
-                    throw new RuntimeException(ex);
-                }
-                progressSlider.setValue(currentPosition);
-            }
-        });
-        timer.start();
-    }
-
-    */
-
 
 
 
