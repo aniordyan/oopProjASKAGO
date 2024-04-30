@@ -40,9 +40,11 @@ public class AudioPlayerUi extends JFrame {
     private boolean isPaused;
     private Timer timer;
 
-    static SongPlayer songPlayer = new SongPlayer("src/am/aua/songs");
+    static SongPlayer songPlayer = new SongPlayer("src/am/aua/audioFiles");
     static AudioFilePlayer audioPlayer = new AudioFilePlayer("src/am/aua/audioFiles");
     EpisodePlayer episodePlayer = new EpisodePlayer("src/am/aua");
+    private static String currentPlaylistPath;
+
 
 
     public AudioPlayerUi() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
@@ -127,9 +129,16 @@ public class AudioPlayerUi extends JFrame {
 
 
         classicalPlylistLabel.addMouseListener(new MouseAdapter() {
-                    @Override
+            @Override
             public void mouseClicked(MouseEvent e) {
                 loadSongs("CLASSICAL.txt");
+            }
+        });
+
+        rockPlylistLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                loadSongs("ROCK.txt");
             }
         });
 
@@ -203,9 +212,10 @@ public class AudioPlayerUi extends JFrame {
         shuffleButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                shufflePlaylist();
             }
         });
+
 
 
 
@@ -259,9 +269,11 @@ public class AudioPlayerUi extends JFrame {
         return label;
     }
 
-     static void loadSongs(String path) {
+    static void loadSongs(String path) {
         welcomePanel.setVisible(false);
         audiofileListPanel.removeAll();
+
+        currentPlaylistPath = path;
 
         ArrayList<Song> songs = songPlayer.loadSongsFromDatabase(path);
 
@@ -275,6 +287,21 @@ public class AudioPlayerUi extends JFrame {
         mainPanel.repaint();
         audiofileListPanel.setVisible(true);
     }
+
+
+    public void shufflePlaylist() {
+        if (currentPlaylistPath != null) {
+            try {
+                songPlayer.playlistToPlayTest(songPlayer.getSongIdsFromGenreDatabase(currentPlaylistPath), true);
+            } catch (UnsupportedAudioFileException | LineUnavailableException | IOException | SongNotFoundException e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("No playlist loaded to shuffle.");
+        }
+    }
+
+
 
 
 

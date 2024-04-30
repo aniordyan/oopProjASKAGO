@@ -1,1 +1,6 @@
+1,Blood Type,Viktor Tsoi,ROCK,gruppa_krovi.wav
+2,Chop Sue,System of a Down,ROCK,System-of-A-Down-Chop-Suey_.wav
+3,A Star Named Sun,Viktor Tsoi,ROCK,Виктор-Цой-Звезда-по-имени-Солнце.wav
 4,La Boheme,Charles Aznavour,POP,Charles-Aznavour-La-Boheme.wav
+5,Maskarad,Aram Khachaturian,CLASSICAL,aram_ilich_hachaturjan_-_waltz_maskarad_109__z3.fm_.wav
+6,Bohemian Rhapsody,Queen,ROCK,Queen-Bohemian-Rhapsody.wav

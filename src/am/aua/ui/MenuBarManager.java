@@ -35,6 +35,7 @@ public class MenuBarManager extends AudioPlayerUi{
                         // User selected a file
                         String filePath = fileChooser.getSelectedFile().getAbsolutePath();
                         // Add logic to handle the selected file
+                        //i am getting the path, adding that path to database
                     }
                 }
 

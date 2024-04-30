@@ -162,8 +162,7 @@ public class SongPlayer extends AudioFilePlayer{
 
     }
 
-    public ArrayList<Integer> getSongIdsFromGenreDatabase(String genreName) {
-        String genreDatabasePath = genreName + ".txt";
+    public ArrayList<Integer> getSongIdsFromGenreDatabase(String genreDatabasePath) {
         ArrayList<Integer> songIds = new ArrayList<>();
         try (Scanner scanner = new Scanner(new File(genreDatabasePath))) {
             while (scanner.hasNextLine()) {

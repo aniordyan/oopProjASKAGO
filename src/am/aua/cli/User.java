@@ -69,7 +69,7 @@ public class User {
                     System.out.println("Custom playlists:");
                     for (Playlist playlist : playlistManager.getAllPlaylists()) {
                         System.out.println(playlist.getName());
-                        //songPlayer.playlistToPlayTest(playlist.getSongIds(), false);
+                        songPlayer.playlistToPlayTest(playlist.getSongIds(), false);
                     }
                     System.out.println();
                     System.out.println("Choose playlist to play: ");
