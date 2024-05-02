@@ -66,15 +66,51 @@ public class AudioPlayerUi extends JFrame {
         controlPanel.setBackground(Color.LIGHT_GRAY);
         controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.Y_AXIS));
 
+        controlPanel.setSize(300, 150);
+        controlPanel.setLayout(new java.awt.FlowLayout());
+        controlPanel.setVisible(true);
+
+
         JLabel songsLabel = createClickableLabel("Songs");
         JLabel podcastsLabel = createClickableLabel("Podcasts");
         JLabel classicalPlylistLabel = createClickableLabel("Classical");
         JLabel rockPlylistLabel = createClickableLabel("Rock");
 
-        controlPanel.add(songsLabel);
-        controlPanel.add(podcastsLabel);
-        controlPanel.add(classicalPlylistLabel);
-        controlPanel.add(rockPlylistLabel);
+        JPanel dropDownSongs = new JPanel();
+        dropDownSongs.setPreferredSize(new Dimension(80,70));
+        dropDownSongs.setBackground(Color.LIGHT_GRAY);
+        dropDownSongs.setVisible(false);
+
+        JLabel playlists = createClickableLabel("▼ Playlists");
+
+        dropDownSongs.add(songsLabel);
+        dropDownSongs.add(classicalPlylistLabel);
+        dropDownSongs.add(rockPlylistLabel);
+        playlists.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                dropDownSongs.setVisible(!dropDownSongs.isVisible());
+            }
+        });
+        JPanel dropDownPodcasts = new JPanel();
+        dropDownPodcasts.setPreferredSize(new Dimension(80,60));
+        dropDownPodcasts.setBackground(Color.LIGHT_GRAY);
+        dropDownPodcasts.setVisible(false);
+
+        JLabel podcast = createClickableLabel("▼ Podcast");
+
+        dropDownPodcasts.add(podcastsLabel);
+        podcast.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                dropDownPodcasts.setVisible(!dropDownPodcasts.isVisible());
+            }
+        });
+
+        controlPanel.add(playlists);
+        controlPanel.add(dropDownSongs);
+        controlPanel.add(podcast);
+        controlPanel.add(dropDownPodcasts);
 
         mainPanel.add(controlPanel, BorderLayout.WEST);
 
@@ -156,7 +192,7 @@ public class AudioPlayerUi extends JFrame {
 
 
 
-       //slider
+        //slider
 
 
 
@@ -235,7 +271,7 @@ public class AudioPlayerUi extends JFrame {
     }
 
 
-        private static JLabel createClickableLabel(AudioFile audioFile) {
+    private static JLabel createClickableLabel(AudioFile audioFile) {
         JLabel label = new JLabel(audioFile.toString());
         label.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         label.addMouseListener(new MouseAdapter() {
