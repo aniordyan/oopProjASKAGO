@@ -19,10 +19,11 @@ public class ControlBarPanel extends JPanel {
     private JButton stopButton;
     private JButton shuffleButton;
     private JSlider progressSlider;
+    private JLabel currentlyPlayingLabel;
     private boolean isPaused;
-    private AudioFile selectedAudio;
     private AudioFilePlayer audioPlayer;
     private AudioPlayerUi parentUi;
+    AudioFile selectedAudio;
 
 
     public ControlBarPanel(AudioFilePlayer audioPlayer, AudioPlayerUi parentUi) {
@@ -35,6 +36,10 @@ public class ControlBarPanel extends JPanel {
     private void initComponents() {
         setLayout(new BorderLayout());
         setBackground(Color.GRAY);
+
+        currentlyPlayingLabel = new JLabel();
+        currentlyPlayingLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        add(currentlyPlayingLabel, BorderLayout.NORTH);
 
         progressSlider = new JSlider();
         progressSlider.setMinimum(0);
@@ -65,7 +70,7 @@ public class ControlBarPanel extends JPanel {
                     isPaused = false;
                 } else {
                     try {
-                        audioPlayer.playAudioFile(selectedAudio);
+                        audioPlayer.playAudioFile(parentUi.selectedAudio);
                     } catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
                         throw new RuntimeException(ex);
                     }
@@ -98,9 +103,6 @@ public class ControlBarPanel extends JPanel {
         });
     }
 
-    public void setSelectedAudio(AudioFile selectedAudio) {
-        this.selectedAudio = selectedAudio;
-    }
 
     public void setIsPaused(boolean isPaused) {
         this.isPaused = isPaused;
@@ -117,6 +119,12 @@ public class ControlBarPanel extends JPanel {
             System.out.println("No playlist loaded to shuffle.");
         }
     }
+
+    public void updateCurrentlyPlayingLabel(String audioFileName) {
+        currentlyPlayingLabel.setText("Currently playing: " + audioFileName);
+    }
+
+
 
 }
 

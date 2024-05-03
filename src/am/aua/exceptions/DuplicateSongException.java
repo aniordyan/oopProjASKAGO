@@ -9,7 +9,4 @@ public class DuplicateSongException extends Exception {
         super(message);
     }
 
-    public DuplicateSongException(String message, Throwable cause) {
-        super(message, cause);
-    }
 }

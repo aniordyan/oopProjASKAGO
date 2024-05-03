@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import am.aua.core.*;
-import am.aua.exceptions.SongNotFoundException;
+
 
 public class AudioPlayerUi extends JFrame {
 
@@ -26,13 +26,14 @@ public class AudioPlayerUi extends JFrame {
     public static final int HEIGHT = 500;
     public static final int SIDE_WIDTH = 100;
 
-     JScrollPane scrollPane;
-     JSlider progressSlider;
-     static JPanel audiofileListPanel;
+    JScrollPane scrollPane;
+    JSlider progressSlider;
+    static ControlBarPanel controlBarPanel;
+    static JPanel audiofileListPanel;
     private static JPanel mainPanel;
     private static JPanel welcomePanel;
+    static JPanel controlPanel;
     static AudioFile selectedAudio;
-    Song selectedSong;
     boolean isPaused;
 
 
@@ -57,13 +58,13 @@ public class AudioPlayerUi extends JFrame {
 
 
         // Control panel with buttons
-        JPanel controlPanel = new JPanel();
+        controlPanel = new JPanel();
         controlPanel.setPreferredSize(new Dimension(SIDE_WIDTH, HEIGHT));
         controlPanel.setBackground(Color.LIGHT_GRAY);
-        controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.Y_AXIS));
+        controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.PAGE_AXIS));
 
         controlPanel.setSize(300, 150);
-        controlPanel.setLayout(new java.awt.FlowLayout());
+        // controlPanel.setLayout(new java.awt.FlowLayout());
         controlPanel.setVisible(true);
 
 
@@ -73,6 +74,7 @@ public class AudioPlayerUi extends JFrame {
         JLabel rockPlylistLabel = createClickableLabel("Rock");
 
         JPanel dropDownSongs = new JPanel();
+        dropDownSongs.setLayout(new BoxLayout(dropDownSongs, BoxLayout.Y_AXIS));
         dropDownSongs.setPreferredSize(new Dimension(80,70));
         dropDownSongs.setBackground(Color.LIGHT_GRAY);
         dropDownSongs.setVisible(false);
@@ -89,6 +91,7 @@ public class AudioPlayerUi extends JFrame {
             }
         });
         JPanel dropDownPodcasts = new JPanel();
+        dropDownPodcasts.setLayout(new BoxLayout(dropDownPodcasts, BoxLayout.Y_AXIS));
         dropDownPodcasts.setPreferredSize(new Dimension(80,60));
         dropDownPodcasts.setBackground(Color.LIGHT_GRAY);
         dropDownPodcasts.setVisible(false);
@@ -175,7 +178,7 @@ public class AudioPlayerUi extends JFrame {
         });
 
         //CONTROL BAR PANEL
-        ControlBarPanel controlBarPanel = new ControlBarPanel(audioPlayer, this);
+        controlBarPanel = new ControlBarPanel(audioPlayer, this);
         add(controlBarPanel, BorderLayout.SOUTH);
 
 
@@ -185,7 +188,7 @@ public class AudioPlayerUi extends JFrame {
     }
 
 
-    private JLabel createClickableLabel(String labelText) {
+    static JLabel createClickableLabel(String labelText) {
         JLabel label = new JLabel(labelText);
         label.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         return label;
@@ -202,8 +205,10 @@ public class AudioPlayerUi extends JFrame {
                     audioPlayer.playAudioFile(audioFile);
                     selectedAudio = audioFile;
 
-                    label.setBackground(Color.YELLOW);
-                    label.setOpaque(true);
+                    controlBarPanel.updateCurrentlyPlayingLabel(audioFile.getName());
+
+                    //label.setBackground(Color.YELLOW);
+                    //label.setOpaque(true);
 
                     Timer timer = new Timer(3000, new ActionListener() {
                         @Override
@@ -244,6 +249,10 @@ public class AudioPlayerUi extends JFrame {
         mainPanel.repaint();
         audiofileListPanel.setVisible(true);
     }
+
+    // Inside AudioPlayerUi class
+
+
 
 
 }
