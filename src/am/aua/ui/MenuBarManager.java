@@ -83,6 +83,27 @@ public class MenuBarManager extends AudioPlayerUi{
             JMenu createPlaylistMenu = new JMenu("Create new playlist");
             menuBar.add(createPlaylistMenu);
 
+        createPlaylistMenu.addMenuListener(new MenuListener() {
+            @Override
+            public void menuSelected(MenuEvent e) {
+                String playlistName = JOptionPane.showInputDialog(this, "Enter playlist name:");
+                if (playlistName != null && !playlistName.isEmpty()) {
+                    JLabel newPlaylistLabel = createClickableLabel(playlistName);
+                    controlPanel.add(newPlaylistLabel);
+                    controlPanel.revalidate();
+                    controlPanel.repaint();
+                }
+            }
+
+            @Override
+            public void menuDeselected(MenuEvent e) {
+            }
+
+            @Override
+            public void menuCanceled(MenuEvent e) {
+            }
+        });
+
             return menuBar;
         }
 
