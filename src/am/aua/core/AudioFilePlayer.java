@@ -1,5 +1,7 @@
 package am.aua.core;
 
+import am.aua.ui.AudioPlayerUi;
+
 import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;
@@ -8,9 +10,12 @@ public class AudioFilePlayer {
     private String folderPath;
     private Clip clip;
 
+
     public AudioFilePlayer(String folderPath) {
         this.folderPath = folderPath;
     }
+
+
 
     public AudioFilePlayer(){}
 
@@ -40,6 +45,13 @@ public class AudioFilePlayer {
             clip.stop();
             clip.close();
         }
+    }
+
+    public long getCurrentPosition() {
+        if (clip != null && clip.isRunning()) {
+            return clip.getMicrosecondPosition() / 1000; // Convert microseconds to milliseconds
+        }
+        return 0;
     }
 
 

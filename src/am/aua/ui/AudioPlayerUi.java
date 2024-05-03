@@ -26,24 +26,20 @@ public class AudioPlayerUi extends JFrame {
     public static final int HEIGHT = 500;
     public static final int SIDE_WIDTH = 100;
 
-    private JScrollPane scrollPane;
-    private JSlider progressSlider;
-    private JButton playButton;
-    private JButton pauseButton;
-    private JButton stopButton;
-    private JButton shuffleButton;
-    private static JPanel audiofileListPanel;
+     JScrollPane scrollPane;
+     JSlider progressSlider;
+     static JPanel audiofileListPanel;
     private static JPanel mainPanel;
     private static JPanel welcomePanel;
     static AudioFile selectedAudio;
     Song selectedSong;
-    private boolean isPaused;
-    private Timer timer;
+    boolean isPaused;
+
 
     static SongPlayer songPlayer = new SongPlayer("src/am/aua/audioFiles");
     static AudioFilePlayer audioPlayer = new AudioFilePlayer("src/am/aua/audioFiles");
     EpisodePlayer episodePlayer = new EpisodePlayer("src/am/aua");
-    private static String currentPlaylistPath;
+    static String currentPlaylistPath;
 
 
 
@@ -71,7 +67,7 @@ public class AudioPlayerUi extends JFrame {
         controlPanel.setVisible(true);
 
 
-        JLabel songsLabel = createClickableLabel("Songs");
+        JLabel songsLabel = createClickableLabel(" All Songs");
         JLabel podcastsLabel = createClickableLabel("Podcasts");
         JLabel classicalPlylistLabel = createClickableLabel("Classical");
         JLabel rockPlylistLabel = createClickableLabel("Rock");
@@ -81,7 +77,7 @@ public class AudioPlayerUi extends JFrame {
         dropDownSongs.setBackground(Color.LIGHT_GRAY);
         dropDownSongs.setVisible(false);
 
-        JLabel playlists = createClickableLabel("▼ Playlists");
+        JLabel playlists = createClickableLabel("▼ Songs");
 
         dropDownSongs.add(songsLabel);
         dropDownSongs.add(classicalPlylistLabel);
@@ -178,86 +174,11 @@ public class AudioPlayerUi extends JFrame {
             }
         });
 
+        //CONTROL BAR PANEL
+        ControlBarPanel controlBarPanel = new ControlBarPanel(audioPlayer, this);
+        add(controlBarPanel, BorderLayout.SOUTH);
 
 
-        // Player panel with control bar
-        JPanel playerPanel = new JPanel(new BorderLayout());
-        playerPanel.setBackground(Color.GRAY);
-
-        progressSlider = new JSlider();
-        progressSlider.setMinimum(0);
-        progressSlider.setMaximum(100);
-        progressSlider.setValue(0);
-        playerPanel.add(progressSlider, BorderLayout.CENTER);
-
-
-
-        //slider
-
-
-
-        JPanel controlBarPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        playButton = new JButton("Play");
-        pauseButton = new JButton("Pause");
-        stopButton = new JButton("Stop");
-        shuffleButton = new JButton("Shuffle");
-
-        controlBarPanel.add(playButton);
-        controlBarPanel.add(pauseButton);
-        controlBarPanel.add(stopButton);
-        controlBarPanel.add(shuffleButton);
-
-
-        playButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (isPaused) {
-                    audioPlayer.resumeAudioFile();
-                    isPaused = false;
-                } else {
-                    try {
-                        audioPlayer.playAudioFile(selectedAudio);
-                    } catch (UnsupportedAudioFileException ex) {
-                        throw new RuntimeException(ex);
-                    } catch (IOException | LineUnavailableException ex) {
-                        throw new RuntimeException(ex);
-                    }
-                }
-            }
-        });
-
-        pauseButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (!isPaused) {
-                    audioPlayer.pauseAudioFile();
-                    isPaused = true;
-                }
-            }
-        });
-
-        stopButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                audioPlayer.stopAudioFile();
-
-            }
-        });
-
-        shuffleButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                shufflePlaylist();
-            }
-        });
-
-
-
-
-        playerPanel.add(controlBarPanel, BorderLayout.SOUTH);
-
-        mainPanel.add(playerPanel, BorderLayout.SOUTH);
 
         add(mainPanel);
         setVisible(true);
@@ -323,22 +244,6 @@ public class AudioPlayerUi extends JFrame {
         mainPanel.repaint();
         audiofileListPanel.setVisible(true);
     }
-
-
-    public void shufflePlaylist() {
-        if (currentPlaylistPath != null) {
-            try {
-                songPlayer.playlistToPlayTest(songPlayer.getSongIdsFromGenreDatabase(currentPlaylistPath), true);
-            } catch (UnsupportedAudioFileException | LineUnavailableException | IOException | SongNotFoundException e) {
-                e.printStackTrace();
-            }
-        } else {
-            System.out.println("No playlist loaded to shuffle.");
-        }
-    }
-
-
-
 
 
 }
