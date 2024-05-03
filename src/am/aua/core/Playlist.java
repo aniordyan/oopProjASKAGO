@@ -1,7 +1,8 @@
 package am.aua.core;
 
-import am.aua.exceptions.SongNotFoundException;
+import am.aua.exceptions.DuplicateSongException;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,13 +31,18 @@ public class Playlist {
     }
 
 
-    public void addSong(int songId) throws SongNotFoundException {
+    public void addSong(int songId) throws FileNotFoundException, DuplicateSongException {
+        for (Song song : songs) {
+            if (song.getId() == songId) {
+                throw new DuplicateSongException("Duplicate song found with ID: " + songId);
+            }
+        }
         Song songToAdd = songCore.findSongById(songId);
         if (songToAdd != null) {
             songs.add(songToAdd);
             System.out.println("Song added to playlist: " + songToAdd.getName());
         } else {
-            throw new SongNotFoundException("Song with ID " + songId + " not found.");
+            throw new FileNotFoundException("Song with ID " + songId + " not found.");
         }
     }
 

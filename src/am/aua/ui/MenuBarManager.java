@@ -1,6 +1,5 @@
 package am.aua.ui;
 import am.aua.core.Song;
-import am.aua.exceptions.SongNotFoundException;
 
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -8,9 +7,7 @@ import javax.swing.*;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class MenuBarManager extends AudioPlayerUi{
@@ -64,7 +61,7 @@ public class MenuBarManager extends AudioPlayerUi{
 
                         }
                         selectedAudio = null;
-                    } catch (SongNotFoundException ex) {
+                    } catch (FileNotFoundException ex) {
                         throw new RuntimeException(ex);
                     }
                 }

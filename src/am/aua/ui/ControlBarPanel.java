@@ -2,7 +2,6 @@ package am.aua.ui;
 
 import am.aua.core.AudioFile;
 import am.aua.core.AudioFilePlayer;
-import am.aua.exceptions.SongNotFoundException;
 
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -10,6 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class ControlBarPanel extends JPanel {
@@ -110,7 +110,7 @@ public class ControlBarPanel extends JPanel {
         if (parentUi.currentPlaylistPath != null) {
             try {
                 parentUi.songPlayer.playlistToPlayTest(parentUi.songPlayer.getSongIdsFromGenreDatabase(parentUi.currentPlaylistPath), true);
-            } catch (UnsupportedAudioFileException | LineUnavailableException | IOException | SongNotFoundException e) {
+            } catch (UnsupportedAudioFileException | LineUnavailableException | IOException e) {
                 e.printStackTrace();
             }
         } else {

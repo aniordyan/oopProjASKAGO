@@ -1,11 +1,5 @@
 package am.aua.core;
 
-import javax.sound.sampled.*;
-import java.io.File;
-import java.io.IOException;
-import am.aua.core.SongPlayer;
-import am.aua.exceptions.SongNotFoundException;
-
 
 public class Song extends AudioFile implements Playable{
     public enum Genre {CLASSICAL, POP, ROCK, FUNK, RNB }

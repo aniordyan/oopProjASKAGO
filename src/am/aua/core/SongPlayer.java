@@ -1,7 +1,6 @@
 package am.aua.core;
 
 import am.aua.exceptions.InvalidGenreException;
-import am.aua.exceptions.SongNotFoundException;
 
 import javax.sound.sampled.*;
 import java.io.*;
@@ -31,7 +30,7 @@ public class SongPlayer extends AudioFilePlayer{
 
     }
 
-    public File getSongLocation(Song s) throws SongNotFoundException {
+    public File getSongLocation(Song s) throws FileNotFoundException {
 
         if (s != null) {
             Path path = Paths.get(s.getFilePath());
@@ -41,11 +40,11 @@ public class SongPlayer extends AudioFilePlayer{
                 return new File(folderPath + File.separator + s.getFilePath());
             }
         } else {
-            throw new SongNotFoundException("Song not found.");
+            throw new FileNotFoundException("Song not found.");
         }
     }
 
-    public File getSongLocation(String filepath) throws SongNotFoundException {
+    public File getSongLocation(String filepath) throws FileNotFoundException {
 
         if (filepath != null) {
             Path path = Paths.get(filepath);
@@ -55,7 +54,7 @@ public class SongPlayer extends AudioFilePlayer{
                 return new File(folderPath + File.separator + filepath);
             }
         } else {
-            throw new SongNotFoundException("Song not found.");
+            throw new FileNotFoundException("Song not found.");
         }
     }
 
@@ -95,13 +94,13 @@ public class SongPlayer extends AudioFilePlayer{
         return null;
     }
 
-    public void deleteSong(int id ) throws SongNotFoundException {
+    public void deleteSong(int id ) throws FileNotFoundException {
         Song songToDelete = findSongById(id);
         if (songToDelete != null) {
             songs.remove(songToDelete);
             updateDatabase();
         } else {
-            throw new SongNotFoundException("Song with ID " + id + " not found.");
+            throw new FileNotFoundException("Song with ID " + id + " not found.");
         }
     }
 
@@ -177,7 +176,7 @@ public class SongPlayer extends AudioFilePlayer{
         return songIds;
     }
 
-    public void playlistToPlayTest(ArrayList<Integer> songIds, boolean shuffle) throws UnsupportedAudioFileException, LineUnavailableException, IOException, SongNotFoundException {
+    public void playlistToPlayTest(ArrayList<Integer> songIds, boolean shuffle) throws UnsupportedAudioFileException, LineUnavailableException, IOException, FileNotFoundException {
         if (songIds.isEmpty()) {
             System.out.println("Playlist is empty.");
             return;

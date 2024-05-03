@@ -1,9 +1,7 @@
 package am.aua.core;
 
 import am.aua.exceptions.InvalidGenreException;
-import am.aua.exceptions.SongNotFoundException;
 
-import javax.sound.sampled.*;
 import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -24,7 +22,7 @@ public class EpisodePlayer {
 
     }
 
-        public File getEpisodeLocation(Episode episode) throws SongNotFoundException{
+        public File getEpisodeLocation(Episode episode) throws FileNotFoundException{
         if (episode != null) {
             Path path = Paths.get(episode.getFilePath());
             if (path.isAbsolute()) {
@@ -33,7 +31,7 @@ public class EpisodePlayer {
                 return new File(folderPath + File.separator + episode.getFilePath());
             }
         } else {
-            throw new SongNotFoundException("Episode not found.");
+            throw new FileNotFoundException("Episode not found.");
         }
     }
 
@@ -63,7 +61,7 @@ public class EpisodePlayer {
 
 
 
-    public void playFiles(int id) throws SongNotFoundException {
+    public void playFiles(int id) throws FileNotFoundException {
 
     }
 

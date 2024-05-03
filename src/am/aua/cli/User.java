@@ -4,13 +4,6 @@ package am.aua.cli;
 
 import am.aua.core.SongPlayer;
 import am.aua.core.Playlist;
-import am.aua.exceptions.InvalidGenreException;
-import am.aua.exceptions.SongNotFoundException;
-
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
-import java.io.IOException;
-import java.util.Scanner;
 
 public class User {
 
