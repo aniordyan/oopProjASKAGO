@@ -111,7 +111,7 @@ public class ControlBarPanel extends JPanel {
     public void shufflePlaylist() {
         if (parentUi.currentPlaylistPath != null) {
             try {
-                parentUi.songPlayer.playlistToPlayTest(parentUi.songPlayer.getSongIdsFromGenreDatabase(parentUi.currentPlaylistPath), true);
+                parentUi.songPlayer.playlistToPlayTest(parentUi.songPlayer.getSongsFromDatabase(parentUi.currentPlaylistPath), true);
             } catch (UnsupportedAudioFileException | LineUnavailableException | IOException e) {
                 e.printStackTrace();
             }

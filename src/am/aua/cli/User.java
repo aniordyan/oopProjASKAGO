@@ -11,7 +11,7 @@ public class User {
     String defaultDatabase = "songDatabase.txt";
 
     SongPlayer songPlayer = new SongPlayer(folderPath);
-    private Playlist.PlaylistManager playlistManager = new Playlist.PlaylistManager();
+    //private Playlist.PlaylistManager playlistManager = new Playlist.PlaylistManager();
 
 //need to be changed for ui right?
   /*  public void EntryPoint() throws SongNotFoundException, UnsupportedAudioFileException, LineUnavailableException, IOException, InvalidGenreException {

@@ -10,14 +10,14 @@ public class Episode extends AudioFile implements Playable{
     private GenrePodcast genre;
     private Playable.Duration duration;
 
-    public Episode(int id,
+    public Episode(
                    String name,
                    String creator,
                    GenrePodcast genre,
                    String filePath,
                    String publishedDate
                    ) {
-        super(id, name, creator, filePath);
+        super(name, creator, filePath);
         this.publishedDate = publishedDate;
         this.genre = genre;
         this.duration = new Playable.Duration(filePath);

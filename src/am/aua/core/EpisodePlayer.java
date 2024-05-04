@@ -42,15 +42,13 @@ public class EpisodePlayer {
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
                 String[] parts = line.split(",");
-                int id = Integer.parseInt(parts[0]);
-                if (id > highestId) highestId = id;
-                String name = parts[1];
-                String creator = parts[2];
-                Episode.GenrePodcast genre = Episode.GenrePodcast.valueOf(parts[3]);
-                String filePath = parts[4];
-                String date = parts[5];
+                String name = parts[0];
+                String creator = parts[1];
+                Episode.GenrePodcast genre = Episode.GenrePodcast.valueOf(parts[2]);
+                String filePath = parts[3];
+                String date = parts[4];
 
-                episodes.add(new Episode(id, name, creator, genre, filePath, date));
+                episodes.add(new Episode(name, creator, genre, filePath, date));
             }
             return episodes;
         } catch (FileNotFoundException e) {

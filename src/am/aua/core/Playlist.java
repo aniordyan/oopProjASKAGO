@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Playlist {
+    /*
     private String name;
     private ArrayList<Song> songs;
     private SongPlayer songCore;
@@ -76,5 +77,7 @@ public class Playlist {
             return new ArrayList<>(playlists);
         }
     }
+
+    */
 
 }

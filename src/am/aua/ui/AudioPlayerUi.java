@@ -9,6 +9,7 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.plaf.ColorUIResource;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -25,6 +26,7 @@ public class AudioPlayerUi extends JFrame {
     public static final int WIDTH = 800;
     public static final int HEIGHT = 500;
     public static final int SIDE_WIDTH = 100;
+
 
     JScrollPane scrollPane;
     JSlider progressSlider;
@@ -207,18 +209,6 @@ public class AudioPlayerUi extends JFrame {
 
                     controlBarPanel.updateCurrentlyPlayingLabel(audioFile.getName());
 
-                    //label.setBackground(Color.YELLOW);
-                    //label.setOpaque(true);
-
-                    Timer timer = new Timer(3000, new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            label.setBackground(null);
-                            label.setOpaque(false);
-                        }
-                    });
-
-
                 } catch (UnsupportedAudioFileException ex) {
                     throw new RuntimeException(ex);
                 } catch (IOException ex) {
@@ -249,9 +239,6 @@ public class AudioPlayerUi extends JFrame {
         mainPanel.repaint();
         audiofileListPanel.setVisible(true);
     }
-
-    // Inside AudioPlayerUi class
-
 
 
 

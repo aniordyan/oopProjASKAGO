@@ -16,7 +16,7 @@ public class SongPlayer extends AudioFilePlayer{
     private long clipPosition;
     private Clip clip;
     private ArrayList<Song> songs;
-    private static int highestId = 0;
+    //static int highestId = 0;
     private static final String databasePath = "songDatabase.txt";
 
 
@@ -65,13 +65,11 @@ public class SongPlayer extends AudioFilePlayer{
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
                 String[] parts = line.split(",");
-                int id = Integer.parseInt(parts[0]);
-                if (id > highestId) highestId = id; // for adding song id
-                String name = parts[1];
-                String creator = parts[2];
-                Song.Genre genre = Song.Genre.valueOf(parts[3]);
-                String filePath = parts[4];
-                songs.add(new Song(id, name, creator, genre, filePath));
+                String name = parts[0];
+                String creator = parts[1];
+                Song.Genre genre = Song.Genre.valueOf(parts[2]);
+                String filePath = parts[3];
+                songs.add(new Song(name, creator, genre, filePath));
             }
             return songs;
         } catch (FileNotFoundException e) {
@@ -82,19 +80,7 @@ public class SongPlayer extends AudioFilePlayer{
 
     }
 
-
-
-
-    public Song findSongById(int id) {
-        for (Song song : songs) {
-            if (song.getId() == id) {
-                return song;
-            }
-        }
-        return null;
-    }
-
-    public void deleteSong(int id ) throws FileNotFoundException {
+  /*  public void deleteSong(int id ) throws FileNotFoundException {
         Song songToDelete = findSongById(id);
         if (songToDelete != null) {
             songs.remove(songToDelete);
@@ -104,10 +90,14 @@ public class SongPlayer extends AudioFilePlayer{
         }
     }
 
+
+   */
+
+
     public void updateDatabase() {
         try (PrintWriter writer = new PrintWriter(new FileWriter(databasePath))) {
             for (Song song : songs) {
-                writer.println(song.getId() + "," + song.getName() + "," + song.getCreator() +
+                writer.println(song.getName() + "," + song.getCreator() +
                         "," + song.getGenre() + "," + song.getFilePath());
             }
         } catch (IOException e) {
@@ -134,9 +124,8 @@ public class SongPlayer extends AudioFilePlayer{
         System.out.println("Enter the path to the audio file:");
         String filePath = scanner.nextLine();
 
-        int id = highestId + 1;
 
-        Song newSong = new Song(id, name, artist, genre, filePath);
+        Song newSong = new Song(name, artist, genre, filePath);
         songs.add(newSong);
         updateDatabase();
         System.out.println("Song added successfully!");
@@ -149,7 +138,7 @@ public class SongPlayer extends AudioFilePlayer{
             try (PrintWriter writer = new PrintWriter(new FileWriter(genreFileName))) {
                 for (Song song : songs) {
                     if (song.getGenre() == genre) {
-                        writer.println(song.getId() + "," + song.getName() + "," + song.getCreator() +
+                        writer.println( song.getName() + "," + song.getCreator() +
                                 "," + song.getGenre() + "," + song.getFilePath());
                     }
                 }
@@ -161,8 +150,8 @@ public class SongPlayer extends AudioFilePlayer{
 
     }
 
-    public ArrayList<Integer> getSongIdsFromGenreDatabase(String genreDatabasePath) {
-        ArrayList<Integer> songIds = new ArrayList<>();
+  /*  public ArrayList<Song> getSongFromGenreDatabase(String genreDatabasePath) {
+        ArrayList<Song> songs = new ArrayList<>();
         try (Scanner scanner = new Scanner(new File(genreDatabasePath))) {
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
@@ -176,37 +165,55 @@ public class SongPlayer extends AudioFilePlayer{
         return songIds;
     }
 
-    public void playlistToPlayTest(ArrayList<Integer> songIds, boolean shuffle) throws UnsupportedAudioFileException, LineUnavailableException, IOException, FileNotFoundException {
-        if (songIds.isEmpty()) {
+   */
+
+
+    public ArrayList<Song> getSongsFromDatabase(String databasePath) {
+        ArrayList<Song> songs = new ArrayList<>();
+        try (Scanner scanner = new Scanner(new File(databasePath))) {
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                String[] parts = line.split(",");
+                String name = parts[0];
+                String creator = parts[1];
+                Song.Genre genre = Song.Genre.valueOf(parts[2]);
+                String filePath = parts[3];
+                songs.add(new Song(name, creator, genre, filePath));
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return songs;
+    }
+
+
+    public void playlistToPlayTest(ArrayList<Song> songs, boolean shuffle) throws UnsupportedAudioFileException, LineUnavailableException, IOException, FileNotFoundException {
+        if (songs.isEmpty()) {
             System.out.println("Playlist is empty.");
             return;
         }
 
         if (shuffle) {
-            Collections.shuffle(songIds);
+            Collections.shuffle(songs);
         }
 
-        for (int songId : songIds) {
-            Song song = findSongById(songId);
-            if (song != null) {
-                File songFile = getSongLocation(song);
-                try {
-                    AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(songFile);
-                    Clip clip = AudioSystem.getClip();
+        for (Song song : songs) {
+            File songFile = getSongLocation(song);
+            try {
+                AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(songFile);
+                Clip clip = AudioSystem.getClip();
 
-                    clip.open(audioInputStream);
-                    clip.start();
-                    while (clip.getMicrosecondLength() != clip.getMicrosecondPosition()) {
-                    }
-
-                } catch (UnsupportedAudioFileException | LineUnavailableException | IOException e) {
-                    e.printStackTrace();
+                clip.open(audioInputStream);
+                clip.start();
+                while (clip.getMicrosecondLength() != clip.getMicrosecondPosition()) {
                 }
-            } else {
-                System.out.println("Song with ID " + songId + " not found.");
+
+            } catch (UnsupportedAudioFileException | LineUnavailableException | IOException e) {
+                e.printStackTrace();
             }
         }
     }
+
 
 
  /*   public void playlistToPlay(String respone, boolean shuffle) throws UnsupportedAudioFileException, LineUnavailableException, IOException, SongNotFoundException {

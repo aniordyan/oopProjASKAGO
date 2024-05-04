@@ -11,15 +11,10 @@ public abstract class AudioFile {
     private String filePath;
     //private String duration;
 
-    public AudioFile(int id,String name, String creator, String filePath){
-        this.id = id;
+    public AudioFile(String name, String creator, String filePath){
         this.name = name;
         this.creator = creator;
         this.filePath = filePath;
-    }
-
-    public int getId() {
-        return this.id;
     }
 
     public String getName() {

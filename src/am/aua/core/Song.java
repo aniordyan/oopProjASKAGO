@@ -9,8 +9,8 @@ public class Song extends AudioFile implements Playable{
 
 
 
-    public Song(int id, String name, String creator, Genre genre, String filePath) {
-        super(id, name, creator, filePath);
+    public Song(String name, String creator, Genre genre, String filePath) {
+        super( name, creator, filePath);
         this.genre = genre;
         this.duration = new Playable.Duration(filePath);
     }
