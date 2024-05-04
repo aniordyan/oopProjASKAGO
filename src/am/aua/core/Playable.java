@@ -13,7 +13,8 @@ public interface Playable {
 
         public Duration(String filePath) {
             try {
-                AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("src/am/aua/audioFiles" + File.separator + filePath));
+                File file = getFile(filePath);
+                AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file);
                 Clip clip = AudioSystem.getClip();
                 clip.open(audioInputStream);
                 long frameLength = clip.getFrameLength();
@@ -38,5 +39,14 @@ public interface Playable {
         public String getDuration() {
             return duration;
         }
+
+        public File getFile(String filePath) {
+            if (new File(filePath).isAbsolute()) {
+                return new File(filePath);
+            } else {
+                return new File("src/am/aua/audioFiles" + File.separator + filePath);
+            }
+        }
+
     }
 }

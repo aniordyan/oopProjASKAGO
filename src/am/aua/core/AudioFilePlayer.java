@@ -6,7 +6,7 @@ import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;
 
-public class AudioFilePlayer {
+public class AudioFilePlayer{
     private String folderPath;
     private Clip clip;
 
@@ -19,8 +19,16 @@ public class AudioFilePlayer {
 
     public AudioFilePlayer(){}
 
+    public File getFile(String filePath) {
+        if (new File(filePath).isAbsolute()) {
+            return new File(filePath);
+        } else {
+            return new File("src/am/aua/audioFiles" + File.separator + filePath);
+        }
+    }
+
     public void playAudioFile(AudioFile audioFile) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
-        File file = new File(folderPath + File.separator + audioFile.getFilePath());
+        File file = getFile(audioFile.getFilePath());
         AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file);
         clip = AudioSystem.getClip();
         clip.open(audioInputStream);
@@ -54,31 +62,5 @@ public class AudioFilePlayer {
         return 0;
     }
 
-
-
-   /*STUFF FOR SLIDER THAT DIDNT WORK YET
-    public int getCurrentPosition(AudioFile audioFile) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
-        if (clip != null && clip.isOpen()) {
-            return (int) clip.getMicrosecondPosition() / 1000;
-        }
-        return 0;
-    }
-
-    public Clip getClip(AudioFile audioFile) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
-        File file = new File(folderPath + File.separator + audioFile.getFilePath());
-        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file);
-
-        if (clip != null) {
-            clip.close();
-        }
-
-        clip = AudioSystem.getClip();
-        clip.open(audioInputStream);
-        audioInputStream.close();
-
-        return clip;
-    }
-
-    */
 
 }

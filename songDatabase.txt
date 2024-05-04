@@ -1,3 +1,5 @@
 A Star Named Sun,Viktor Tsoi,ROCK,Виктор-Цой-Звезда-по-имени-Солнце.wav
 La Boheme,Charles Aznavour,POP,Charles-Aznavour-La-Boheme.wav
 Maskarad,Aram Khachaturian,CLASSICAL,aram_ilich_hachaturjan_-_waltz_maskarad_109__z3.fm_.wav
+blood type,me,ROCK,C:\Users\37493\IdeaProjects\cs120Project\src\am\aua\audioFiles\Charles-Aznavour-La-Boheme.wav
+suserov par,khachaturian,CLASSICAL,C:\Users\37493\Music\A.Khachaturian-Suserov-par.wav

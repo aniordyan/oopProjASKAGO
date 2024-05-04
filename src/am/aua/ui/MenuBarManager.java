@@ -40,20 +40,6 @@ public class MenuBarManager extends AudioPlayerUi{
                             // canceled
                             break;
                     }
-
-                    JFileChooser fileChooser = new JFileChooser();
-                    fileChooser.setDialogTitle("Choose a WAV audio file to add");
-                    fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-                    fileChooser.setFileFilter(new FileNameExtensionFilter("WAV Audio Files", "wav"));
-
-                    int option = fileChooser.showOpenDialog(parentFrame);
-
-                    if (option == JFileChooser.APPROVE_OPTION) {
-                        // User selected a file
-                        String filePath = fileChooser.getSelectedFile().getAbsolutePath();
-                        // Add logic to handle the selected file
-                        //i am getting the path, adding that path to database
-                    }
                 }
 
                 @Override
@@ -75,8 +61,10 @@ public class MenuBarManager extends AudioPlayerUi{
                 audioPlayer.stopAudioFile();
                 if (selectedAudio != null) {
                     if (selectedAudio instanceof Song) {
-                        //songPlayer.deleteSong(selectedAudio.getId());
+                        Song selectedSong = (Song) selectedAudio;
+                        songPlayer.deleteSong(selectedSong);
                         loadSongs("songDatabase.txt");
+
 
                     }
                     selectedAudio = null;
@@ -139,7 +127,7 @@ public class MenuBarManager extends AudioPlayerUi{
             try {
                 Song.Genre genre = Song.Genre.valueOf(genreString.toUpperCase());
                 Song song = new Song(name, artist, genre, filePath);
-                //songPlayer.addSong(song);
+                songPlayer.addSong(song);
                 loadSongs(currentPlaylistPath);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, "Error adding song: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);

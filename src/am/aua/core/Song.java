@@ -1,6 +1,8 @@
 package am.aua.core;
 
 
+import java.util.Objects;
+
 public class Song extends AudioFile implements Playable{
     public enum Genre {CLASSICAL, POP, ROCK, FUNK, RNB }
     private Playable.Duration duration;
@@ -34,5 +36,22 @@ public class Song extends AudioFile implements Playable{
 
         return Title + Artist + Genre + Duration;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Song song = (Song) o;
+        return Objects.equals(getName(), song.getName()) &&
+                Objects.equals(getCreator(), song.getCreator()) &&
+                genre == song.genre &&
+                Objects.equals(getFilePath(), song.getFilePath());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getName(), getCreator(), getGenre(), getFilePath());
+    }
+
 
 }

@@ -16,7 +16,6 @@ public class SongPlayer extends AudioFilePlayer{
     private long clipPosition;
     private Clip clip;
     private ArrayList<Song> songs;
-    //static int highestId = 0;
     private static final String databasePath = "songDatabase.txt";
 
 
@@ -44,19 +43,6 @@ public class SongPlayer extends AudioFilePlayer{
         }
     }
 
-    public File getSongLocation(String filepath) throws FileNotFoundException {
-
-        if (filepath != null) {
-            Path path = Paths.get(filepath);
-            if (path.isAbsolute()) {
-                return new File(filepath);
-            } else {
-                return new File(folderPath + File.separator + filepath);
-            }
-        } else {
-            throw new FileNotFoundException("Song not found.");
-        }
-    }
 
 
     public ArrayList<Song> loadSongsFromDatabase(String path) {
@@ -80,19 +66,21 @@ public class SongPlayer extends AudioFilePlayer{
 
     }
 
-  /*  public void deleteSong(int id ) throws FileNotFoundException {
-        Song songToDelete = findSongById(id);
+
+    public void deleteSong(Song songToDelete ){
         if (songToDelete != null) {
             songs.remove(songToDelete);
             updateDatabase();
-        } else {
-            throw new FileNotFoundException("Song with ID " + id + " not found.");
         }
     }
 
 
-   */
-
+    public void addSong(Song songToAdd) {
+        if (songToAdd != null) {
+            songs.add(songToAdd);  // Add the song to the list
+            updateDatabase();  // Update the database file
+        }
+    }
 
     public void updateDatabase() {
         try (PrintWriter writer = new PrintWriter(new FileWriter(databasePath))) {
@@ -130,6 +118,8 @@ public class SongPlayer extends AudioFilePlayer{
         updateDatabase();
         System.out.println("Song added successfully!");
     }
+
+
 
     public void createPlaylistByGenre() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
 
