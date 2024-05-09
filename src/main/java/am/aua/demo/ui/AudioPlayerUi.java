@@ -13,6 +13,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -95,7 +97,10 @@ public class AudioPlayerUi extends Application {
             loadSongs("RNB.txt");
         });
 
-
+        Label podcastsLabel = createClickableLabel("All podcasts");
+        podcastsLabel.setOnMouseClicked(event -> {
+            loadEpisodes("podcastDatabase.txt");
+        });
         Label inStepanavanLabel = createClickableLabel("inStepanavan");
         inStepanavanLabel.setOnMouseClicked(event -> {
             loadEpisodes("instepanavan.txt");
@@ -117,7 +122,7 @@ public class AudioPlayerUi extends Application {
 
         VBox dropDownPodcasts = new VBox(5); // dropdown
         dropDownPodcasts.setVisible(true);
-        dropDownPodcasts.getChildren().addAll(inStepanavanLabel, EuronewsLabel);
+        dropDownPodcasts.getChildren().addAll(podcastsLabel, inStepanavanLabel, EuronewsLabel);
 
         Button podcastItems = new Button("▼ Podcasts");
         podcastItems.setOnAction((ActionEvent event) -> {
@@ -254,7 +259,7 @@ public class AudioPlayerUi extends Application {
         audiofileListPanel.setVisible(true);
     }
 
-    private void initTableViewPodcast() {
+    private static void initTableViewPodcast() {
         podcastTable = new TableView<>();
 
         TableColumn<Episode, String> titleColumn = new TableColumn<>("Title");

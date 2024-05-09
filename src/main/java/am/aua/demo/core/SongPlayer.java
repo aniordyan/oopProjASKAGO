@@ -78,8 +78,8 @@ public class SongPlayer extends AudioFilePlayer{
 
     public void addSong(Song songToAdd) {
         if (songToAdd != null) {
-            songs.add(songToAdd);  // Add the song to the list
-            updateDatabase();  // Update the database file
+            songs.add(songToAdd);
+            updateDatabase();
         }
     }
 

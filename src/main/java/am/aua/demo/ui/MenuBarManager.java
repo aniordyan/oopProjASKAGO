@@ -2,6 +2,7 @@ package am.aua.demo.ui;
 
 
 import am.aua.demo.core.AudioFile;
+import am.aua.demo.core.Episode;
 import am.aua.demo.core.Song;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
@@ -25,7 +26,7 @@ public class MenuBarManager extends AudioPlayerUi{
 
         MenuItem addPodcastItem = new MenuItem("Add Podcast");
         addPodcastItem.setOnAction((ActionEvent event) -> {
-            addPodcast();
+            addEpisode(parentFrame);
         });
 
         addMenu.getItems().addAll(addSongItem, addPodcastItem);
@@ -39,11 +40,16 @@ public class MenuBarManager extends AudioPlayerUi{
                     Song selectedSong = (Song) selectedAudio;
                     songPlayer.deleteSong(selectedSong);
                     loadSongs("songDatabase.txt");
+                } else if (selectedAudio instanceof Episode) {
+                    Episode selectedEpisode = (Episode) selectedAudio;
+                    episodePlayer.deleteEpisode(selectedEpisode);
+                    loadEpisodes("podcastDatabase.txt");
                 }
                 selectedAudio = null;
             }
         });
         deleteMenu.getItems().add(deleteMenuItem);
+
         MenuItem deletePlaylist = new MenuItem("Delete Playlist");
         deletePlaylist.setOnAction((ActionEvent event) -> {
 
@@ -104,12 +110,10 @@ public class MenuBarManager extends AudioPlayerUi{
                 genreDialog.showAndWait().ifPresent(genreString -> {
                     try {
                         Song.Genre genre = Song.Genre.valueOf(genreString.toUpperCase());
-
-
-
                             Song song = new Song(name, artist, genre, chooseFile("Add song"));
                             songPlayer.addSong(song);
                             loadSongs(currentPlaylistPath);
+                            songPlayer.createPlaylistByGenre();
 
                     } catch (Exception ex) {
                         Alert errorAlert = new Alert(Alert.AlertType.ERROR);
@@ -126,9 +130,56 @@ public class MenuBarManager extends AudioPlayerUi{
 
     }
 
-    private static void addPodcast() {
-        // Your add podcast logic here
+    private static void addEpisode(AudioPlayerUi parentFrame) {
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Add Episode");
+        dialog.setHeaderText(null);
+        dialog.setContentText("Enter episode name:");
+
+        // Get podcast name input
+        dialog.showAndWait().ifPresent(name -> {
+            // Dialog for entering creator
+            TextInputDialog creatorDialog = new TextInputDialog();
+            creatorDialog.setTitle("Add episode");
+            creatorDialog.setHeaderText(null);
+            creatorDialog.setContentText("Enter creator:");
+
+            // Get creator input
+            creatorDialog.showAndWait().ifPresent(creator -> {
+                // Dialog for entering genre
+                TextInputDialog genreDialog = new TextInputDialog();
+                genreDialog.setTitle("Add episode");
+                genreDialog.setHeaderText(null);
+                genreDialog.setContentText("Enter genre:");
+
+                // Get genre input
+                genreDialog.showAndWait().ifPresent(genreString -> {
+                    // Dialog for entering additional data
+                    TextInputDialog dateDialog = new TextInputDialog();
+                    dateDialog.setTitle("Add episode");
+                    dateDialog.setHeaderText(null);
+                    dateDialog.setContentText("Enter date of publish");
+
+                    dateDialog.showAndWait().ifPresent(publishDate -> {
+                        try {
+                            // Convert genre string to Genre enum
+                            Episode.GenrePodcast genre = Episode.GenrePodcast.valueOf(genreString.toUpperCase());
+
+                            // Create and add the podcast
+                            Episode e = new Episode(name, creator, genre, chooseFile("Add podcast"),  publishDate);
+                            episodePlayer.addEpisode(e);
+                            loadEpisodes(currentPlaylistPath);
+                            episodePlayer.createPlaylistsByCreators();
+
+                        } catch (Exception ex) {
+                            System.out.println("error");
+                        }
+                    });
+                });
+            });
+        });
     }
+
 
     private static void createNewPlaylist(AudioPlayerUi parentFrame) {
         TextInputDialog dialog = new TextInputDialog();

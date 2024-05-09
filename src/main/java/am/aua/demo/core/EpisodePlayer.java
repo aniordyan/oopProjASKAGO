@@ -90,22 +90,29 @@ public class EpisodePlayer {
 
 
 
-
-
-    public void playFiles(int id) throws FileNotFoundException {
-
+    public void deleteEpisode(Episode episodeToDelete ){
+        if (episodeToDelete != null) {
+            episodes.remove(episodeToDelete);
+            updateDatabase();
+        }
     }
 
+
+    public void addEpisode(Episode episodeToAdd) {
+        if (episodeToAdd != null) {
+            episodes.add(episodeToAdd);
+            updateDatabase();
+        }
+    }
 
     public void updateDatabase() {
-
-    }
-
-
-    public void addFile() throws InvalidGenreException {
-/*
-here addFile should mean that the user input the name of a podcast and an absolute path to it
-and there would be a database with name... and path to the folder
- */
+        try (PrintWriter writer = new PrintWriter(new FileWriter(databasePath))) {
+            for (Episode e : episodes) {
+                writer.println(e.getName() + "," + e.getCreator() +
+                        "," + e.getGenre() + "," + e.getFilePath() + "," + e.getPublishedDate());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

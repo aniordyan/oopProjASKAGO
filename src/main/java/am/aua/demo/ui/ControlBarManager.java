@@ -1,5 +1,6 @@
 package am.aua.demo.ui;
 
+import javafx.application.Platform;
 import javafx.scene.layout.BorderPane;
 import am.aua.demo.core.AudioFile;
 import am.aua.demo.core.AudioFilePlayer;
@@ -9,6 +10,14 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
+import java.io.IOException;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
+
 public class ControlBarManager extends BorderPane {
     private Button playButton;
     private Button pauseButton;
@@ -19,6 +28,7 @@ public class ControlBarManager extends BorderPane {
     private boolean isPaused;
     private AudioFilePlayer audioPlayer;
     private AudioPlayerUi parentUi;
+    private Thread shuffleThread;
 
     public ControlBarManager(AudioFilePlayer audioPlayer, AudioPlayerUi parentUi) {
         this.audioPlayer = audioPlayer;
@@ -89,20 +99,35 @@ public class ControlBarManager extends BorderPane {
     }
 
     public void shufflePlaylist() {
-    /*    if (parentUi.getCurrentPlaylistPath() != null) {
-            try {
-                parentUi.getSongPlayer().playlistToPlayTest(parentUi.getSongPlayer().getSongsFromDatabase(parentUi.getCurrentPlaylistPath()), true);
-            } catch (Exception e) {
-                e.printStackTrace();
+        Button stopLoopButton = new Button("Stop loop");
+        stopLoopButton.setOnAction(event -> {
+            shuffleThread.interrupt();
+        });
+
+        HBox controlBarPanel = (HBox) getCenter();
+        controlBarPanel.getChildren().add(stopLoopButton);
+
+        //new thread for shuffling
+        shuffleThread = new Thread(() -> {
+            if (parentUi.currentPlaylistPath != null) {
+                try {
+                    parentUi.songPlayer.playlistToPlayTest(parentUi.songPlayer.getSongsFromDatabase(parentUi.currentPlaylistPath), true);
+                } catch (UnsupportedAudioFileException | LineUnavailableException | IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                System.out.println("No playlist loaded to shuffle.");
             }
-        } else {
-            System.out.println("No playlist loaded to shuffle.");
-        }
 
-     */
+
+            Platform.runLater(() -> {
+                controlBarPanel.getChildren().remove(stopLoopButton);
+            });
+        });
+
+        shuffleThread.start();
     }
 
-    public void updateCurrentlyPlayingLabel(String audioFileName) {
-        currentlyPlayingLabel.setText("Currently playing: " + audioFileName);
-    }
+
+
 }
