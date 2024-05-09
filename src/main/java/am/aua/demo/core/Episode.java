@@ -30,12 +30,12 @@ public class Episode extends AudioFile implements Playable{
         return genre;
     }
 
-    public void setGenre(GenrePodcast genre) {
-        this.genre = genre;
-    }
-
     public String getPublishedDate() {
         return publishedDate;
+    }
+
+    public Duration getDuration() {
+        return duration;
     }
 
     public void setDuration(Playable.Duration duration) {

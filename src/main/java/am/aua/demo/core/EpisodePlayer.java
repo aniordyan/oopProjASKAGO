@@ -2,12 +2,15 @@ package am.aua.demo.core;
 
 import am.aua.demo.exceptions.InvalidGenreException;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
+import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Scanner;
+import java.util.Set;
 
 public class EpisodePlayer {
     private String folderPath;
@@ -20,6 +23,7 @@ public class EpisodePlayer {
     public EpisodePlayer(String folderPath) {
         this.folderPath = folderPath;
         this.episodes = loadPodcastsFromDatabase(databasePath);
+        createPlaylistsByCreators();
 
     }
 
@@ -57,6 +61,34 @@ public class EpisodePlayer {
         }
         return episodes;
     }
+
+    public void createPlaylistsByCreators() {
+        // Create a set to store unique creator names
+        Set<String> creators = new HashSet<>();
+
+        // Extract unique creator names
+        for (Episode episode : episodes) {
+            creators.add(episode.getCreator());
+        }
+
+        // Create playlists for each unique creator
+        for (String creator : creators) {
+            String creatorFileName = creator + ".txt";
+            try (PrintWriter writer = new PrintWriter(new FileWriter(creatorFileName))) {
+                for (Episode episode : episodes) {
+                    if (episode.getCreator().equals(creator)) {
+                        writer.println(episode.getName() + "," + episode.getCreator() +
+                                "," + episode.getGenre() + "," + episode.getFilePath() + "," + episode.getPublishedDate());
+                    }
+                }
+                System.out.println("Playlist created for creator: " + creator);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
 
 
 

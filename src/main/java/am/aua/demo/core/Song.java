@@ -36,7 +36,7 @@ public class Song extends AudioFile implements Playable{
         String Title = String.format("%-" + COLUMN_WIDTH + "s",  getName());
         String Artist = String.format("%-" + COLUMN_WIDTH + "s",  getCreator());
         String Genre = String.format("%-" + COLUMN_WIDTH + "s",  getGenre());
-        String Duration = String.format("%-" + COLUMN_WIDTH + "s", duration.getDuration().toString());
+        String Duration = String.format("%-" + COLUMN_WIDTH + "s", duration.getDuration());
 
         return Title + Artist + Genre + Duration;
     }

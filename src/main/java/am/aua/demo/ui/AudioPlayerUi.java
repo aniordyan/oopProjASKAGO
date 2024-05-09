@@ -35,12 +35,22 @@ public class AudioPlayerUi extends Application {
     static BorderPane mainPanel;
     private static Label welcomeLabel;
     private static TableView<Song> songTable;
+    private static TableView<Episode> podcastTable;
     static String currentPlaylistPath;
     static VBox welcomePanel;
     static AudioFile selectedAudio;
-    static SongPlayer songPlayer = new SongPlayer("src/main/java/am/aua/demo/audioFiles");
+    static SongPlayer songPlayer;
+
+    static {
+        try {
+            songPlayer = new SongPlayer("src/main/java/am/aua/demo/audioFiles");
+        } catch (UnsupportedAudioFileException | LineUnavailableException | IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     static AudioFilePlayer audioPlayer = new AudioFilePlayer("src/main/java/am/aua/demo/audioFiles");
-    EpisodePlayer episodePlayer = new EpisodePlayer("src/main/java/am/aua/demo/audioFiles");
+    static EpisodePlayer episodePlayer = new EpisodePlayer("src/main/java/am/aua/demo/audioFiles");
 
 
     @Override
@@ -64,16 +74,40 @@ public class AudioPlayerUi extends Application {
         songsLabel.setOnMouseClicked(event -> {
             loadSongs("songDatabase.txt");
         });
-        Label podcastsLabel = createClickableLabel("Podcasts");
-        podcastsLabel.setOnMouseClicked(event -> {
-
-        });
         Label classicalPlaylistLabel = createClickableLabel("Classical");
+        classicalPlaylistLabel.setOnMouseClicked(event -> {
+            loadSongs("CLASSICAL.txt");
+        });
         Label rockPlaylistLabel = createClickableLabel("Rock");
+        rockPlaylistLabel.setOnMouseClicked(event -> {
+            loadSongs("ROCK.txt");
+        });
+        Label popPlaylistLabel = createClickableLabel("POP");
+        popPlaylistLabel.setOnMouseClicked(event -> {
+            loadSongs("POP.txt");
+        });
+        Label funkPlaylistLabel = createClickableLabel("Funk");
+        funkPlaylistLabel.setOnMouseClicked(event -> {
+            loadSongs("FUNK.txt");
+        });
+        Label rnbPlaylistLabel = createClickableLabel("RnB");
+        rnbPlaylistLabel.setOnMouseClicked(event -> {
+            loadSongs("RNB.txt");
+        });
+
+
+        Label inStepanavanLabel = createClickableLabel("inStepanavan");
+        inStepanavanLabel.setOnMouseClicked(event -> {
+            loadEpisodes("instepanavan.txt");
+        });
+        Label EuronewsLabel = createClickableLabel("Euronews");
+        EuronewsLabel.setOnMouseClicked(event -> {
+            loadEpisodes("Euronews.txt");
+        });
 
         VBox dropDownSongs = new VBox(5); //dropdown
-        dropDownSongs.setVisible(false);
-        dropDownSongs.getChildren().addAll(songsLabel, classicalPlaylistLabel, rockPlaylistLabel);
+        dropDownSongs.setVisible(true);
+        dropDownSongs.getChildren().addAll(songsLabel, classicalPlaylistLabel, rockPlaylistLabel, popPlaylistLabel, funkPlaylistLabel, rnbPlaylistLabel);
 
         Button songItems = new Button("▼ Songs");
         songItems.setOnAction((ActionEvent event) -> {
@@ -82,10 +116,10 @@ public class AudioPlayerUi extends Application {
         });
 
         VBox dropDownPodcasts = new VBox(5); // dropdown
-        dropDownPodcasts.setVisible(false);
-        dropDownPodcasts.getChildren().add(podcastsLabel);
+        dropDownPodcasts.setVisible(true);
+        dropDownPodcasts.getChildren().addAll(inStepanavanLabel, EuronewsLabel);
 
-        Button podcastItems = new Button("▼ Podcast");
+        Button podcastItems = new Button("▼ Podcasts");
         podcastItems.setOnAction((ActionEvent event) -> {
             dropDownPodcasts.setVisible(!dropDownPodcasts.isVisible());
 
@@ -100,6 +134,7 @@ public class AudioPlayerUi extends Application {
         audiofileListPanel = new VBox();
 
         initTableView();
+        initTableViewPodcast();
 
 
         // Welcome panel
@@ -117,6 +152,7 @@ public class AudioPlayerUi extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
     }
+
 
     private static Label createClickableLabel(String labelText) {
         Label label = new Label(labelText);
@@ -197,6 +233,65 @@ public class AudioPlayerUi extends Application {
         mainPanel.setCenter(audiofileListPanel);
         audiofileListPanel.setVisible(true);
     }
+
+    static void loadEpisodes(String path) {
+        welcomeLabel.setVisible(false);
+        audiofileListPanel.getChildren().clear();
+
+        currentPlaylistPath = path;
+
+        ArrayList<Episode> episodes = episodePlayer.loadPodcastsFromDatabase(path);
+
+        ObservableList<Episode> episodeList = FXCollections.observableArrayList(episodes);
+
+        // Set items to TableView
+        podcastTable.setItems(episodeList);
+
+        // Add TableView to the panel
+        audiofileListPanel.getChildren().add(podcastTable);
+
+        mainPanel.setCenter(audiofileListPanel);
+        audiofileListPanel.setVisible(true);
+    }
+
+    private void initTableViewPodcast() {
+        podcastTable = new TableView<>();
+
+        TableColumn<Episode, String> titleColumn = new TableColumn<>("Title");
+        titleColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+
+        TableColumn<Episode, String> artistColumn = new TableColumn<>("Creator");
+        artistColumn.setCellValueFactory(new PropertyValueFactory<>("creator"));
+
+        TableColumn<Episode, String> genreColumn = new TableColumn<>("Genre");
+        genreColumn.setCellValueFactory(new PropertyValueFactory<>("genre"));
+
+        TableColumn<Episode, String> dateColumn = new TableColumn<>("Published Date");
+        dateColumn.setCellValueFactory(new PropertyValueFactory<>("publishedDate"));
+
+        TableColumn<Episode, String> durationColumn = new TableColumn<>("Duration");
+        durationColumn.setCellValueFactory(new PropertyValueFactory<>("duration"));
+
+        podcastTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        podcastTable.getColumns().addAll(titleColumn, artistColumn, genreColumn, dateColumn, durationColumn);
+
+        podcastTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                if(selectedAudio != null)
+                    audioPlayer.stopAudioFile();
+                selectedAudio = newSelection;
+                try {
+                    audioPlayer.playAudioFile(selectedAudio);
+                } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+                    throw new RuntimeException(e);
+                }
+                System.out.println("Selected episode: " + selectedAudio.getName());
+            }
+        });
+
+    }
+
 
 
 

@@ -23,9 +23,10 @@ public class SongPlayer extends AudioFilePlayer{
     }
 
 
-    public SongPlayer(String folderPath) {
+    public SongPlayer(String folderPath) throws UnsupportedAudioFileException, LineUnavailableException, IOException {
         this.folderPath = folderPath;
         this.songs = loadSongsFromDatabase(databasePath);
+        createPlaylistByGenre();
 
     }
 
@@ -94,10 +95,9 @@ public class SongPlayer extends AudioFilePlayer{
     }
 
 
-    public void createPlaylistByGenre() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
-
+    public void createPlaylistByGenre(){
         for (Song.Genre genre : Song.Genre.values()) {
-            String genreFileName = genreFileName = genre.toString() + ".txt";
+            String genreFileName = genre.toString() + ".txt";
             try (PrintWriter writer = new PrintWriter(new FileWriter(genreFileName))) {
                 for (Song song : songs) {
                     if (song.getGenre() == genre) {
