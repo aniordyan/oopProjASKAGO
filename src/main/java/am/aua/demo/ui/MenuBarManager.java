@@ -177,7 +177,7 @@ public class MenuBarManager extends AudioPlayerUi{
     */
 
     private static void addSong(AudioPlayerUi parentFrame) {
-        // Read playlist names from song_playlist.txt
+
         List<String> playlistNames = new ArrayList<>();
         try (Scanner scanner = new Scanner(new File("song_playlist.txt"))) {
             while (scanner.hasNextLine()) {
@@ -187,10 +187,10 @@ public class MenuBarManager extends AudioPlayerUi{
             e.printStackTrace();
         }
 
-        // Add an option for adding the song directly to the song database
+
         playlistNames.add("All Songs");
 
-        // Show dialog window with playlist names for user selection
+
         ChoiceDialog<String> dialog = new ChoiceDialog<>(null, playlistNames);
         dialog.setTitle("Select Playlist");
         dialog.setHeaderText("Select the playlist to add the song:");
@@ -217,11 +217,11 @@ public class MenuBarManager extends AudioPlayerUi{
                         try {
                             Song.Genre genre = Song.Genre.valueOf(genreString.toUpperCase());
                             Song song = new Song(name, artist, genre, chooseFile("Add song"));
-                            songPlayer.addSong(song, playlistFileName); // Add song to the specified playlist
-                            appendToSongDatabase(song); // Append song details to songDatabase.txt
-                            loadSongs(playlistFileName); // Reload the songs for the playlist
+                            songPlayer.addSong(song, playlistFileName);
+                            appendToSongDatabase(song);
+                            loadSongs(playlistFileName);
                         } catch (Exception ex) {
-                            // Handle error
+
                         }
                     });
                 });
@@ -232,13 +232,11 @@ public class MenuBarManager extends AudioPlayerUi{
 
     private static void appendToSongDatabase(Song song) {
         try {
-            // Append to songDatabase.txt
             PrintWriter generalWriter = new PrintWriter(new FileWriter("songDatabase.txt", true));
             generalWriter.println(song.getName() + "," + song.getCreator() + "," + song.getGenre() + "," + song.getFilePath());
             generalWriter.close();
 
-            // Append to genre-specific playlist
-            String genreFileName = song.getGenre() + ".txt"; // Adjust the filename format as needed
+            String genreFileName = song.getGenre() + ".txt";
             PrintWriter genreWriter = new PrintWriter(new FileWriter(genreFileName, true));
             genreWriter.println(song.getName() + "," + song.getCreator() + "," + song.getGenre() + "," + song.getFilePath());
             genreWriter.close();
