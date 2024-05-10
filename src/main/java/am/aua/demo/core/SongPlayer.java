@@ -112,18 +112,7 @@ public class SongPlayer extends AudioFilePlayer{
         }
 
     }
-
-   /* public void createPlaylist(String playlistNmae){
-            String createdPlaylist = playlistNmae + ".txt";
-            try (PrintWriter writer = new PrintWriter(new FileWriter(createdPlaylist))) {
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-
-    }
-
-    */
+    
 
 
     public ArrayList<Song> getSongsFromDatabase(String databasePath) {

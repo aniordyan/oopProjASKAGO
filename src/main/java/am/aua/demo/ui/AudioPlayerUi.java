@@ -33,7 +33,7 @@ public class AudioPlayerUi extends Application {
     public static final int HEIGHT = 500;
     public static final int SIDE_WIDTH = 100;
 
-    private VBox controlPanel;
+    static VBox controlPanel;
     private static VBox audiofileListPanel;
     static BorderPane mainPanel;
     private static Label welcomeLabel;
@@ -72,7 +72,7 @@ public class AudioPlayerUi extends Application {
 
 
         // Control panel with buttons
-        VBox controlPanel = new VBox(10);
+        controlPanel = new VBox(10);
         controlPanel.setPadding(new Insets(10));
         controlPanel.setStyle("-fx-background-color: lightgrey;");
 
@@ -125,11 +125,13 @@ public class AudioPlayerUi extends Application {
 
         });
 
-        loadPlaylists();
+
 
         dropDownPodcasts = new VBox(5); // dropdown
         dropDownPodcasts.setVisible(true);
         dropDownPodcasts.getChildren().addAll(podcastsLabel, inStepanavanLabel, EuronewsLabel);
+
+        loadPlaylists();
 
         Button podcastItems = new Button("▼ Podcasts");
         podcastItems.setOnAction((ActionEvent event) -> {

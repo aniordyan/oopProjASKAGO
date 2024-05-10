@@ -8,12 +8,26 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.*;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.cell.PropertyValueFactory;
+
 
 import javax.swing.*;
 import java.io.*;
 import java.util.Scanner;
 
 public class MenuBarManager extends AudioPlayerUi{
+    public enum PlaylistType {
+        SONG,
+        PODCAST,
+        CUSTOM
+    }
+
+
+    private static TableView<String> customPlaylistTableView = new TableView<>();
+
+
     public static MenuBar createMenuBar(AudioPlayerUi parentFrame) {
         MenuBar menuBar = new MenuBar();
 
@@ -214,11 +228,31 @@ public class MenuBarManager extends AudioPlayerUi{
             dropDownSongs.getChildren().add(playlistLabel);
 
             // Save the playlist name to a file
-            savePlaylist(name);
+            savePlaylist(name, PlaylistType.SONG);
         });
     }
 
-    private static void createNewCustomPlaylist(AudioPlayerUi parentFrame) {
+    public static void createNewCustomPlaylist(AudioPlayerUi parentFrame) {
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Create Playlist");
+        dialog.setHeaderText(null);
+        dialog.setContentText("Enter playlist name:");
+        dialog.showAndWait().ifPresent(name -> {
+            Label playlistLabel = new Label(name);
+            ((VBox) parentFrame.mainPanel.getLeft()).getChildren().add(playlistLabel);
+
+            // Create a TableView for the custom playlist
+            customPlaylistTableView.getColumns().clear();
+            TableColumn<String, String> column = new TableColumn<>(name);
+            column.setCellValueFactory(new PropertyValueFactory<>("name"));
+            customPlaylistTableView.getColumns().add(column);
+
+            // Add the TableView to the control panel of the AudioPlayerUi
+            //mainPanel().getChildren().add(customPlaylistTableView);
+
+            // Save the playlist name to a file
+            savePlaylist(name, PlaylistType.CUSTOM);
+        });
     }
 
     private static void createNewPodcastPlaylist(AudioPlayerUi parentFrame) {
@@ -235,12 +269,20 @@ public class MenuBarManager extends AudioPlayerUi{
             dropDownPodcasts.getChildren().add(playlistLabel);
 
             // Save the playlist name to a file
-            savePlaylist(name);
+            savePlaylist(name, PlaylistType.PODCAST);
         });
     }
 
-    private static void savePlaylist(String playlistName) {
-        File file = new File("playlists.txt");
+    private static void savePlaylist(String playlistName, PlaylistType type) {
+        File file;
+        if (type == PlaylistType.SONG) {
+            file = new File("song_playlist.txt");
+        } else if (type == PlaylistType.PODCAST) {
+            file = new File("podcast_playlist.txt");
+        } else {
+            file = new File("custom_playlist.txt");
+        }
+
         try (FileWriter writer = new FileWriter(file, true)) {
             writer.write(playlistName + "\n");
         } catch (IOException e) {
@@ -255,16 +297,34 @@ public class MenuBarManager extends AudioPlayerUi{
     }
 
     public static void loadPlaylists() {
-        // Read playlist names from the file
-        File file = new File("playlists.txt");
+        loadPlaylists(PlaylistType.SONG, dropDownSongs);
+        loadPlaylists(PlaylistType.PODCAST, dropDownPodcasts);
+    }
+
+    private static void loadPlaylists(PlaylistType type, VBox dropdown) {
+        // Read playlist names from the appropriate file
+        File file;
+        if (type == PlaylistType.SONG) {
+            file = new File("song_playlist.txt");
+        } else if (type == PlaylistType.PODCAST) {
+            file = new File("podcast_playlist.txt");
+        } else {
+            // Handle invalid type
+            return;
+        }
+
         try (Scanner scanner = new Scanner(file)) {
             while (scanner.hasNextLine()) {
                 String playlistName = scanner.nextLine();
                 Label playlistLabel = createClickableLabel(playlistName);
                 playlistLabel.setOnMouseClicked(event -> {
-                    loadSongs(playlistName + ".txt");
+                    if (type == PlaylistType.SONG) {
+                        loadSongs(playlistName + ".txt");
+                    } else if (type == PlaylistType.PODCAST) {
+                        loadEpisodes(playlistName + ".txt");
+                    }
                 });
-                dropDownSongs.getChildren().add(playlistLabel);
+                dropdown.getChildren().add(playlistLabel);
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
