@@ -5,6 +5,7 @@ import am.aua.demo.core.AudioFile;
 import am.aua.demo.core.Episode;
 import am.aua.demo.core.Song;
 import javafx.event.ActionEvent;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.*;
@@ -15,6 +16,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 import javax.swing.*;
 import java.io.*;
+import java.nio.file.Files;
+import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 
 public class MenuBarManager extends AudioPlayerUi{
@@ -66,8 +70,31 @@ public class MenuBarManager extends AudioPlayerUi{
 
         MenuItem deletePlaylist = new MenuItem("Delete Playlist");
         deletePlaylist.setOnAction((ActionEvent event) -> {
+            VBox dropdown = dropDownSongs.isVisible() ? dropDownSongs : dropDownPodcasts;
 
+            ChoiceDialog<String> dialog = new ChoiceDialog<>(null, dropdown.getChildren().stream()
+                    .filter(node -> node instanceof Label)
+                    .map(node -> ((Label) node).getText())
+                    .toArray(String[]::new));
+            dialog.setTitle("Delete Playlist");
+            dialog.setHeaderText("Select the playlist to delete:");
+            dialog.setContentText("Playlist:");
+
+            Optional<String> result = dialog.showAndWait();
+            result.ifPresent(playlistName -> {
+                dropdown.getChildren().stream()
+                        .filter(node -> node instanceof Label && ((Label) node).getText().equals(playlistName))
+                        .findFirst()
+                        .ifPresent(node -> {
+                            ((Label) node).setVisible(false);
+
+                            deletePlaylist(playlistName, dropDownSongs.isVisible() ? PlaylistType.SONG : PlaylistType.PODCAST);
+                        });
+            });
         });
+
+
+
         deleteMenu.getItems().add(deletePlaylist);
 
 
@@ -330,6 +357,28 @@ public class MenuBarManager extends AudioPlayerUi{
             e.printStackTrace();
         }
     }
+
+    private static void deletePlaylist(String playlistName, PlaylistType type) {
+        // Determine the file corresponding to the playlist type
+        File file;
+        if (type == PlaylistType.SONG) {
+            file = new File("song_playlist.txt");
+        } else if (type == PlaylistType.PODCAST) {
+            file = new File("podcast_playlist.txt");
+        } else {
+            file = new File("custom_playlist.txt");
+        }
+
+        // Remove the playlist name from the file
+        try {
+            List<String> lines = Files.readAllLines(file.toPath());
+            lines.remove(playlistName); // Remove the playlist name from the list
+            Files.write(file.toPath(), lines); // Write the updated list back to the file
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 
 }
