@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import javafx.scene.Cursor;
 
+import static am.aua.demo.ui.MenuBarManager.loadPlaylists;
 
 
 public class AudioPlayerUi extends Application {
@@ -42,6 +43,8 @@ public class AudioPlayerUi extends Application {
     static VBox welcomePanel;
     static AudioFile selectedAudio;
     static SongPlayer songPlayer;
+    static VBox dropDownSongs;
+    static VBox dropDownPodcasts;
 
     static {
         try {
@@ -65,6 +68,8 @@ public class AudioPlayerUi extends Application {
         mainPanel.setTop(MenuBarManager.createMenuBar(this));
         ControlBarManager controlBarManager = new ControlBarManager(audioPlayer, this);
         mainPanel.setBottom(controlBarManager);
+
+
 
         // Control panel with buttons
         VBox controlPanel = new VBox(10);
@@ -110,7 +115,7 @@ public class AudioPlayerUi extends Application {
             loadEpisodes("Euronews.txt");
         });
 
-        VBox dropDownSongs = new VBox(5); //dropdown
+        dropDownSongs = new VBox(5); //dropdown
         dropDownSongs.setVisible(true);
         dropDownSongs.getChildren().addAll(songsLabel, classicalPlaylistLabel, rockPlaylistLabel, popPlaylistLabel, funkPlaylistLabel, rnbPlaylistLabel);
 
@@ -120,7 +125,9 @@ public class AudioPlayerUi extends Application {
 
         });
 
-        VBox dropDownPodcasts = new VBox(5); // dropdown
+        loadPlaylists();
+
+        dropDownPodcasts = new VBox(5); // dropdown
         dropDownPodcasts.setVisible(true);
         dropDownPodcasts.getChildren().addAll(podcastsLabel, inStepanavanLabel, EuronewsLabel);
 
@@ -159,7 +166,7 @@ public class AudioPlayerUi extends Application {
     }
 
 
-    private static Label createClickableLabel(String labelText) {
+    static Label createClickableLabel(String labelText) {
         Label label = new Label(labelText);
         label.setStyle("-fx-cursor: hand;");
         label.setOnMouseClicked(event -> {

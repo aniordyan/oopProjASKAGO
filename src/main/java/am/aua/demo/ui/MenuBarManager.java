@@ -10,8 +10,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.*;
 
 import javax.swing.*;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.util.Scanner;
 
 public class MenuBarManager extends AudioPlayerUi{
     public static MenuBar createMenuBar(AudioPlayerUi parentFrame) {
@@ -61,19 +61,19 @@ public class MenuBarManager extends AudioPlayerUi{
         Menu createPlaylistMenu = new Menu("Create new playlist");
         MenuItem createSongPlaylistMenuItem = new MenuItem("Create Song Playlist");
         createSongPlaylistMenuItem.setOnAction((ActionEvent event) -> {
-            createNewPlaylist(parentFrame);
+            createNewSongPlaylist(parentFrame);
         });
         createPlaylistMenu.getItems().add(createSongPlaylistMenuItem);
 
         MenuItem createPodcastPlaylistMenuItem = new MenuItem("Create Podcast Playlist");
         createPodcastPlaylistMenuItem.setOnAction((ActionEvent event) -> {
-            createNewPlaylist(parentFrame);
+            createNewPodcastPlaylist(parentFrame);
         });
         createPlaylistMenu.getItems().add(createPodcastPlaylistMenuItem);
 
         MenuItem createCustomPlaylistMenuItem = new MenuItem("Create Custom Playlist");
         createCustomPlaylistMenuItem.setOnAction((ActionEvent event) -> {
-            createNewPlaylist(parentFrame);
+            createNewCustomPlaylist(parentFrame);
         });
         createPlaylistMenu.getItems().add(createCustomPlaylistMenuItem);
 
@@ -82,6 +82,8 @@ public class MenuBarManager extends AudioPlayerUi{
 
         return menuBar;
     }
+
+
 
     private static void addSong(AudioPlayerUi parentFrame) {
 
@@ -181,17 +183,6 @@ public class MenuBarManager extends AudioPlayerUi{
     }
 
 
-    private static void createNewPlaylist(AudioPlayerUi parentFrame) {
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Create Playlist");
-        dialog.setHeaderText(null);
-        dialog.setContentText("Enter playlist name:");
-
-        dialog.showAndWait().ifPresent(name -> {
-            Label playlistLabel = new Label(name);
-            ((VBox) parentFrame.mainPanel.getLeft()).getChildren().add(playlistLabel);
-        });
-    }
 
 
     private static String chooseFile(String dialogTitle) {
@@ -207,5 +198,78 @@ public class MenuBarManager extends AudioPlayerUi{
             return null;
         }
     }
+
+
+    private static void createNewSongPlaylist(AudioPlayerUi parentFrame) {
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Create Playlist");
+        dialog.setHeaderText(null);
+        dialog.setContentText("Enter playlist name:");
+
+        dialog.showAndWait().ifPresent(name -> {
+            Label playlistLabel = createClickableLabel(name);
+            playlistLabel.setOnMouseClicked(event -> {
+                loadSongs(name + ".txt");
+            });
+            dropDownSongs.getChildren().add(playlistLabel);
+
+            // Save the playlist name to a file
+            savePlaylist(name);
+        });
+    }
+
+    private static void createNewCustomPlaylist(AudioPlayerUi parentFrame) {
+    }
+
+    private static void createNewPodcastPlaylist(AudioPlayerUi parentFrame) {
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Create Playlist");
+        dialog.setHeaderText(null);
+        dialog.setContentText("Enter playlist name:");
+
+        dialog.showAndWait().ifPresent(name -> {
+            Label playlistLabel = createClickableLabel(name);
+            playlistLabel.setOnMouseClicked(event -> {
+                loadSongs(name + ".txt");
+            });
+            dropDownPodcasts.getChildren().add(playlistLabel);
+
+            // Save the playlist name to a file
+            savePlaylist(name);
+        });
+    }
+
+    private static void savePlaylist(String playlistName) {
+        File file = new File("playlists.txt");
+        try (FileWriter writer = new FileWriter(file, true)) {
+            writer.write(playlistName + "\n");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        String createdPlaylist = playlistName + ".txt";
+        try (PrintWriter writer = new PrintWriter(new FileWriter(createdPlaylist))) {
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void loadPlaylists() {
+        // Read playlist names from the file
+        File file = new File("playlists.txt");
+        try (Scanner scanner = new Scanner(file)) {
+            while (scanner.hasNextLine()) {
+                String playlistName = scanner.nextLine();
+                Label playlistLabel = createClickableLabel(playlistName);
+                playlistLabel.setOnMouseClicked(event -> {
+                    loadSongs(playlistName + ".txt");
+                });
+                dropDownSongs.getChildren().add(playlistLabel);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }
