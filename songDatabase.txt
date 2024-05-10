@@ -1,3 +1,10 @@
 A Star Named Sun,Viktor Tsoi,ROCK,Виктор-Цой-Звезда-по-имени-Солнце.wav
 Maskarad,Aram Khachaturian,CLASSICAL,aram_ilich_hachaturjan_-_waltz_maskarad_109__z3.fm_.wav
 suserov par,khachaturian,CLASSICAL,C:\Users\37493\Music\A.Khachaturian-Suserov-par.wav
+esim e,ani,ROCK,C:\Users\37493\Music\A.Khachaturian-Suserov-par.wav
+test2,ani,ROCK,C:\Users\37493\Music\A.Khachaturian-Suserov-par.wav
+test3,ani,CLASSICAL,C:\Users\37493\Music\A.Khachaturian-Suserov-par.wav
+final final test,aniko,ROCK,C:\Users\37493\Music\A.Khachaturian-Suserov-par.wav
+test5,esim,POP,C:\Users\37493\Music\A.Khachaturian-Suserov-par.wav
+testing,me,POP,C:\Users\37493\Music\A.Khachaturian-Suserov-par.wav
+testing,me,POP,C:\Users\37493\Music\A.Khachaturian-Suserov-par.wav

@@ -112,7 +112,7 @@ public class SongPlayer extends AudioFilePlayer{
         }
 
     }
-    
+
 
 
     public ArrayList<Song> getSongsFromDatabase(String databasePath) {
@@ -158,6 +158,18 @@ public class SongPlayer extends AudioFilePlayer{
             } catch (UnsupportedAudioFileException | LineUnavailableException | IOException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    public void addSong(Song song, String playlistName) {
+        // Assuming the playlist database is stored in a file named after the playlist
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(playlistName, true))) {
+            // Append the song details to the playlist file
+            writer.write(song.getName() + "," + song.getCreator() + "," + song.getGenre() + "," + song.getFilePath());
+            writer.newLine();
+        } catch (IOException e) {
+            // Handle the exception (e.g., log it or show an error message)
+            e.printStackTrace();
         }
     }
 

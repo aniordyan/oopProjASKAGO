@@ -17,6 +17,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javax.swing.*;
 import java.io.*;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
@@ -126,7 +127,7 @@ public class MenuBarManager extends AudioPlayerUi{
 
 
 
-    private static void addSong(AudioPlayerUi parentFrame) {
+   /* private static void addSong(AudioPlayerUi parentFrame) {
 
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Add Song");
@@ -172,6 +173,81 @@ public class MenuBarManager extends AudioPlayerUi{
 
 
     }
+
+    */
+
+    private static void addSong(AudioPlayerUi parentFrame) {
+        // Read playlist names from song_playlist.txt
+        List<String> playlistNames = new ArrayList<>();
+        try (Scanner scanner = new Scanner(new File("song_playlist.txt"))) {
+            while (scanner.hasNextLine()) {
+                playlistNames.add(scanner.nextLine());
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        // Add an option for adding the song directly to the song database
+        playlistNames.add("All Songs");
+
+        // Show dialog window with playlist names for user selection
+        ChoiceDialog<String> dialog = new ChoiceDialog<>(null, playlistNames);
+        dialog.setTitle("Select Playlist");
+        dialog.setHeaderText("Select the playlist to add the song:");
+        dialog.setContentText("Playlist:");
+
+        Optional<String> result = dialog.showAndWait();
+        result.ifPresent(playlistName -> {
+            String playlistFileName = playlistName.equals("All Songs") ? "songDatabase.txt" : playlistName + ".txt";
+            TextInputDialog songNameDialog = new TextInputDialog();
+            songNameDialog.setTitle("Add Song");
+            songNameDialog.setHeaderText(null);
+            songNameDialog.setContentText("Enter song name:");
+            songNameDialog.showAndWait().ifPresent(name -> {
+                TextInputDialog artistDialog = new TextInputDialog();
+                artistDialog.setTitle("Add Song");
+                artistDialog.setHeaderText(null);
+                artistDialog.setContentText("Enter artist:");
+                artistDialog.showAndWait().ifPresent(artist -> {
+                    TextInputDialog genreDialog = new TextInputDialog();
+                    genreDialog.setTitle("Add Song");
+                    genreDialog.setHeaderText(null);
+                    genreDialog.setContentText("Enter genre:");
+                    genreDialog.showAndWait().ifPresent(genreString -> {
+                        try {
+                            Song.Genre genre = Song.Genre.valueOf(genreString.toUpperCase());
+                            Song song = new Song(name, artist, genre, chooseFile("Add song"));
+                            songPlayer.addSong(song, playlistFileName); // Add song to the specified playlist
+                            appendToSongDatabase(song); // Append song details to songDatabase.txt
+                            loadSongs(playlistFileName); // Reload the songs for the playlist
+                        } catch (Exception ex) {
+                            // Handle error
+                        }
+                    });
+                });
+            });
+        });
+    }
+
+
+    private static void appendToSongDatabase(Song song) {
+        try {
+            // Append to songDatabase.txt
+            PrintWriter generalWriter = new PrintWriter(new FileWriter("songDatabase.txt", true));
+            generalWriter.println(song.getName() + "," + song.getCreator() + "," + song.getGenre() + "," + song.getFilePath());
+            generalWriter.close();
+
+            // Append to genre-specific playlist
+            String genreFileName = song.getGenre() + ".txt"; // Adjust the filename format as needed
+            PrintWriter genreWriter = new PrintWriter(new FileWriter(genreFileName, true));
+            genreWriter.println(song.getName() + "," + song.getCreator() + "," + song.getGenre() + "," + song.getFilePath());
+            genreWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
     private static void addEpisode(AudioPlayerUi parentFrame) {
         TextInputDialog dialog = new TextInputDialog();
@@ -359,7 +435,6 @@ public class MenuBarManager extends AudioPlayerUi{
     }
 
     private static void deletePlaylist(String playlistName, PlaylistType type) {
-        // Determine the file corresponding to the playlist type
         File file;
         if (type == PlaylistType.SONG) {
             file = new File("song_playlist.txt");
@@ -369,11 +444,11 @@ public class MenuBarManager extends AudioPlayerUi{
             file = new File("custom_playlist.txt");
         }
 
-        // Remove the playlist name from the file
         try {
             List<String> lines = Files.readAllLines(file.toPath());
-            lines.remove(playlistName); // Remove the playlist name from the list
-            Files.write(file.toPath(), lines); // Write the updated list back to the file
+            lines.remove(playlistName);
+            Files.write(file.toPath(), lines);
+
         } catch (IOException e) {
             e.printStackTrace();
         }

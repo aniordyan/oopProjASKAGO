@@ -1,0 +1,8 @@
+test,test,ROCK,C:\Users\37493\Music\A.Khachaturian-Suserov-par.wav
+esim e,ani,ROCK,C:\Users\37493\Music\A.Khachaturian-Suserov-par.wav
+test2,ani,ROCK,C:\Users\37493\Music\A.Khachaturian-Suserov-par.wav
+test3,ani,CLASSICAL,C:\Users\37493\Music\A.Khachaturian-Suserov-par.wav
+test4,anini,POP,C:\Users\37493\Music\A.Khachaturian-Suserov-par.wav
+hope final test,ani,ROCK,C:\Users\37493\Music\A.Khachaturian-Suserov-par.wav
+final final test,aniko,ROCK,C:\Users\37493\Music\A.Khachaturian-Suserov-par.wav
+test5,esim,POP,C:\Users\37493\Music\A.Khachaturian-Suserov-par.wav

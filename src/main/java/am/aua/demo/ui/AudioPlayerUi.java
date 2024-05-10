@@ -46,6 +46,7 @@ public class AudioPlayerUi extends Application {
     static VBox dropDownSongs;
     static VBox dropDownPodcasts;
 
+
     static {
         try {
             songPlayer = new SongPlayer("src/main/java/am/aua/demo/audioFiles");
@@ -177,20 +178,7 @@ public class AudioPlayerUi extends Application {
         return label;
     }
 
-    private static Label createClickableLabel(AudioFile audioFile) {
-        Label label = new Label(audioFile.toString());
-        label.setCursor(Cursor.HAND);
-        label.setOnMouseClicked(event -> {
 
-            try {
-                audioPlayer.playAudioFile(audioFile);
-            } catch (UnsupportedAudioFileException | LineUnavailableException | IOException e) {
-                throw new RuntimeException(e);
-            }
-
-        });
-        return label;
-    }
 
     private void initTableView() {
         songTable = new TableView<>();
