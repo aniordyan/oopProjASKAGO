@@ -5,7 +5,6 @@ public abstract class AudioFile {
     private String name;
     private String creator;
     private String filePath;
-    //private String duration;
 
     public AudioFile(String name, String creator, String filePath){
         this.name = name;
@@ -26,17 +25,5 @@ public abstract class AudioFile {
         return this.filePath;
     }
 
-
- /*   public String getDuration() {
-        return duration;
-    }
-
-    public void setDuration(String duration) {
-        this.duration = duration;
-    }
-
-
-
-  */
 
 }

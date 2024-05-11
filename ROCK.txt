@@ -1,4 +1,4 @@
 A Star Named Sun,Viktor Tsoi,ROCK,Виктор-Цой-Звезда-по-имени-Солнце.wav
-esim e,ani,ROCK,C:\Users\37493\Music\A.Khachaturian-Suserov-par.wav
-test2,ani,ROCK,C:\Users\37493\Music\A.Khachaturian-Suserov-par.wav
-final final test,aniko,ROCK,C:\Users\37493\Music\A.Khachaturian-Suserov-par.wav
+Come as you are,Nirvana,ROCK,Nirvana-–-Come-As-You-Are.wav
+Bohemian Rhapsody,Queen,ROCK,Queen-Bohemian-Rhapsody.wav
+Chop Suey,SOAD,ROCK,System-of-A-Down-Chop-Suey_.wav

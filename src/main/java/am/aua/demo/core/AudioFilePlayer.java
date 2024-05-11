@@ -52,5 +52,12 @@ public class AudioFilePlayer{
         }
     }
 
+    public void setSongPosition(double newPositionInSeconds) {
+        if (clip != null && clip.isOpen() && clip.isRunning()) {
+            long newPositionInMicroseconds = (long) (newPositionInSeconds * 1_000_000);
+            clip.setMicrosecondPosition(newPositionInMicroseconds);
+        }
+    }
+
 
 }

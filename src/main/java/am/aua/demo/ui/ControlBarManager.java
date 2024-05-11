@@ -2,21 +2,19 @@ package am.aua.demo.ui;
 
 import javafx.application.Platform;
 import javafx.scene.layout.BorderPane;
-import am.aua.demo.core.AudioFile;
 import am.aua.demo.core.AudioFilePlayer;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
-import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
-import javafx.event.EventHandler;
+
+import static am.aua.demo.ui.AudioPlayerUi.songPlayer;
+
 
 public class ControlBarManager extends BorderPane {
     private Button playButton;
@@ -49,7 +47,9 @@ public class ControlBarManager extends BorderPane {
         progressSlider.setMin(0);
         progressSlider.setMax(100);
         progressSlider.setValue(0);
-        setTop(progressSlider);;
+        setTop(progressSlider);
+
+
 
         HBox controlBarPanel = new HBox(10);
         controlBarPanel.setStyle("-fx-alignment: center;");
@@ -60,6 +60,11 @@ public class ControlBarManager extends BorderPane {
 
         controlBarPanel.getChildren().addAll(playButton, pauseButton, stopButton, shuffleButton);
         setCenter(controlBarPanel);
+
+
+
+
+
     }
 
     private void addListeners() {
@@ -92,26 +97,26 @@ public class ControlBarManager extends BorderPane {
         shuffleButton.setOnAction((ActionEvent e) -> {
             shufflePlaylist();
         });
+
+
     }
 
-    public void setIsPaused(boolean isPaused) {
-        this.isPaused = isPaused;
-    }
 
-    public void shufflePlaylist() {
+   public void shufflePlaylist() {
         Button stopLoopButton = new Button("Stop loop");
         stopLoopButton.setOnAction(event -> {
             shuffleThread.interrupt();
+            Platform.exit();
+            System.exit(1);
         });
 
         HBox controlBarPanel = (HBox) getCenter();
         controlBarPanel.getChildren().add(stopLoopButton);
 
-        //new thread for shuffling
         shuffleThread = new Thread(() -> {
             if (parentUi.currentPlaylistPath != null) {
                 try {
-                    parentUi.songPlayer.playlistToPlayTest(parentUi.songPlayer.getSongsFromDatabase(parentUi.currentPlaylistPath), true);
+                    songPlayer.playlistToPlayTest(songPlayer.getSongsFromDatabase(parentUi.currentPlaylistPath), true);
                 } catch (UnsupportedAudioFileException | LineUnavailableException | IOException e) {
                     e.printStackTrace();
                 }
@@ -127,7 +132,6 @@ public class ControlBarManager extends BorderPane {
 
         shuffleThread.start();
     }
-
 
 
 }

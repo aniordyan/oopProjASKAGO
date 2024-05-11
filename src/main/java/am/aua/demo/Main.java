@@ -1,6 +1,5 @@
 package am.aua.demo;
 
-import am.aua.demo.core.SongPlayer;
 import am.aua.demo.ui.AudioPlayerUi;
 import javafx.application.Application;
 

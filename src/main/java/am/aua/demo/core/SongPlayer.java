@@ -1,6 +1,5 @@
 package am.aua.demo.core;
 
-import am.aua.demo.exceptions.InvalidGenreException;
 
 import javax.sound.sampled.*;
 import java.io.*;
@@ -10,11 +9,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
 
-public class SongPlayer extends AudioFilePlayer{
+public class SongPlayer {
 
     private String folderPath;
-    private long clipPosition;
-    private Clip clip;
     private ArrayList<Song> songs;
     private static final String databasePath = "songDatabase.txt";
 
@@ -71,14 +68,6 @@ public class SongPlayer extends AudioFilePlayer{
     public void deleteSong(Song songToDelete ){
         if (songToDelete != null) {
             songs.remove(songToDelete);
-            updateDatabase();
-        }
-    }
-
-
-    public void addSong(Song songToAdd) {
-        if (songToAdd != null) {
-            songs.add(songToAdd);
             updateDatabase();
         }
     }
@@ -162,15 +151,23 @@ public class SongPlayer extends AudioFilePlayer{
     }
 
     public void addSong(Song song, String playlistName) {
-        // Assuming the playlist database is stored in a file named after the playlist
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(playlistName, true))) {
-            // Append the song details to the playlist file
             writer.write(song.getName() + "," + song.getCreator() + "," + song.getGenre() + "," + song.getFilePath());
             writer.newLine();
         } catch (IOException e) {
-            // Handle the exception (e.g., log it or show an error message)
             e.printStackTrace();
         }
+    }
+
+    public boolean isDuplicateSong(String name, String creator, Song.Genre genre) {
+        for (Song song : songs) {
+            if (song.getName().equalsIgnoreCase(name) &&
+                    song.getCreator().equalsIgnoreCase(creator) &&
+                    song.getGenre() == genre) {
+                return true;
+            }
+        }
+        return false;
     }
 
 

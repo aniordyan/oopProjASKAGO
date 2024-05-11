@@ -1,11 +1,11 @@
 package am.aua.demo.ui;
 
 
-import am.aua.demo.core.AudioFile;
 import am.aua.demo.core.Episode;
 import am.aua.demo.core.Song;
+import am.aua.demo.exceptions.DuplicateAudioFileException;
+import am.aua.demo.exceptions.InvalidGenreException;
 import javafx.event.ActionEvent;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.*;
@@ -13,8 +13,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-
-import javax.swing.*;
 import java.io.*;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -40,12 +38,16 @@ public class MenuBarManager extends AudioPlayerUi{
 
         MenuItem addSongItem = new MenuItem("Add Song");
         addSongItem.setOnAction((ActionEvent event) -> {
-            addSong(parentFrame);
+            try {
+                addSong();
+            } catch (InvalidGenreException e) {
+                throw new RuntimeException(e);
+            }
         });
 
         MenuItem addPodcastItem = new MenuItem("Add Podcast");
         addPodcastItem.setOnAction((ActionEvent event) -> {
-            addEpisode(parentFrame);
+            addEpisode();
         });
 
         addMenu.getItems().addAll(addSongItem, addPodcastItem);
@@ -103,7 +105,7 @@ public class MenuBarManager extends AudioPlayerUi{
         Menu createPlaylistMenu = new Menu("Create new playlist");
         MenuItem createSongPlaylistMenuItem = new MenuItem("Create Song Playlist");
         createSongPlaylistMenuItem.setOnAction((ActionEvent event) -> {
-            createNewSongPlaylist(parentFrame);
+            createNewSongPlaylist();
         });
         createPlaylistMenu.getItems().add(createSongPlaylistMenuItem);
 
@@ -113,11 +115,13 @@ public class MenuBarManager extends AudioPlayerUi{
         });
         createPlaylistMenu.getItems().add(createPodcastPlaylistMenuItem);
 
-        MenuItem createCustomPlaylistMenuItem = new MenuItem("Create Custom Playlist");
+   /*     MenuItem createCustomPlaylistMenuItem = new MenuItem("Create Custom Playlist");
         createCustomPlaylistMenuItem.setOnAction((ActionEvent event) -> {
             createNewCustomPlaylist(parentFrame);
         });
         createPlaylistMenu.getItems().add(createCustomPlaylistMenuItem);
+
+    */
 
 
         menuBar.getMenus().addAll(addMenu, deleteMenu, createPlaylistMenu);
@@ -126,57 +130,7 @@ public class MenuBarManager extends AudioPlayerUi{
     }
 
 
-
-   /* private static void addSong(AudioPlayerUi parentFrame) {
-
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Add Song");
-        dialog.setHeaderText(null);
-        dialog.setContentText("Enter song name:");
-
-        // Get song name input
-        dialog.showAndWait().ifPresent(name -> {
-            // Dialog for entering artist
-            TextInputDialog artistDialog = new TextInputDialog();
-            artistDialog.setTitle("Add Song");
-            artistDialog.setHeaderText(null);
-            artistDialog.setContentText("Enter artist:");
-
-            // Get artist input
-            artistDialog.showAndWait().ifPresent(artist -> {
-                // Dialog for entering genre
-                TextInputDialog genreDialog = new TextInputDialog();
-                genreDialog.setTitle("Add Song");
-                genreDialog.setHeaderText(null);
-                genreDialog.setContentText("Enter genre:");
-
-                // Get genre input
-                genreDialog.showAndWait().ifPresent(genreString -> {
-                    try {
-                        Song.Genre genre = Song.Genre.valueOf(genreString.toUpperCase());
-                            Song song = new Song(name, artist, genre, chooseFile("Add song"));
-                            songPlayer.addSong(song);
-                            loadSongs(currentPlaylistPath);
-                            songPlayer.createPlaylistByGenre();
-
-                    } catch (Exception ex) {
-                        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-                        errorAlert.setTitle("Error");
-                        errorAlert.setHeaderText(null);
-                        errorAlert.setContentText("Error adding song: " + ex.getMessage());
-                        errorAlert.showAndWait();
-                    }
-                });
-            });
-        });
-
-
-
-    }
-
-    */
-
-    private static void addSong(AudioPlayerUi parentFrame) {
+    private static void addSong() throws InvalidGenreException{
 
         List<String> playlistNames = new ArrayList<>();
         try (Scanner scanner = new Scanner(new File("song_playlist.txt"))) {
@@ -216,12 +170,26 @@ public class MenuBarManager extends AudioPlayerUi{
                     genreDialog.showAndWait().ifPresent(genreString -> {
                         try {
                             Song.Genre genre = Song.Genre.valueOf(genreString.toUpperCase());
+                            if (songPlayer.isDuplicateSong(name, artist, genre)) {
+                                throw new DuplicateAudioFileException("Duplicate song found: " + name);
+                            }
                             Song song = new Song(name, artist, genre, chooseFile("Add song"));
                             songPlayer.addSong(song, playlistFileName);
                             appendToSongDatabase(song);
                             loadSongs(playlistFileName);
-                        } catch (Exception ex) {
-
+                        } catch (IllegalArgumentException ex) {
+                            InvalidGenreException invalidGenreException = new InvalidGenreException(genreString);
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("Error");
+                            alert.setHeaderText("Invalid Genre");
+                            alert.setContentText(invalidGenreException.getMessage());
+                            alert.showAndWait();
+                        } catch (DuplicateAudioFileException e) {
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("Error");
+                            alert.setHeaderText("Duplicate Song");
+                            alert.setContentText(e.getMessage());
+                            alert.showAndWait();
                         }
                     });
                 });
@@ -247,31 +215,25 @@ public class MenuBarManager extends AudioPlayerUi{
 
 
 
-    private static void addEpisode(AudioPlayerUi parentFrame) {
+    private static void addEpisode() {
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Add Episode");
         dialog.setHeaderText(null);
         dialog.setContentText("Enter episode name:");
 
-        // Get podcast name input
         dialog.showAndWait().ifPresent(name -> {
-            // Dialog for entering creator
             TextInputDialog creatorDialog = new TextInputDialog();
             creatorDialog.setTitle("Add episode");
             creatorDialog.setHeaderText(null);
             creatorDialog.setContentText("Enter creator:");
 
-            // Get creator input
             creatorDialog.showAndWait().ifPresent(creator -> {
-                // Dialog for entering genre
                 TextInputDialog genreDialog = new TextInputDialog();
                 genreDialog.setTitle("Add episode");
                 genreDialog.setHeaderText(null);
                 genreDialog.setContentText("Enter genre:");
 
-                // Get genre input
                 genreDialog.showAndWait().ifPresent(genreString -> {
-                    // Dialog for entering additional data
                     TextInputDialog dateDialog = new TextInputDialog();
                     dateDialog.setTitle("Add episode");
                     dateDialog.setHeaderText(null);
@@ -279,10 +241,9 @@ public class MenuBarManager extends AudioPlayerUi{
 
                     dateDialog.showAndWait().ifPresent(publishDate -> {
                         try {
-                            // Convert genre string to Genre enum
+
                             Episode.GenrePodcast genre = Episode.GenrePodcast.valueOf(genreString.toUpperCase());
 
-                            // Create and add the podcast
                             Episode e = new Episode(name, creator, genre, chooseFile("Add podcast"),  publishDate);
                             episodePlayer.addEpisode(e);
                             loadEpisodes(currentPlaylistPath);
@@ -315,7 +276,7 @@ public class MenuBarManager extends AudioPlayerUi{
     }
 
 
-    private static void createNewSongPlaylist(AudioPlayerUi parentFrame) {
+    private static void createNewSongPlaylist() {
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Create Playlist");
         dialog.setHeaderText(null);
@@ -328,7 +289,6 @@ public class MenuBarManager extends AudioPlayerUi{
             });
             dropDownSongs.getChildren().add(playlistLabel);
 
-            // Save the playlist name to a file
             savePlaylist(name, PlaylistType.SONG);
         });
     }
@@ -342,16 +302,10 @@ public class MenuBarManager extends AudioPlayerUi{
             Label playlistLabel = new Label(name);
             ((VBox) parentFrame.mainPanel.getLeft()).getChildren().add(playlistLabel);
 
-            // Create a TableView for the custom playlist
             customPlaylistTableView.getColumns().clear();
             TableColumn<String, String> column = new TableColumn<>(name);
             column.setCellValueFactory(new PropertyValueFactory<>("name"));
             customPlaylistTableView.getColumns().add(column);
-
-            // Add the TableView to the control panel of the AudioPlayerUi
-            //mainPanel().getChildren().add(customPlaylistTableView);
-
-            // Save the playlist name to a file
             savePlaylist(name, PlaylistType.CUSTOM);
         });
     }
@@ -369,7 +323,6 @@ public class MenuBarManager extends AudioPlayerUi{
             });
             dropDownPodcasts.getChildren().add(playlistLabel);
 
-            // Save the playlist name to a file
             savePlaylist(name, PlaylistType.PODCAST);
         });
     }
@@ -403,14 +356,12 @@ public class MenuBarManager extends AudioPlayerUi{
     }
 
     private static void loadPlaylists(PlaylistType type, VBox dropdown) {
-        // Read playlist names from the appropriate file
         File file;
         if (type == PlaylistType.SONG) {
             file = new File("song_playlist.txt");
         } else if (type == PlaylistType.PODCAST) {
             file = new File("podcast_playlist.txt");
         } else {
-            // Handle invalid type
             return;
         }
 
@@ -451,6 +402,8 @@ public class MenuBarManager extends AudioPlayerUi{
             e.printStackTrace();
         }
     }
+
+
 
 
 

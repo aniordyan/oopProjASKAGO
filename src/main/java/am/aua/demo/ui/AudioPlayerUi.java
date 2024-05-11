@@ -13,8 +13,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -23,7 +21,7 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
 import java.util.ArrayList;
-import javafx.scene.Cursor;
+
 
 import static am.aua.demo.ui.MenuBarManager.loadPlaylists;
 
@@ -226,10 +224,7 @@ public class AudioPlayerUi extends Application {
 
         ObservableList<Song> songList = FXCollections.observableArrayList(songs);
 
-        // Set items to TableView
         songTable.setItems(songList);
-
-        // Add TableView to the panel
         audiofileListPanel.getChildren().add(songTable);
 
         mainPanel.setCenter(audiofileListPanel);
@@ -246,10 +241,8 @@ public class AudioPlayerUi extends Application {
 
         ObservableList<Episode> episodeList = FXCollections.observableArrayList(episodes);
 
-        // Set items to TableView
         podcastTable.setItems(episodeList);
 
-        // Add TableView to the panel
         audiofileListPanel.getChildren().add(podcastTable);
 
         mainPanel.setCenter(audiofileListPanel);

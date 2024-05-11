@@ -1,9 +1,5 @@
 package am.aua.demo.core;
 
-import am.aua.demo.exceptions.InvalidGenreException;
-
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -25,19 +21,6 @@ public class EpisodePlayer {
         this.episodes = loadPodcastsFromDatabase(databasePath);
         createPlaylistsByCreators();
 
-    }
-
-        public File getEpisodeLocation(Episode episode) throws FileNotFoundException{
-        if (episode != null) {
-            Path path = Paths.get(episode.getFilePath());
-            if (path.isAbsolute()) {
-                return new File(episode.getFilePath());
-            } else {
-                return new File(folderPath + File.separator + episode.getFilePath());
-            }
-        } else {
-            throw new FileNotFoundException("Episode not found.");
-        }
     }
 
 
@@ -63,15 +46,12 @@ public class EpisodePlayer {
     }
 
     public void createPlaylistsByCreators() {
-        // Create a set to store unique creator names
         Set<String> creators = new HashSet<>();
 
-        // Extract unique creator names
         for (Episode episode : episodes) {
             creators.add(episode.getCreator());
         }
 
-        // Create playlists for each unique creator
         for (String creator : creators) {
             String creatorFileName = creator + ".txt";
             try (PrintWriter writer = new PrintWriter(new FileWriter(creatorFileName))) {

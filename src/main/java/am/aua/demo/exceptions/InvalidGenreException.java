@@ -6,6 +6,6 @@ public class InvalidGenreException extends Exception{
     }
 
     public InvalidGenreException(String message){
-        super(message);
+        super("Invalid genre: " + message);
     }
 }
